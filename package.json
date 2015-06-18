@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "babelify": "^6.1.2",
+    "budo": "^4.0.0",
+    "gl-matrix": "^2.3.1"
+  }
+}
