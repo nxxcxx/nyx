@@ -6,7 +6,7 @@ global.mat4 = gl_matrix.mat4;
 global.quat = gl_matrix.quat;
 
 global.vec3.new = function( x, y, z ) {
-   return vec3.set( vec3.create(), x, y, z );
+   return vec3.set( vec3.create(), x || 0, y || 0, z || 0 );
 }
 
 global.ndarray = require( 'ndarray' );

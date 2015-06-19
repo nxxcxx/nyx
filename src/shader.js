@@ -4,31 +4,12 @@ class Shader {
 
 	constructor( opts ) {
 
-		this.vertexShaderSrc = [
+		this.vertexShaderSrc = NYX.CONST.DEFAULT_VERTEX_SHADER;
 
-         'precision highp float;',
-         'attribute vec3 vertexPosition;',
-         'uniform mat4 modelMatrix;',
-         'uniform mat4 viewMatrix;',
-         'uniform mat4 projectionMatrix;',
-         'varying vec3 vPosition;',
-         'void main() {',
-         '  vPosition = vertexPosition;',
-         '  gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( vertexPosition, 1.0 );',
-         '}'
+      this.fragmentShaderSrc = NYX.CONST.DEFAULT_FRAGMENT_SHADER;
 
-      ].join( '\n' );
-
-      this.fragmentShaderSrc = [
-
-         'precision highp float;',
-         'varying vec3 vPosition;',
-         'void main() {',
-         '  vec3 color = vPosition * 0.5 + vec3( 0.5 );',
-         '  gl_FragColor = vec4( color, 1.0 );',
-         '}'
-
-      ].join( '\n' );
+		this.attributes = {};
+		this.uniforms = {};
 
 	}
 
@@ -53,9 +34,19 @@ class Shader {
       this._program = gl.createProgram();
       gl.attachShader( this._program, vertexShader );
       gl.attachShader( this._program, fragmentShader );
-      gl.linkProgram( this._program );
+      gl.linkProgram( this._program );		
 
    }
+
+
+
+	_enableVertexAttributes() {
+
+	}
+
+	_bindAttributesUniforms() {
+
+	}
 
 }
 

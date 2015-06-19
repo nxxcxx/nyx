@@ -15,7 +15,7 @@ var MOUSE_Y = 0;
 var RENDERER = global.RENDERER = new NYX.Renderer( {} );
 global.ctx = RENDERER.context;
 
-var canvas = RENDERER.canvas;
+var canvas = global.canvas = RENDERER.canvas;
 canvas.style.position = 'absolute';
 canvas.style.top = '0px';
 canvas.style.left = '0px';
@@ -23,6 +23,7 @@ canvas.width = WIDTH;
 canvas.height = HEIGHT;
 document.body.style.margin = '0px';
 document.body.appendChild( canvas );
+
 
 RENDERER.setViewport( WIDTH, HEIGHT );
 RENDERER.setClearColor( 0.12, 0.12, 0.13, 1.0 );
@@ -36,22 +37,22 @@ var vertexBuffer = new NYX.VertexBuffer();
 var shader = new NYX.Shader();
 var mesh = new NYX.Mesh( vertexBuffer, shader );
 
-   var transformMatrix = mat4.create();
    var qu = quat.create();
    quat.setAxisAngle( qu, vec3.new( 0.0, 0.0, 1.0 ), Math.PI * 0.25 ) ;
+   var transformMatrix = mat4.create();
    mat4.fromQuat( transformMatrix, qu );
    vertexBuffer.applyMatrix( transformMatrix );
-
+   vec3.set( mesh.position, 0.0, 0.0, 0.0 );
+   mesh.updateModelMatrix();
 
 var vertexBuffer2 = new NYX.VertexBuffer();
-var mesh2 = new NYX.Mesh( vertexBuffer2, shader );
+var shader2 = new NYX.Shader();
+var mesh2 = new NYX.Mesh( vertexBuffer2, shader2 );
+   vec3.set( mesh2.position, 5.0, 1.0, 0.0 );
+   vec3.set( mesh2.scale, 0.5, 0.5, 0.5 );
 
-   var transformMatrix = mat4.create();
-   mat4.translate( transformMatrix, transformMatrix, vec3.new( 5.0, 0.0, 0.0 ) );
-   vertexBuffer2.applyMatrix( transformMatrix );
+   mesh2.updateModelMatrix();
 
-
-var frameCount = 0;
 
 ( function run( time ) {
 
