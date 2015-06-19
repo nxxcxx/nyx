@@ -1,8 +1,5 @@
 'use strict';
 
-var gl_matrix = require( 'gl-matrix' );
-var mat4 = gl_matrix.mat4;
-
 class Mesh {
 
 	constructor( vertexBuffer, shader ) {
@@ -15,7 +12,7 @@ class Mesh {
 		this.modelMatrix = mat4.create();
 		mat4.translate( this.modelMatrix, this.modelMatrix, [ 0, 0, 0.0 ] );
 
-      this.drawMode = null;
+      this.drawMode = NYX.CONST.TRIANGLE_STRIP;
 
 	}
 

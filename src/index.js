@@ -12,7 +12,7 @@ var ASPECT_RATIO = WIDTH / HEIGHT;
 var MOUSE_X = 0;
 var MOUSE_Y = 0;
 
-var RENDERER = global.RENDERER = new NYX.Renderer();
+var RENDERER = global.RENDERER = new NYX.Renderer( {} );
 global.ctx = RENDERER.context;
 
 var canvas = RENDERER.canvas;
@@ -28,7 +28,7 @@ RENDERER.setViewport( WIDTH, HEIGHT );
 RENDERER.setClearColor( 0.12, 0.12, 0.13, 1.0 );
 RENDERER.clear();
 
-var CAMERA = global.CAMERA = new NYX.Camera( Math.PI / 4, ASPECT_RATIO, 1, 10000 );
+var CAMERA = global.CAMERA = new NYX.Camera( NYX.Util.rad( 75 ), ASPECT_RATIO, 1, 10000 );
 vec3.set( CAMERA.position, 0.0, 0.0, 5.0 );
 CAMERA.updateViewMatrix();
 
@@ -36,7 +36,20 @@ var vertexBuffer = new NYX.VertexBuffer();
 var shader = new NYX.Shader();
 var mesh = new NYX.Mesh( vertexBuffer, shader );
 
-mesh.drawMode = NYX.CONST.TRIANGLE_STRIP;
+   var transformMatrix = mat4.create();
+   var qu = quat.create();
+   quat.setAxisAngle( qu, vec3.new( 0.0, 0.0, 1.0 ), Math.PI * 0.25 ) ;
+   mat4.fromQuat( transformMatrix, qu );
+   vertexBuffer.applyMatrix( transformMatrix );
+
+
+var vertexBuffer2 = new NYX.VertexBuffer();
+var mesh2 = new NYX.Mesh( vertexBuffer2, shader );
+
+   var transformMatrix = mat4.create();
+   mat4.translate( transformMatrix, transformMatrix, vec3.new( 5.0, 0.0, 0.0 ) );
+   vertexBuffer2.applyMatrix( transformMatrix );
+
 
 var frameCount = 0;
 
@@ -44,7 +57,7 @@ var frameCount = 0;
 
    requestAnimationFrame( run );
 
-   var r = 5.0;
+   var r = 8.0;
    var theta = MOUSE_X * Math.PI * 2.0;
    vec3.set( CAMERA.position, r * Math.cos( theta ), 0.0, r * Math.sin( theta ) );
    vec3.set( CAMERA.lookAt, 0.0, 0.0, 0.0 );
@@ -53,6 +66,7 @@ var frameCount = 0;
 
    RENDERER.clear();
    RENDERER.renderMesh( mesh, CAMERA );
+   RENDERER.renderMesh( mesh2, CAMERA );
 
 } )();
 

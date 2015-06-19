@@ -16,7 +16,9 @@ var UTIL = {
    		timeout = setTimeout( later, wait );
    		if ( callNow ) func.apply( context, args );
    	};
-   }
+   },
+
+   rad: d => d * Math.PI/180.0
 
 };
 
