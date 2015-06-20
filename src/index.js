@@ -1,8 +1,5 @@
 'use strict';
 
-var gl_matrix = require( 'gl-matrix' );
-var vec3 = gl_matrix.vec3;
-
 var NYX = global.NYX = require( './nyx.js' );
 
 var WIDTH = window.innerWidth;
@@ -29,48 +26,45 @@ RENDERER.setViewport( WIDTH, HEIGHT );
 RENDERER.setClearColor( 0.12, 0.12, 0.13, 1.0 );
 RENDERER.clear();
 
-var CAMERA = global.CAMERA = new NYX.Camera( NYX.Util.rad( 75 ), ASPECT_RATIO, 1, 10000 );
-vec3.set( CAMERA.position, 0.0, 0.0, 5.0 );
+var CAMERA = global.CAMERA = new NYX.Camera( NYX.Util.rad( 45 ), ASPECT_RATIO, 1, 10000 );
+vec3.set( CAMERA.position, 0.0, 0.0, 10.0 );
 CAMERA.updateViewMatrix();
 
-var vertexBuffer = new NYX.VertexBuffer();
+var vertexBuffer = new NYX.Geometry();
 var shader = new NYX.Shader();
-var mesh = new NYX.Mesh( vertexBuffer, shader );
-
-   var qu = quat.create();
-   quat.setAxisAngle( qu, vec3.new( 0.0, 0.0, 1.0 ), Math.PI * 0.25 ) ;
-   var transformMatrix = mat4.create();
-   mat4.fromQuat( transformMatrix, qu );
-   vertexBuffer.applyMatrix( transformMatrix );
-   vec3.set( mesh.position, 0.0, 0.0, 0.0 );
-   mesh.updateModelMatrix();
-
-var vertexBuffer2 = new NYX.VertexBuffer();
-var shader2 = new NYX.Shader();
-var mesh2 = new NYX.Mesh( vertexBuffer2, shader2 );
-   vec3.set( mesh2.position, 5.0, 1.0, 0.0 );
-   vec3.set( mesh2.scale, 0.5, 0.5, 0.5 );
-
-   mesh2.updateModelMatrix();
+var mesh = global.mesh = new NYX.Mesh( vertexBuffer, shader );
 
 
 ( function run( time ) {
 
    requestAnimationFrame( run );
 
-   var r = 8.0;
-   var theta = MOUSE_X * Math.PI * 2.0;
-   vec3.set( CAMERA.position, r * Math.cos( theta ), 0.0, r * Math.sin( theta ) );
-   vec3.set( CAMERA.lookAt, 0.0, 0.0, 0.0 );
-   vec3.set( CAMERA.upVector, 0.0, 1.0, 0.0 );
-   CAMERA.updateViewMatrix();
+   ctrlCamera( CAMERA, MOUSE_X, MOUSE_Y );
 
    RENDERER.clear();
-   RENDERER.renderMesh( mesh, CAMERA );
-   RENDERER.renderMesh( mesh2, CAMERA );
+   RENDERER.render( mesh, CAMERA );
 
 } )();
 
+function ctrlCamera( cam, mx, my ) {
+
+   // control camera using spherical coordinate
+   var r = 10.0;
+   var theta = -mx * Math.PI * 2.0;
+   var phi = (-my + 0.5)  * Math.PI;
+
+   var t = r * Math.cos( phi );
+   var y = r * Math.sin( phi );
+
+   var x = t * Math.cos( theta );
+   var z = t * Math.sin( theta );
+
+   vec3.set( cam.position, x, y, z );
+   vec3.set( cam.lookAt, 0.0, 0.0, 0.0 );
+   vec3.set( cam.upVector, 0.0, 1.0, 0.0 );
+   cam.updateViewMatrix();
+
+}
 
 window.addEventListener( 'resize', NYX.Util.debounce( function ( event ) {
 
@@ -87,7 +81,7 @@ window.addEventListener( 'resize', NYX.Util.debounce( function ( event ) {
 
 window.addEventListener( 'mousemove', function ( event ) {
 
-   MOUSE_X = event.x / WIDTH * 2.0 - 1.0;
-   MOUSE_Y = event.y / HEIGHT * 2.0 - 1.0;
+   MOUSE_X = event.x / WIDTH;
+   MOUSE_Y = event.y / HEIGHT;
 
 } );

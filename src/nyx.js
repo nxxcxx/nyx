@@ -1,6 +1,6 @@
 'use strict';
 
-var gl_matrix = global.gl_matrix = require( 'gl-matrix' );
+global.gl_matrix = require( 'gl-matrix' );
 global.vec3 = gl_matrix.vec3;
 global.mat4 = gl_matrix.mat4;
 global.quat = gl_matrix.quat;
@@ -17,7 +17,7 @@ var NYX = {
    Renderer: require( './renderer.js' ),
    Camera: require( './camera.js' ),
    Mesh: require( './mesh.js' ),
-   VertexBuffer: require( './vertexBuffer.js' ),
+   Geometry: require( './geometry.js' ),
    Shader: require( './shader.js' ),
    Util: require( './util.js' )
 

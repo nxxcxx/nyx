@@ -1,68 +1,83 @@
 'use strict';
 
-class Renderer {
+function Renderer( opts ) {
 
-	constructor( opts ) {
+	var canvas = document.createElement( 'canvas' );
+	var gl = canvas.getContext( 'webgl', opts || {} );
+	_checkDependencies();
+	_setDefaultGLState();
 
-		this._canvas = document.createElement( 'canvas' );
-		this._gl = this._canvas.getContext( 'webgl', opts || {} );
-      this._checkDependencies( this._gl );
-		// console.info( this._gl.getContextAttributes() );
-		// console.info( this._gl.getSupportedExtensions() );
-
-		var gl = this._gl;
-		gl.enable( gl.DEPTH_TEST );
-		// gl.depthFunc( gl.LESS );
-		// gl.blendFunc( gl.SRC_ALPHA, gl.ONE );
-		// gl.enable( gl.BLEND );
-
-	}
-
-	_checkDependencies( gl ) {
+	function _checkDependencies() {
 
 		if ( !gl ) console.error( 'WebGL not supported' );
-
-		NYX.CONST.WEBGL_EXTENSIONS
-		.forEach( ext => { if ( !gl.getExtension( ext ) ) console.warn( `${ext} not supported` ); } );
+		NYX.CONST.WEBGL_EXTENSIONS.forEach( ext => { if ( !gl.getExtension( ext ) ) console.warn( `${ext} not supported` ); } );
 
 	}
 
-	get canvas() {
+	function _setDefaultGLState() {
 
-		return this._canvas;
+		gl.clearColor( 0.12, 0.12, 0.15, 1.0 );
+		gl.clearDepth( 1.0 );
+		gl.clearStencil( 0.0 );
+		gl.enable( gl.DEPTH_TEST );
+		gl.depthFunc( gl.LEQUAL );
 
-	}
+		// gl.frontFace( gl.CW );
+		// gl.cullFace( gl.BACK );
+		// gl.enable( gl.CULL_FACE );
 
-   get context() {
-
-      return this._gl;
-
-   }
-
-	renderMesh( mesh, camera ) {
-
-		var gl = this._gl;
-      mesh._init( gl );
-
-		this._setDefaultAttributes( mesh );
-		this._setDefaultUniforms( mesh, camera );
-		this._activeProgram( mesh );
-
-
-		// ----- render without indexing -----
-			// gl.drawArrays( mesh.drawMode, 0, mesh.vertexBuffer.nVerts );
-
-		// ----- render with indexing
-
-			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, mesh.vertexBuffer._buffer_indices );
-			// if index with uint16
-			gl.drawElements( mesh.drawMode, mesh.vertexBuffer.numIndices, gl.UNSIGNED_SHORT, 0 );
-			// if index with uint32
-			// gl.drawElements( mesh.drawMode, mesh.vertexBuffer.numIndices, gl.UNSIGNED_INT, 0 );
+		gl.enable( gl.BLEND );
+		gl.blendEquation( gl.FUNC_ADD );
+		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
 
 	}
 
-	_setDefaultUniforms( mesh, camera ) {
+
+	function render( mesh, camera ) {
+
+		_initMesh( mesh, camera );
+
+		gl.useProgram( mesh.shader._program );
+
+		// _updateUniforms();
+		// _updateAttributes();
+
+		_linkAttributes( mesh.shader._program, mesh.shader.attributes );
+		_linkUniforms( mesh.shader._program, mesh.shader.uniforms );
+
+		// todo update unifs/attr | set blend modes
+
+		if ( mesh.geometry.__buffers.index ) {
+			var type = (mesh.geometry.__buffers.index.data instanceof Uint16Array) ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT;
+			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, mesh.geometry.__buffers.index.buffer );
+			gl.drawElements( mesh.drawMode, mesh.geometry.__buffers.index.num, type, 0 );
+		} else {
+			gl.bindBuffer( gl.ARRAY_BUFFER, mesh.geometry.__buffers.position.buffer );
+			gl.drawArrays( mesh.drawMode, 0, mesh.geometry.__buffers.position.num );
+		}
+
+	}
+
+	function _initMesh( mesh, camera ) {
+
+		if ( !mesh._initialized ) {
+
+			_initShaders( mesh.shader );
+	      _initBuffers( mesh.geometry );
+
+			_setPredefAttributes( mesh );
+			_setPredefUniforms( mesh, camera );
+
+			_cacheUniformsLocation( mesh.shader );
+			_cacheAttributesLocation( mesh.shader );
+
+			mesh._initialized = true;
+
+		}
+
+	}
+
+	function _setPredefUniforms( mesh, camera ) {
 
 		var u_default = {
 			projectionMatrix: { type: 'm4', value: camera.projectionMatrix },
@@ -74,118 +89,148 @@ class Renderer {
 			mesh.shader.uniforms[ name ] = u_default[ name ];
 		} );
 
-
 	}
 
-	_setDefaultAttributes( mesh ) {
+	function _setPredefAttributes( mesh ) {
 
-		var a_default = {
-			vertexPosition: { itemSize: 3, value: mesh.vertexBuffer._buffer_vertexPosition },
-			vertexColor:    { itemSize: 4, value: mesh.vertexBuffer._buffer_vertexColor }
-		}
+		var buffers = mesh.geometry.__buffers;
 
-		Object.keys( a_default ).forEach( ( name ) => {
-			 mesh.shader.attributes[ name ] = a_default[ name ];
+		Object.keys( buffers ).forEach( ( name ) => {
+			if ( name !== 'index' ) mesh.shader.attributes[ name ] = buffers[ name ];
 		} );
 
-
 	}
 
-	_activeProgram( mesh ) {
+	function _updateUniforms() {}
 
-		var gl = this._gl;
-		var program = mesh.shader._program;
-      gl.useProgram( program );
+	function _updateAttributes() {}
 
-		// link uniforms
-		this._linkUniforms( program, mesh.shader.uniforms );
+	function _linkUniforms( program, uniforms ) {
 
-		// link attributes
-		this._linkAttributes( program, mesh.shader.attributes );
-
-	}
-
-	_linkUniforms( program, uniforms ) {
-
-		var gl = this._gl;
 		Object.keys( uniforms ).forEach( ( name ) => {
+
 			var uni = uniforms[ name ];
-			var u_location = gl.getUniformLocation( program, name );
-			if ( uni.type === 'm4' ) {
-				gl.uniformMatrix4fv( u_location, false, uni.value );
+			var loc = uni.location;
+			var val = uni.value;
+
+			switch ( uni.type ) {
+				case 'm4': gl.uniformMatrix4fv( loc, false, val ); break;
+				case 'v4': gl.uniform4fv( loc, val ); break;
 			}
+
 		} );
 
 	}
 
-	_linkAttributes( program, attributes ) {
+	function _linkAttributes( program, attributes ) {
 
-		var gl = this._gl;
 		Object.keys( attributes ).forEach( ( name ) => {
-			var a_location = gl.getAttribLocation( program, name );
-			gl.enableVertexAttribArray( a_location );
+
 			var attr = attributes[ name ];
-			gl.bindBuffer( gl.ARRAY_BUFFER, attr.value );
-			gl.vertexAttribPointer( a_location, attr.itemSize, gl.FLOAT, false, 0, 0 );
+			if ( attr.location !== -1) {
+				gl.enableVertexAttribArray( attr.location );
+				gl.bindBuffer( gl.ARRAY_BUFFER, attr.buffer );
+				gl.vertexAttribPointer( attr.location, attr.itemSize, gl.FLOAT, false, 0, 0 );
+			}
+
 		} );
 
 	}
 
-	setClearColor( r, g, b, a ) {
+	function _initBuffers( geometry ) {
 
-		this._gl.clearColor( r, g, b, a );
+		var buffers = geometry.__buffers;
 
-	}
+		Object.keys( buffers ).forEach( ( name ) => {
 
-	clear() {
+			var curr = buffers[ name ];
+			curr.buffer = gl.createBuffer();
 
-		this._gl.clear( this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT );
+			if ( name === 'index' ) {
 
-	}
+				if ( curr.data ) {
+					gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, curr.buffer );
+					gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, curr.data, gl.STATIC_DRAW );
+				}
 
-   setViewport( width, height ) {
+			} else {
 
-      this._gl.viewport( 0.0, 0.0, width, height );
+				gl.bindBuffer( gl.ARRAY_BUFFER, curr.buffer );
+		      gl.bufferData( gl.ARRAY_BUFFER, curr.data, gl.STATIC_DRAW );
+
+			}
+
+		} );
 
    }
 
-}
+	function _initShaders( shader ) {
+
+		var vertexShader = gl.createShader( gl.VERTEX_SHADER );
+		gl.shaderSource( vertexShader, shader.vertexShaderSrc );
+		gl.compileShader( vertexShader );
+
+		if ( !gl.getShaderParameter( vertexShader, gl.COMPILE_STATUS ) ) {
+			console.error( gl.getShaderInfoLog( vertexShader ) );
+		}
+
+		var fragmentShader = gl.createShader( gl.FRAGMENT_SHADER );
+		gl.shaderSource( fragmentShader, shader.fragmentShaderSrc );
+		gl.compileShader( fragmentShader );
+
+		if ( !gl.getShaderParameter( fragmentShader, gl.COMPILE_STATUS ) ) {
+			console.error( gl.getShaderInfoLog( fragmentShader ) );
+		}
+
+		shader._program = gl.createProgram();
+		gl.attachShader( shader._program, vertexShader );
+		gl.attachShader( shader._program, fragmentShader );
+		gl.linkProgram( shader._program );
+
+	}
+
+	function _cacheUniformsLocation( shader ) {
+
+		Object.keys( shader.uniforms ).forEach( ( name ) => {
+			var uni = shader.uniforms[ name ];
+			uni.location = gl.getUniformLocation( shader._program, name );
+		} );
+
+	}
+
+	function _cacheAttributesLocation( shader ) {
+
+		Object.keys( shader.attributes ).forEach( ( name ) => {
+			var attr = shader.attributes[ name ];
+			attr.location = gl.getAttribLocation( shader._program, name );
+			if ( attr.location === -1 ) console.warn( `${name} attribute defined but never used` );
+		} );
+
+	}
+
+	function setClearColor( r, g, b, a ) {
+		gl.clearColor( r, g, b, a );
+	}
+
+	function clear() {
+		gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+	}
+
+   function setViewport( width, height ) {
+      gl.viewport( 0.0, 0.0, width, height );
+   }
+
+	return {
+
+		gl: gl,
+		canvas: canvas,
+		setClearColor: setClearColor,
+		setViewport: setViewport,
+		clear: clear,
+		render: render
+
+	}
+
+} // end of Renderer
 
 module.exports = Renderer;
-
-
-
-
-
-
-/*
-active GLSL program
-set uniforms & attributes
-enable attrib array
-bindBuffer with corret pointer
-draw w/ w/o indexing
-*/
-
-
-// active shader program
-// var program = mesh.shader._program;
-// gl.useProgram( program );
-//
-//
-// // Attributes
-// // todo: run only if buffer needs update
-// var a_vertexPosition   = gl.getAttribLocation( program, 'vertexPosition' );
-// gl.enableVertexAttribArray( a_vertexPosition );
-//
-// // !bind buffer first // pointer is points to current bound buffer
-// gl.bindBuffer( gl.ARRAY_BUFFER, mesh.vertexBuffer._buffer_vertex );
-// gl.vertexAttribPointer( a_vertexPosition, mesh.vertexBuffer.vSize, gl.FLOAT, false, 0, 0 );
-
-// Uniforms
-	// var u_projectionMatrix = gl.getUniformLocation( program, 'projectionMatrix' );
-	// var u_viewMatrix       = gl.getUniformLocation( program, 'viewMatrix' );
-	// var u_modelMatrix      = gl.getUniformLocation( program, 'modelMatrix' );
-	//
-	// gl.uniformMatrix4fv( u_projectionMatrix, false, camera.projectionMatrix );
-	// gl.uniformMatrix4fv( u_viewMatrix, false, camera.viewMatrix );
-	// gl.uniformMatrix4fv( u_modelMatrix, false, mesh.modelMatrix );
