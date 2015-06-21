@@ -37,8 +37,9 @@ var mesh = global.mesh = new NYX.Mesh( vertexBuffer, shader );
 
 ( function run( time ) {
 
-   requestAnimationFrame( run );
+   // todo: face melt shader
 
+   requestAnimationFrame( run );
    ctrlCamera( CAMERA, MOUSE_X, MOUSE_Y );
 
    RENDERER.clear();

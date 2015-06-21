@@ -13,13 +13,16 @@ global.ndarray = require( 'ndarray' );
 
 var NYX = {
 
-   CONST: require( './constants.js' ),
-   Renderer: require( './renderer.js' ),
-   Camera: require( './camera.js' ),
-   Mesh: require( './mesh.js' ),
-   Geometry: require( './geometry.js' ),
-   Shader: require( './shader.js' ),
-   Util: require( './util.js' )
+   CONST: require( './constants' ),
+   Renderer: require( './renderer' ),
+   Camera: require( './camera' ),
+   Mesh: require( './mesh' ),
+   Geometry: require( './geometry' ),
+   Shader: require( './shader' ),
+   Util: require( './util' ),
+
+   GL_Buffer: require( './GL-Buffer' ),
+   GL_Program: require( './GL-Program' )
 
 };
 
