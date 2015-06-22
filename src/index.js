@@ -43,9 +43,6 @@ CAMERA.updateViewMatrix();
 var vertexBuffer = new NYX.TestGeometry();
 var shader = new NYX.Shader();
 global.mesh = new NYX.Mesh( vertexBuffer, shader );
-// mat4.translate( mesh.modelMatrix, mesh.modelMatrix, vec3.new( 0, 0, 0 ) );
-vec3.set( mesh.position, 0, 0, 0 );
-mesh.updateModelMatrix();
 
 
 var mesh2 = global.mesh2;
@@ -70,9 +67,11 @@ req.onreadystatechange = function() {
       mesh2.geometry.addAttribute( 'position', vpos.data, vpos.shape );
       mesh2.geometry.addAttribute( 'index', vidx.data, vidx.shape );
 
+      mesh2.drawMode = NYX.CONST.LINES;
+
    }
 }
-req.open( 'GET', './ext/skull-low.json' );
+req.open( 'GET', './ext/skull-high.json' );
 req.send();
 
 
@@ -169,7 +168,7 @@ window.addEventListener( 'mousewheel', event => {
 
    var dt = event.wheelDelta;
    CAM_DIST -= dt * 0.01;
-   CAM_DIST = clamp( CAM_DIST, 0, 100 );
+   CAM_DIST = clamp( CAM_DIST, 1, 50 );
 
 } );
 
