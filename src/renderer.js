@@ -22,10 +22,10 @@ function Renderer( opts ) {
 		gl.enable( gl.DEPTH_TEST );
 		gl.depthFunc( gl.LEQUAL );
 
-		// gl.frontFace( gl.CW );
+		// gl.frontFace( gl.CCW );
 		// gl.cullFace( gl.BACK );
 		// gl.enable( gl.CULL_FACE );
-		//
+
 		gl.enable( gl.BLEND );
 		gl.blendEquation( gl.FUNC_ADD );
 		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
@@ -39,19 +39,20 @@ function Renderer( opts ) {
 
 		gl.useProgram( mesh.shader._program );
 
+		_updateAttributes( mesh );
 		_updateUniforms( mesh );
 
 		// todo update unifs/attr | set blend modes
-
 		if ( mesh.geometry.attributes.index ) {
 
 			var type = (mesh.geometry.attributes.index.data instanceof Uint16Array) ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT;
 			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, mesh.geometry.attributes.index.buffer );
-			gl.drawElements( mesh.drawMode, mesh.geometry.attributes.index.dimension[ 0 ], type, 0 );
+			gl.drawElements( mesh.drawMode, mesh.geometry.attributes.index.shape[ 0 ], type, 0 );
 
 		} else {
+
 			gl.bindBuffer( gl.ARRAY_BUFFER, mesh.geometry.attributes.position.buffer );
-			gl.drawArrays( mesh.drawMode, 0, mesh.geometry.attributes.position.dimension[ 0 ] );
+			gl.drawArrays( mesh.drawMode, 0, mesh.geometry.attributes.position.shape[ 0 ] );
 
 		}
 
@@ -79,6 +80,12 @@ function Renderer( opts ) {
 		mesh.shader.uniforms.modelMatrix.value = mesh.modelMatrix;
 
 		NYX.GL_Buffer.assembleBufferUniforms( gl, mesh.shader.uniforms, mesh.shader._program );
+
+	}
+
+	function _updateAttributes( mesh ) {
+
+		NYX.GL_Buffer.updateAttributes( gl, mesh.geometry.attributes );
 
 	}
 

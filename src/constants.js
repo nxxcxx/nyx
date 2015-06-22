@@ -42,7 +42,7 @@ const CONST = {
 
       'void main() {',
       '  vec3 color = vPosition * 0.5 + vec3( 0.5 );',
-      // '  vec3 color = vColor.rgb;',
+      '  vec3 inColor = vColor.rgb;',
       '  gl_FragColor = vec4( color, 1.0 );',
       '}'
 

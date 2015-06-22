@@ -15,13 +15,17 @@ function createShader( gl, type, src ) {
    gl.shaderSource( shader, src );
    gl.compileShader( shader );
 
+   var log = gl.getShaderInfoLog( shader );
+
    if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
 
-      console.error( gl.getShaderInfoLog( shader ) );
+      console.error( log );
       gl.deleteShader( shader );
       return null;
 
    }
+
+   if ( log ) console.warn( log );
 
    return shader;
 
@@ -44,6 +48,9 @@ function createProgram( gl, shaders ) {
       return null;
 
    }
+
+   var log = gl.getProgramInfoLog( program );
+   if ( log ) console.warn( log );
 
    return program;
 
