@@ -1,6 +1,6 @@
 'use strict';
 
-var UTIL = {
+var Util = {
 
    debounce: function debounce( func, wait, immediate ) {
    	var timeout;
@@ -22,4 +22,4 @@ var UTIL = {
 
 };
 
-module.exports = UTIL;
+module.exports = Util;

@@ -11,7 +11,7 @@ class Camera {
 		this.projectionMatrix = mat4.create();
 		mat4.perspective( this.projectionMatrix, fov, aspectRatio, near, far );
 
-      this.position = vec3.new( 0.0, 0.0, 0.0 );
+      this.position = vec3.new( 0.0, 0.0, 10.0 );
       this.lookAt   = vec3.new( 0.0, 0.0, 0.0 );
       this.upVector = vec3.new( 0.0, 1.0, 0.0 );
 

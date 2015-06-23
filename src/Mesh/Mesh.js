@@ -14,8 +14,6 @@ class Mesh {
 		this.quaternion = quat.create();
 		this.modelMatrix = mat4.create();
 
-      this.drawMode = NYX.CONST.TRIANGLES;
-
 	}
 
 	updateModelMatrix() {

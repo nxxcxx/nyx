@@ -34,22 +34,23 @@ function createShader( gl, type, src ) {
 /**
  * @param {WebGLShader}
  */
-function createProgram( gl, shaders ) {
+function createProgram( gl, ...shaders ) {
 
    var program = gl.createProgram();
    shaders.forEach( shader => gl.attachShader( program, shader ) );
 
    gl.linkProgram( program );
 
+   var log = gl.getProgramInfoLog( program );
+
    if ( !gl.getProgramParameter( program, gl.LINK_STATUS ) ) {
 
-      console.error( gl.getProgramInfoLog( program ) );
+      console.error( log );
       gl.deleteProgram( program );
       return null;
 
-   }
+      }
 
-   var log = gl.getProgramInfoLog( program );
    if ( log ) console.warn( log );
 
    return program;
@@ -58,7 +59,7 @@ function createProgram( gl, shaders ) {
 
 module.exports = {
 
-   createShader: createShader,
-   createProgram: createProgram
+   createShader,
+   createProgram
 
 }

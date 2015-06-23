@@ -1,5 +1,8 @@
 'use strict';
 
+
+var GLState = require( './GL-State' );
+
 /*
  * @param  {TypedArray}  data
  * @param  {boolean}     isIndexed
@@ -27,7 +30,7 @@ function bindBufferAttribute( gl, name, buffer, attribute, program ) {
 
 	if ( location === -1 ) {
 
-		if ( name !== 'index' ) console.warn( `${name} attribute is defined but never used` );
+		if ( name !== 'index' ) console.warn( `${name} attribute is defined but never used by vertex shader` );
 
 	} else {
 
@@ -36,8 +39,6 @@ function bindBufferAttribute( gl, name, buffer, attribute, program ) {
 		gl.vertexAttribPointer( location, attribute.shape[ 1 ], gl.FLOAT, false, 0, 0 );
 
 	}
-
-	console.log( name, location );
 
 	attribute.buffer = buffer;
 	attribute.location = location;
@@ -69,25 +70,20 @@ function updateAttributes( gl, attributes ) {
 
 	// if attribute index slot is enabled for previous mesh and is not use in current mesh
 	// then error ..access index out of range blah blah blah...
-	// todo current wegl attribute state manager
-	// for now just disable all
-	for ( let i = 0; i < 16; i ++ ) {
-		gl.disableVertexAttribArray( i );
-	}
 
 	Object.keys( attributes ).forEach( name => {
 
-		if ( name === 'index' ) return;
-
 		var attr = attributes[ name ];
+
+		if ( attr.location === -1  ) return;
+
 		gl.bindBuffer( gl.ARRAY_BUFFER, attr.buffer );
-		gl.enableVertexAttribArray( attr.location );
 		gl.vertexAttribPointer( attr.location, attr.shape[ 1 ], gl.FLOAT, false, 0, 0 );
 
 	} );
 
-	// disable inactive attributes
-
+	// enable/disable attributes
+	GLState.enableAttributes( gl, attributes );
 
 }
 
@@ -102,12 +98,17 @@ function bindBufferUniform( gl, name, uniform, program ) {
 
 	var setter;
 	switch ( uniform.type ) {
+
 		case 'm4':
 			setter = function ( value ) {
+
 				gl.uniformMatrix4fv( uniform.location, false, value );
+
 			}
 			break;
+
 	}
+
 	if ( !setter ) console.error( `${name} uniform type is unknown` );
 	uniform.setter = setter;
 
@@ -148,8 +149,10 @@ function updateUniforms( gl, uniforms ) {
 
 
 module.exports = {
-	assembleBufferAttributes: assembleBufferAttributes,
-	assembleBufferUniforms: assembleBufferUniforms,
-	updateUniforms: updateUniforms,
-	updateAttributes: updateAttributes
+
+	assembleBufferAttributes,
+	assembleBufferUniforms,
+	updateUniforms,
+	updateAttributes
+
 }
