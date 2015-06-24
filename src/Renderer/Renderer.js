@@ -1,9 +1,10 @@
 'use strict';
 
-var GL_BUFFER = require( './GL/GL-Buffer' );
 var GL_PROGRAM = require( './GL/GL-Program' );
 var GL_STATE = require( './GL/GL-State' );
 var GL_INIT = require( './GL/GL-Init' );
+var GL_ATTRIBUTE = require( './GL/GL-Attribute' );
+var GL_UNIFORM = require( './GL/GL-Uniform' );
 
 
 function Renderer( opts ) {
@@ -44,7 +45,7 @@ function Renderer( opts ) {
 
 			_initShaders( mesh.shader );
 			_initBuffers( mesh );
-			_setupUniforms( mesh, camera );
+			_initUniforms( mesh, camera );
 
 			if ( mesh.shader.drawMode === undefined ) console.warn( `drawMode is ${mesh.shader.drawMode}:`, mesh );
 			mesh._initialized = true;
@@ -53,31 +54,42 @@ function Renderer( opts ) {
 
 	}
 
-	function _setupUniforms( mesh, camera ) {
+	function _initUniforms( mesh, camera ) {
 
-		mesh.shader.uniforms.projectionMatrix.value = camera.projectionMatrix;
-		mesh.shader.uniforms.viewMatrix.value = camera.viewMatrix;
-		mesh.shader.uniforms.modelMatrix.value = mesh.modelMatrix;
+		var unis = mesh.shader.uniforms;
+		// set predefined uniforms
+		unis.projectionMatrix.value = camera.projectionMatrix;
+		unis.viewMatrix.value = camera.viewMatrix;
+		unis.modelMatrix.value = mesh.modelMatrix;
 
-		GL_BUFFER.assembleBufferUniforms( gl, mesh.shader.uniforms, mesh.shader._program );
+		// set texture unit
+		var currUnit = 0;
+		Object.keys( unis ).forEach( name => {
+
+			var uni = unis[ name ];
+			if ( uni.type === 't' ) uni.unit = currUnit ++;
+
+		} );
+
+		GL_UNIFORM.assembleUniformsBuffer( gl, unis, mesh.shader._program );
 
 	}
 
 	function _activeAttributes( mesh ) {
 
-		GL_BUFFER.activeAttributes( gl, mesh.geometry.attributes );
+		GL_ATTRIBUTE.activateAttributes( gl, mesh.geometry.attributes );
 
 	}
 
 	function _activeUniforms( mesh ) {
 
-		GL_BUFFER.activeUniforms( gl, mesh.shader.uniforms );
+		GL_UNIFORM.activateUniforms( gl, mesh.shader.uniforms );
 
 	}
 
 	function _initBuffers( mesh ) {
 
-		GL_BUFFER.assembleBufferAttributes( gl, mesh.geometry.attributes, mesh.shader._program );
+		GL_ATTRIBUTE.assembleAttributesBuffer( gl, mesh.geometry.attributes, mesh.shader._program );
 
 	}
 
@@ -92,18 +104,6 @@ function Renderer( opts ) {
 		gl.clearColor( r, g, b, a );
 
 	}
-
-	/*
-	function clear( color = true, depth = true, stencil = true ) {
-
-		gl.clear(
-			( color ? gl.COLOR_BUFFER_BIT : 0 ) |
-			( depth ? gl.DEPTH_BUFFER_BIT : 0 ) |
-			( stencil ? gl.STENCIL_BUFFER_BIT : 0 )
-		);
-
-	}
-	*/
 
 	function clear() {
 

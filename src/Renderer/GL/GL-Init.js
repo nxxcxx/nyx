@@ -3,6 +3,7 @@
 var gl = null;
 var canvas = null;
 
+
 function initContext( opts = {} ) {
 
    canvas = opts.canvas || document.createElement( 'canvas' );
@@ -16,7 +17,7 @@ function getExtensions() {
 
 	NYX.CONST.WEBGL_EXTENSIONS.forEach( ext => {
 
-      if ( !gl.getExtension( ext ) ) console.warn( `${ext} not supported.` );
+      if ( !gl.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
 
    } );
 
