@@ -56,10 +56,22 @@ function createProgram( gl, ...shaders ) {
    return program;
 
 }
+/**
+ * @param {String} vertexShaderSrc
+ * @param {String} fragmentShaderSrc
+ */
+function createShaderProgram( gl, vertexShaderSrc, fragmentShaderSrc ) {
+
+   var vs =	createShader( gl, 'vs', vertexShaderSrc );
+   var fs = createShader( gl, 'fs', fragmentShaderSrc );
+   return createProgram( gl, vs, fs );
+
+}
 
 module.exports = {
 
    createShader,
-   createProgram
+   createProgram,
+   createShaderProgram
 
-}
+};

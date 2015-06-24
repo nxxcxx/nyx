@@ -6,6 +6,7 @@ var chalk = require( 'chalk' );
 
 budo( 'src/index.js', {
 
+	host: '0.0.0.0',
 	port: 3000,
 	live: true,
 	transform: babelify

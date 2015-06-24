@@ -8,11 +8,11 @@ global.quat = glMatrix.quat;
 
 global.vec2.new = function( x, y ) {
    return vec3.set( vec2.create(), x || 0, y || 0 );
-}
+};
 
 global.vec3.new = function( x, y, z ) {
    return vec3.set( vec3.create(), x || 0, y || 0, z || 0 );
-}
+};
 
 global.ndarray = require( 'ndarray' );
 
@@ -29,6 +29,7 @@ global.NYX = {
    Util: require( './Util/Util' ),
 
    TestGeometry: require( './Geometry/TestGeometry' ),
+   Tex: require( './Texture/Texture' )
 
 };
 

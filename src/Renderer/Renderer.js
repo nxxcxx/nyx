@@ -2,39 +2,16 @@
 
 var GL_BUFFER = require( './GL/GL-Buffer' );
 var GL_PROGRAM = require( './GL/GL-Program' );
+var GL_STATE = require( './GL/GL-State' );
+var GL_INIT = require( './GL/GL-Init' );
+
 
 function Renderer( opts ) {
 
-	var canvas = document.createElement( 'canvas' );
-	var gl = canvas.getContext( 'webgl', opts || {} );
-	_checkDependencies();
-	_setDefaultGLState();
-
-
-	function _checkDependencies() {
-
-		if ( !gl ) console.error( 'WebGL not supported' );
-		NYX.CONST.WEBGL_EXTENSIONS.forEach( ext => { if ( !gl.getExtension( ext ) ) console.warn( `${ext} not supported` ); } );
-
-	}
-
-	function _setDefaultGLState() {
-
-		gl.clearColor( 0.12, 0.12, 0.15, 1.0 );
-		gl.clearDepth( 1.0 );
-		gl.clearStencil( 0.0 );
-		gl.enable( gl.DEPTH_TEST );
-		gl.depthFunc( gl.LEQUAL );
-
-		// gl.frontFace( gl.CCW );
-		// gl.cullFace( gl.BACK );
-		// gl.enable( gl.CULL_FACE );
-
-		gl.enable( gl.BLEND );
-		gl.blendEquation( gl.FUNC_ADD );
-		gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
-
-	}
+	var gl = GL_INIT.initContext( opts );
+	var canvas = GL_INIT.getCanvas();
+	GL_INIT.getExtensions();
+	GL_STATE.setDefaultState( gl );
 
 
 	function render( mesh, camera ) {
@@ -43,13 +20,12 @@ function Renderer( opts ) {
 
 		gl.useProgram( mesh.shader._program );
 
-		_updateAttributes( mesh );
-		_updateUniforms( mesh );
+		_activeAttributes( mesh );
+		_activeUniforms( mesh );
 
-		// set blend modes
 		if ( mesh.geometry.attributes.index ) {
 
-			var type = (mesh.geometry.attributes.index.data instanceof Uint16Array) ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT;
+			var type = ( mesh.geometry.attributes.index.data instanceof Uint16Array ) ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT;
 			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, mesh.geometry.attributes.index.buffer );
 			gl.drawElements( mesh.shader.drawMode, mesh.geometry.attributes.index.shape[ 0 ], type, 0 );
 
@@ -67,7 +43,7 @@ function Renderer( opts ) {
 		if ( !mesh._initialized ) {
 
 			_initShaders( mesh.shader );
-	      _initBuffers( mesh );
+			_initBuffers( mesh );
 			_setupUniforms( mesh, camera );
 
 			if ( mesh.shader.drawMode === undefined ) console.warn( `drawMode is ${mesh.shader.drawMode}:`, mesh );
@@ -87,15 +63,15 @@ function Renderer( opts ) {
 
 	}
 
-	function _updateAttributes( mesh ) {
+	function _activeAttributes( mesh ) {
 
-		GL_BUFFER.updateAttributes( gl, mesh.geometry.attributes );
+		GL_BUFFER.activeAttributes( gl, mesh.geometry.attributes );
 
 	}
 
-	function _updateUniforms( mesh ) {
+	function _activeUniforms( mesh ) {
 
-		GL_BUFFER.updateUniforms( gl, mesh.shader.uniforms );
+		GL_BUFFER.activeUniforms( gl, mesh.shader.uniforms );
 
 	}
 
@@ -103,25 +79,11 @@ function Renderer( opts ) {
 
 		GL_BUFFER.assembleBufferAttributes( gl, mesh.geometry.attributes, mesh.shader._program );
 
-   }
+	}
 
 	function _initShaders( shader ) {
 
-		var vs =	GL_PROGRAM.createShader( gl, 'vs', shader.vertexShaderSrc );
-		var fs = GL_PROGRAM.createShader( gl, 'fs', shader.fragmentShaderSrc );
-
-		shader._program = GL_PROGRAM.createProgram( gl, vs, fs );
-
-	}
-
-	function _cacheUniformsLocation( shader ) {
-
-		Object.keys( shader.uniforms ).forEach( ( name ) => {
-
-			var uni = shader.uniforms[ name ];
-			uni.location = gl.getUniformLocation( shader._program, name );
-
-		} );
+		shader._program = GL_PROGRAM.createShaderProgram( gl, shader.vertexShaderSrc, shader.fragmentShaderSrc );
 
 	}
 
@@ -131,17 +93,29 @@ function Renderer( opts ) {
 
 	}
 
+	/*
+	function clear( color = true, depth = true, stencil = true ) {
+
+		gl.clear(
+			( color ? gl.COLOR_BUFFER_BIT : 0 ) |
+			( depth ? gl.DEPTH_BUFFER_BIT : 0 ) |
+			( stencil ? gl.STENCIL_BUFFER_BIT : 0 )
+		);
+
+	}
+	*/
+
 	function clear() {
 
 		gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
 
 	}
 
-   function setViewport( width, height ) {
+	function setViewport( width, height ) {
 
-      gl.viewport( 0.0, 0.0, width, height );
+		gl.viewport( 0.0, 0.0, width, height );
 
-   }
+	}
 
 	return {
 
@@ -152,7 +126,7 @@ function Renderer( opts ) {
 		clear,
 		render
 
-	}
+	};
 
 } // end of Renderer
 

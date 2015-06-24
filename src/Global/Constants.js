@@ -18,18 +18,17 @@ const CONST = {
 
       attribute vec3 position;
       attribute vec4 color;
+      attribute vec2 uv;
 
       uniform mat4 modelMatrix;
       uniform mat4 viewMatrix;
       uniform mat4 projectionMatrix;
 
-      varying vec3 vPosition;
-      varying vec4 vColor;
+      varying vec2 vUv;
 
       void main() {
-        vColor = color;
-        vPosition = position;
-        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
+         vUv = uv;
+         gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
       }
 
       `
@@ -39,18 +38,19 @@ const CONST = {
       `
       precision highp float;
 
-      varying vec3 vPosition;
-      varying vec4 vColor;
+      varying vec2 vUv;
+
+      uniform sampler2D uTexture;
 
       void main() {
-        vec3 color = vPosition * 0.5 + vec3( 0.5 );
-        gl_FragColor = vec4( color, 1.0 );
+         vec3 color = texture2D( uTexture, vUv ).rgb;
+         gl_FragColor = vec4( color, 1.0 );
       }
 
       `
    ,
 
 
-}
+};
 
 module.exports = CONST;

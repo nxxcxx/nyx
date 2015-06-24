@@ -11,7 +11,7 @@ var ASPECT_RATIO = WIDTH / HEIGHT;
 global.RENDERER = new NYX.Renderer( {} );
 global.gl = RENDERER.gl;
 
-( function createCanvas() {
+( function initCanvas() {
 
    global.canvas = RENDERER.canvas;
    canvas.style.position = 'absolute';
@@ -34,38 +34,60 @@ NYX.OrbitCtrl( canvas, CAMERA );
 CAMERA.updateViewMatrix();
 
 // Mesh
-var vertexBuffer = new NYX.TestGeometry();
-var shader = new NYX.Shader();
-global.mesh = new NYX.Mesh( vertexBuffer, shader );
+
+
+var mesh = global.mesh;
+// Texture test
+NYX.Tex.loadImage( './tex/lava.png', img => {
+
+   var geom = new NYX.BufferGeometry();
+   var shader = new NYX.Shader();
+   mesh = new NYX.Mesh( geom, shader );
+
+   var vertices = new Float32Array([-1,-1,1,1,-1,1,1,1,1,-1,1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,1,-1,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,1,1,-1,-1,1,1,-1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1] );
+   var indices = new Uint16Array([0,1,2,0,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23]);
+   var uv = new Float32Array([0,0,1,0,1,1,0,1,1,0,1,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,1,0,0,0,0,1,0,1,1,0,1]);
+
+   geom.addAttribute( 'position', vertices, [ vertices.length / 3, 3 ] );
+   geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
+   geom.addAttribute( 'index', indices, [ indices.length, 1 ] );
+
+   var tex = NYX.Tex.createTexture( gl, img );
+   shader.uniforms.uTexture = { type: 't', unit: 0, value: tex };
+
+} );
+
+
 
 // Mesh2
-var mesh2 = global.mesh2;
-var req = new XMLHttpRequest();
-req.onreadystatechange = function() {
+   var mesh2 = global.mesh2;
+   var req = new XMLHttpRequest();
+   req.onreadystatechange = () => {
 
-   if ( req.readyState == 4 && req.status == 200 ) {
+      if ( req.readyState === 4 && req.status === 200 ) {
 
-      var res = JSON.parse( req.responseText );
+         var res = JSON.parse( req.responseText );
 
-      var vb = new NYX.BufferGeometry();
-      var sh = new NYX.Shader();
-      mesh2 = new NYX.Mesh( vb, sh );
+         var vb = new NYX.BufferGeometry();
+         var sh = new NYX.Shader();
+         mesh2 = new NYX.Mesh( vb, sh );
 
-      vec3.set( mesh2.scale, 0.5, 0.5, 0.5 );
-      vec3.set( mesh2.position, -2.5, 0.0, 0.0 );
-      mesh2.updateModelMatrix();
+         vec3.set( mesh2.scale, 0.5, 0.5, 0.5 );
+         vec3.set( mesh2.position, -2.5, 0.0, 0.0 );
+         mesh2.updateModelMatrix();
 
-      var vpos = ndarray( new Float32Array( res.vertices ), [ res.vertices.length / 3, 3 ] );
-      var vidx = ndarray( new Uint32Array( res.faces ), [ res.faces.length, 1 ] );
+         var vpos = ndarray( new Float32Array( res.vertices ), [ res.vertices.length / 3, 3 ] );
+         var vidx = ndarray( new Uint32Array( res.faces ), [ res.faces.length, 1 ] );
 
-      mesh2.geometry.addAttribute( 'position', vpos.data, vpos.shape );
-      mesh2.geometry.addAttribute( 'index', vidx.data, vidx.shape );
+         mesh2.geometry.addAttribute( 'position', vpos.data, vpos.shape );
+         mesh2.geometry.addAttribute( 'index', vidx.data, vidx.shape );
 
-   }
-}
-req.open( 'GET', './ext/skull-high.json' );
-req.send();
+      }
+   };
 
+   req.open( 'GET', './ext/skull-high.json' );
+   req.send();
+//
 
 
 ( function run( time ) {
@@ -76,7 +98,7 @@ req.send();
 
    RENDERER.clear();
 
-   RENDERER.render( mesh, CAMERA );
+   if ( mesh ) RENDERER.render( mesh, CAMERA );
    if ( mesh2 ) RENDERER.render( mesh2, CAMERA );
 
 } )();

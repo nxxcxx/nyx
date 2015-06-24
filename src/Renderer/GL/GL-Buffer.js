@@ -1,7 +1,6 @@
 'use strict';
 
-
-var GLState = require( './GL-State' );
+var GL_STATE = require( './GL-State' );
 
 /*
  * @param  {TypedArray}  data
@@ -30,7 +29,7 @@ function bindBufferAttribute( gl, name, buffer, attribute, program ) {
 
 	if ( location === -1 ) {
 
-		if ( name !== 'index' ) console.warn( `${name} attribute is defined but never used by vertex shader` );
+		if ( name !== 'index' ) console.warn( `${name} attribute is defined but never used by vertex shader.` );
 
 	} else {
 
@@ -66,10 +65,7 @@ function assembleBufferAttributes( gl, attributes, program ) {
 
 }
 
-function updateAttributes( gl, attributes ) {
-
-	// if attribute index slot is enabled for previous mesh and is not use in current mesh
-	// then error ..access index out of range blah blah blah...
+function activeAttributes( gl, attributes ) {
 
 	Object.keys( attributes ).forEach( name => {
 
@@ -83,9 +79,11 @@ function updateAttributes( gl, attributes ) {
 	} );
 
 	// enable/disable attributes
-	GLState.enableAttributes( gl, attributes );
+	GL_STATE.enableAttributes( gl, attributes );
 
 }
+
+
 
 /*
  * @param  {String}  name
@@ -99,17 +97,18 @@ function bindBufferUniform( gl, name, uniform, program ) {
 	var setter;
 	switch ( uniform.type ) {
 
-		case 'm4':
-			setter = function ( value ) {
-
-				gl.uniformMatrix4fv( uniform.location, false, value );
-
-			}
+		case 'm4': setter =  value => gl.uniformMatrix4fv( uniform.location, false, value );
+			break;
+		case 't': setter = value => {
+				gl.activeTexture( gl.TEXTURE0 + uniform.unit );
+				gl.bindTexture( gl.TEXTURE_2D, uniform.value );
+				gl.uniform1i( uniform.location, uniform.unit );
+			};
 			break;
 
 	}
 
-	if ( !setter ) console.error( `${name} uniform type is unknown` );
+	if ( !setter ) console.error( `${name} uniform type is unknown.` );
 	uniform.setter = setter;
 
 }
@@ -136,7 +135,7 @@ function assembleBufferUniforms( gl, uniforms, program ) {
 /*
  * @param  {Object} uniforms
  */
-function updateUniforms( gl, uniforms ) {
+function activeUniforms( gl, uniforms ) {
 
 	Object.keys( uniforms ).forEach( name => {
 
@@ -152,7 +151,7 @@ module.exports = {
 
 	assembleBufferAttributes,
 	assembleBufferUniforms,
-	updateUniforms,
-	updateAttributes
+	activeAttributes,
+	activeUniforms
 
-}
+};
