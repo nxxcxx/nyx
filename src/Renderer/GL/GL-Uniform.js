@@ -23,14 +23,16 @@ function bindBufferUniform( gl, name, uniform, program ) {
 			break;
 
 		case 't': setter = val => {
+
+				// todo if texture image data ready ...
 				gl.activeTexture( gl.TEXTURE0 + uniform.unit );
 				gl.bindTexture( gl.TEXTURE_2D, val );
 				gl.uniform1i( uniform.location, uniform.unit );
+
 			};
 			break;
-         
-      default: console.error( `${name} uniform type is unknown.` );
 
+      default: console.error( `${name} uniform type is unknown.` );
 
 	}
 
@@ -47,7 +49,6 @@ function bindBufferUniform( gl, name, uniform, program ) {
  */
 function assembleUniformsBuffer( gl, uniforms, program ) {
 
-	// gl.useProgram( program );
 	Object.keys( uniforms ).forEach( name => {
 
 		var uni = uniforms[ name ];
@@ -65,7 +66,15 @@ function activateUniforms( gl, uniforms ) {
 	Object.keys( uniforms ).forEach( name => {
 
 		var uni = uniforms[ name ];
-		uni.setter( uni.value );
+		if ( uni.type === 't' ) {
+
+			uni.setter( uni._WebGLTexture );
+
+		} else {
+
+			uni.setter( uni.value );
+
+		}
 
 	} );
 

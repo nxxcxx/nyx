@@ -52,9 +52,7 @@ NYX.Tex.loadImage( './tex/stone.jpg', img => {
    geom.addAttribute( 'index', indices, [ indices.length, 1 ] );
    geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
 
-   var tex = NYX.Tex.createTexture( gl, img );
-
-   shader.uniforms.uTexture = { type: 't', value: tex };
+   shader.uniforms.uTexture = { type: 't', value: img };
 
 } );
 

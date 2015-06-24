@@ -6,6 +6,8 @@ var GL_INIT = require( './GL/GL-Init' );
 var GL_ATTRIBUTE = require( './GL/GL-Attribute' );
 var GL_UNIFORM = require( './GL/GL-Uniform' );
 
+var GL_TEXTURE = require( './GL/GL-Texture' );
+
 
 function Renderer( opts ) {
 
@@ -14,15 +16,14 @@ function Renderer( opts ) {
 	GL_INIT.getExtensions();
 	GL_STATE.setDefaultState( gl );
 
-
 	function render( mesh, camera ) {
 
 		_initMesh( mesh, camera );
 
 		gl.useProgram( mesh.shader._program );
 
-		_activeAttributes( mesh );
-		_activeUniforms( mesh );
+		_activateAttributes( mesh );
+		_activateUniforms( mesh );
 
 		if ( mesh.geometry.attributes.index ) {
 
@@ -67,7 +68,12 @@ function Renderer( opts ) {
 		Object.keys( unis ).forEach( name => {
 
 			var uni = unis[ name ];
-			if ( uni.type === 't' ) uni.unit = currUnit ++;
+			if ( uni.type === 't' ) {
+
+				uni.unit = currUnit ++;
+				uni._WebGLTexture = GL_TEXTURE.createTexture( gl, uni.value );
+
+			}
 
 		} );
 
@@ -75,21 +81,21 @@ function Renderer( opts ) {
 
 	}
 
-	function _activeAttributes( mesh ) {
+	function _initBuffers( mesh ) {
 
-		GL_ATTRIBUTE.activateAttributes( gl, mesh.geometry.attributes );
+		GL_ATTRIBUTE.assembleAttributesBuffer( gl, mesh.geometry.attributes, mesh.shader._program );
 
 	}
 
-	function _activeUniforms( mesh ) {
+	function _activateUniforms( mesh ) {
 
 		GL_UNIFORM.activateUniforms( gl, mesh.shader.uniforms );
 
 	}
 
-	function _initBuffers( mesh ) {
+	function _activateAttributes( mesh ) {
 
-		GL_ATTRIBUTE.assembleAttributesBuffer( gl, mesh.geometry.attributes, mesh.shader._program );
+		GL_ATTRIBUTE.activateAttributes( gl, mesh.geometry.attributes );
 
 	}
 

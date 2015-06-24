@@ -17,12 +17,6 @@ class BufferGeometry {
 
 	}
 
-	addElementAttribute( name, data ) {
-
-		
-
-	}
-
 }
 
 module.exports = BufferGeometry;
