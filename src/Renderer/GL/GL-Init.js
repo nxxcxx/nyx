@@ -3,7 +3,6 @@
 var gl = null;
 var canvas = null;
 
-
 function initContext( opts = {} ) {
 
    canvas = opts.canvas || document.createElement( 'canvas' );

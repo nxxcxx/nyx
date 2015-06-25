@@ -7,7 +7,6 @@ var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 var ASPECT_RATIO = WIDTH / HEIGHT;
 
-
 global.RENDERER = new NYX.Renderer( {} );
 global.gl = RENDERER.gl;
 
@@ -33,32 +32,40 @@ global.CAMERA = new NYX.PerspectiveCamera( NYX.Util.rad( 45 ), ASPECT_RATIO, 1, 
 NYX.OrbitCtrl( canvas, CAMERA );
 CAMERA.updateViewMatrix();
 
-
-
 NYX.AssetManager.fetch( {
 
    images: {
-      stone: './tex/stone.jpg'
+      stone: './assets/tex/stone.jpg'
    },
    json: {
-      skull: './ext/skull-high.json'
+      skull: './assets/ext/skull-high.json'
+   },
+   shaders: {
+      textureExampleVert: './assets/shaders/textureExample.vert',
+      textureExampleFrag: './assets/shaders/textureExample.frag',
+      normalExampleVert: './assets/shaders/normalExample.vert',
+      normalExampleFrag: './assets/shaders/normalExample.frag'
    }
 
-}, () => {
+}, assets => {
 
-   global.ASSETS = NYX.AssetManager.assets;
+   global.ASSETS = assets;
+   console.log( 'Assets:', ASSETS );
    main();
    run();
 
 } );
 
-
-
 function main() {
 
    // Mesh - texture test
       var geom = new NYX.BufferGeometry();
-      var shader = new NYX.Shader();
+      var shader = new NYX.Shader( {
+
+         vs: ASSETS.shaders.textureExampleVert.data,
+         fs: ASSETS.shaders.textureExampleFrag.data
+
+      } );
       global.mesh = new NYX.Mesh( geom, shader );
 
       var vertices = new Float32Array([-1,-1,1,1,-1,1,1,1,1,-1,1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,1,-1,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,1,1,-1,-1,1,1,-1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1] );
@@ -69,19 +76,24 @@ function main() {
       geom.addAttribute( 'index', indices, [ indices.length, 1 ] );
       geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
 
-      shader.uniforms.uTexture = { type: 't', value: ASSETS.images.stone };
+      shader.uniforms.uTexture = { type: 't', value: ASSETS.images.stone.data };
 
-   // Mesh2 - json test
+   // Mesh2 - json & normal test
 
       var geom = new NYX.BufferGeometry();
-      var shader = new NYX.Shader();
+      var shader = new NYX.Shader( {
+
+         vs: ASSETS.shaders.normalExampleVert.data,
+         fs: ASSETS.shaders.normalExampleFrag.data
+
+      } );
 
       global.mesh2 = new NYX.Mesh( geom, shader );
       vec3.set( mesh2.scale, 0.5, 0.5, 0.5 );
       vec3.set( mesh2.position, -2.5, 0.0, 0.0 );
       mesh2.updateModelMatrix();
 
-      var res = ASSETS.json.skull;
+      var res = ASSETS.json.skull.data;
       var vpos = ndarray( new Float32Array( res.vertices ), [ res.vertices.length / 3, 3 ] );
       var vidx = ndarray( new Uint32Array( res.faces ), [ res.faces.length, 1 ] );
 

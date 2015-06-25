@@ -1,14 +1,12 @@
 'use strict';
 
 /*
-var pattern = {
+var uriObj = {
 
    images: {
-      type: 'img',
       name: 'path/to/file'
    },
    shaders: {
-      type: 'text',
       name: 'path/to/file'
    }
 
@@ -20,82 +18,111 @@ var total = 0;
 var loaded = 0;
 var onLoadComplete = null;
 
-function fetch( assets_, done ) {
+var loader = {
 
-	assets = assets_;
-	onLoadComplete = done;
-	var images = assets.images || {};
-	var shaders = assets.shaders || {};
-   var json = assets.json || {};
+	image: ( uri, done ) => {
 
-	Object.keys( images ).forEach( key => {
+		var img = new Image();
+		img.onload = () => done( img );
+		img.src = uri;
 
-		itemStart();
-		loadImage( images[ key ], res => {
+	},
 
-			images[ key ] = res;
-			itemEnd();
+	XHR: ( uri, done ) => {
 
-		} );
+		var request = new XMLHttpRequest();
+		request.open( 'GET', uri, true );
+		request.addEventListener( 'load', () => {
 
-	} );
-
-   Object.keys( json ).forEach( key => {
-
-		itemStart();
-		XHR( json[ key ], res => {
-
-			json[ key ] = res;
-			itemEnd();
+			done( request.response );
 
 		} );
+		request.send();
 
-	} );
-
-}
-
-function itemStart() {
-
-	total++;
-
-}
-
-function itemEnd( uri ) {
-
-	loaded++;
-	if ( loaded === total && onLoadComplete !== null ) {
-		onLoadComplete();
 	}
 
+};
 
-}
+var fetcher = {
 
-function loadImage( uri, done ) {
+	fetchText: text => enqueue( loader.XHR, text, null ),
+	fetchImages: images => enqueue( loader.image, images, null ),
+	fetchJSON: jsons => enqueue( loader.XHR, jsons, JSON.parse )
 
-	var img = new Image();
-	img.onload = () => done( img );
-	img.src = uri;
+};
 
-}
 
-function XHR( uri, done ) {
+function enqueue( loaderFn, obj, transform ) {
 
-	var request = new XMLHttpRequest();
-	request.open( 'GET', uri, true );
-	request.addEventListener( 'load', () => {
+	forEachProp( obj, key => {
 
-      done( JSON.parse( request.response ) );
+		itemStart();
+
+		loaderFn( obj[ key ].path, res => {
+
+			obj[ key ].data = transform ? transform( res ) : res;
+			itemEnd();
+
+		} );
 
 	} );
-   request.send();
+
+	function itemStart() {
+
+		total ++;
+
+	}
+
+	function itemEnd() {
+
+		loaded ++;
+		if ( loaded === total && onLoadComplete !== null ) {
+
+			onLoadComplete( assets );
+
+		}
+
+	}
+
+}
+
+function prepareAssets( uriObj ) {
+
+	forEachProp( uriObj, group => {
+
+		assets[ group ] = {};
+
+		forEachProp( uriObj[ group ], name => {
+
+			assets[ group ][ name ] = { path: uriObj[ group ][ name ] };
+
+		} );
+
+	} );
+
+}
+
+function fetchFiles( uriObj, done ) {
+
+	prepareAssets( uriObj );
+
+	onLoadComplete = done;
+
+	fetcher.fetchImages( assets.images );
+	fetcher.fetchJSON( assets.json );
+	fetcher.fetchText( assets.shaders );
+
+}
+
+function forEachProp( obj, fn ) {
+
+	Object.keys( obj ).forEach( key => fn( key ) );
 
 }
 
 module.exports = {
 
-	fetch,
-	get assets() {
-		return assets;
-	}
+	fetch: fetchFiles,
+	get assets() { return assets; }
 
 };

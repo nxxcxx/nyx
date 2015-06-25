@@ -1,13 +1,11 @@
 'use strict';
 
-var GL_PROGRAM = require( './GL/GL-Program' );
-var GL_STATE = require( './GL/GL-State' );
-var GL_INIT = require( './GL/GL-Init' );
+var GL_PROGRAM   = require( './GL/GL-Program' );
+var GL_STATE     = require( './GL/GL-State' );
+var GL_INIT      = require( './GL/GL-Init' );
 var GL_ATTRIBUTE = require( './GL/GL-Attribute' );
-var GL_UNIFORM = require( './GL/GL-Uniform' );
-
-var GL_TEXTURE = require( './GL/GL-Texture' );
-
+var GL_UNIFORM   = require( './GL/GL-Uniform' );
+var GL_TEXTURE   = require( './GL/GL-Texture' );
 
 function Renderer( opts ) {
 
@@ -69,7 +67,7 @@ function Renderer( opts ) {
 			var uni = unis[ name ];
 			if ( uni.type === 't' ) {
 
-				uni.unit = currUnit ++;
+				uni.unit = currUnit++;
 				uni._WebGLTexture = GL_TEXTURE.createTexture( gl, uni.value );
 
 			}
