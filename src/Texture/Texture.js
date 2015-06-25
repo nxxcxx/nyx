@@ -1,6 +1,5 @@
 'use strict';
 
-
 function loadImage( path, done ) {
 
 	var img = new Image();

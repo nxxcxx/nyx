@@ -19,17 +19,19 @@ global.ndarray = require( 'ndarray' );
 
 global.NYX = {
 
-   CONST: require( './Global/Constants' ),
-   Renderer: require( './Renderer/Renderer' ),
+   CONST            : require( './Global/Constants' ),
+   Renderer         : require( './Renderer/Renderer' ),
    PerspectiveCamera: require( './Camera/PerspectiveCamera' ),
-   OrbitCtrl: require( './Camera/Ctrl/OrbitCtrl'),
-   Mesh: require( './Mesh/Mesh' ),
-   BufferGeometry: require( './Geometry/BufferGeometry' ),
-   Shader: require( './Shader/Shader' ),
-   Util: require( './Util/Util' ),
+   OrbitCtrl        : require( './Camera/Ctrl/OrbitCtrl'),
+   Mesh             : require( './Mesh/Mesh' ),
+   BufferGeometry   : require( './Geometry/BufferGeometry' ),
+   Shader           : require( './Shader/Shader' ),
+   Util             : require( './Util/Util' ),
 
-   TestGeometry: require( './Geometry/TestGeometry' ),
-   Tex: require( './Texture/Texture' )
+   TestGeometry     : require( './Geometry/TestGeometry' ),
+   Tex              : require( './Texture/Texture' ),
+
+   AssetManager     : require( './Manager/AssetManager')
 
 };
 

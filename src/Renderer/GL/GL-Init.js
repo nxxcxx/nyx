@@ -9,7 +9,7 @@ function initContext( opts = {} ) {
    canvas = opts.canvas || document.createElement( 'canvas' );
 	gl = canvas.getContext( 'webgl', opts );
    if ( !gl ) console.error( 'WebGL not supported.' );
-   return gl;
+   return { gl, canvas };
 
 }
 
@@ -33,6 +33,7 @@ module.exports = {
 
    initContext,
    getExtensions,
-   getCanvas,
+   get canvas() { return canvas; },
+   get gl() { return gl; }
 
 };

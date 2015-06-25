@@ -19,6 +19,7 @@ const CONST = {
       attribute vec3 position;
       attribute vec4 color;
       attribute vec2 uv;
+      attribute vec3 normal;
 
       uniform mat4 modelMatrix;
       uniform mat4 viewMatrix;
@@ -26,11 +27,15 @@ const CONST = {
 
       varying vec2 vUv;
       varying vec3 vPosition;
+      varying vec3 vNormal;
 
       void main() {
+
+         vNormal = normalize( normal );
          vUv = uv;
          vPosition = position;
          gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
+
       }
 
       `
@@ -44,10 +49,19 @@ const CONST = {
 
       varying vec2 vUv;
       varying vec3 vPosition;
+      varying vec3 vNormal;
 
       void main() {
-         vec3 color = texture2D( uTexture, vUv ).rgb;
+
+         // vec3 color = texture2D( uTexture, vUv ).rgb;
+         vec3 color = vec3( 1.0 );
+
+         color = vNormal * 0.5 + 0.5;
+         // vec3 lumCoef = vec3( 0.299, 0.587, 0.114 );
+         // color = vec3( dot( lumCoef, color ) );
+
          gl_FragColor = vec4( color, 1.0 );
+
       }
 
       `

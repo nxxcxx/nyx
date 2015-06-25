@@ -11,8 +11,7 @@ var GL_TEXTURE = require( './GL/GL-Texture' );
 
 function Renderer( opts ) {
 
-	var gl = GL_INIT.initContext( opts );
-	var canvas = GL_INIT.getCanvas();
+	var { gl, canvas } = GL_INIT.initContext( opts );
 	GL_INIT.getExtensions();
 	GL_STATE.setDefaultState( gl );
 
