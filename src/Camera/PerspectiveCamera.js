@@ -8,7 +8,7 @@ class PerspectiveCamera extends Camera {
 
 		super();
 		[ this.fov, this.aspectRatio, this.near, this.far ] = arguments
-		mat4.perspective( this.projectionMatrix, fov, aspectRatio, near, far );
+		this.updateProjectionMatrix();
 
 	}
 

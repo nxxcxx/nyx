@@ -7,8 +7,10 @@ var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 var ASPECT_RATIO = WIDTH / HEIGHT;
 
-global.RENDERER = new NYX.Renderer( {} );
-global.gl = RENDERER.gl;
+// global.GL_INIT = require( './Renderer/GL/GL-Init' );
+// Object.defineProperty( global, 'GL', { get: () => { return GL_INIT.gl; } } );
+
+global.RENDERER = NYX.Renderer( {} );
 
 ( function initCanvas() {
 

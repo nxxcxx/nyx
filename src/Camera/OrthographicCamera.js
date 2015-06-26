@@ -8,7 +8,7 @@ class OrthographicCamera extends Camera {
 
       super();
       [ this.left, this.right, this.bot, this.top, this.near, this.far ] = arguments;
-      mat4.ortho( this.projectionMatrix, left, right, bot, top, near, far );
+      this.updateProjectionMatrix();
 
    }
 

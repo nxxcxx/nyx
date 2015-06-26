@@ -5,12 +5,12 @@
  * @param  {boolean}     isIndexed
  * @return {WebGLBuffer}
  */
-function createBuffer( gl, data, isIndexed ) {
+function createBuffer( data, isIndexed ) {
 
-	var buffer = gl.createBuffer();
-	var target = isIndexed ? gl.ELEMENT_ARRAY_BUFFER : gl.ARRAY_BUFFER;
-	gl.bindBuffer( target, buffer );
-	gl.bufferData( target, data, gl.STATIC_DRAW );
+	var buffer = GL.createBuffer();
+	var target = isIndexed ? GL.ELEMENT_ARRAY_BUFFER : GL.ARRAY_BUFFER;
+	GL.bindBuffer( target, buffer );
+	GL.bufferData( target, data, GL.STATIC_DRAW );
 	return buffer;
 
 }

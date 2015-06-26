@@ -4,23 +4,23 @@
  * @param {String} type; shader type 'vs' or 'fs'
  * @param {String} src
  */
-function createShader( gl, type, src ) {
+function createShader( type, src ) {
 
 	var shaderType;
 
-	if ( type === 'vs' ) shaderType = gl.VERTEX_SHADER;
-	else if ( type === 'fs' ) shaderType = gl.FRAGMENT_SHADER;
+	if ( type === 'vs' ) shaderType = GL.VERTEX_SHADER;
+	else if ( type === 'fs' ) shaderType = GL.FRAGMENT_SHADER;
 
-	var shader = gl.createShader( shaderType );
-	gl.shaderSource( shader, src );
-	gl.compileShader( shader );
+	var shader = GL.createShader( shaderType );
+	GL.shaderSource( shader, src );
+	GL.compileShader( shader );
 
-	var log = gl.getShaderInfoLog( shader );
+	var log = GL.getShaderInfoLog( shader );
 
-	if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
+	if ( !GL.getShaderParameter( shader, GL.COMPILE_STATUS ) ) {
 
 		console.error( log );
-		gl.deleteShader( shader );
+		GL.deleteShader( shader );
 		return null;
 
 	}
@@ -34,19 +34,19 @@ function createShader( gl, type, src ) {
 /**
  * @param {WebGLShader}
  */
-function createProgram( gl, ...shaders ) {
+function createProgram( ...shaders ) {
 
-	var program = gl.createProgram();
-	shaders.forEach( shader => gl.attachShader( program, shader ) );
+	var program = GL.createProgram();
+	shaders.forEach( shader => GL.attachShader( program, shader ) );
 
-	gl.linkProgram( program );
+	GL.linkProgram( program );
 
-	var log = gl.getProgramInfoLog( program );
+	var log = GL.getProgramInfoLog( program );
 
-	if ( !gl.getProgramParameter( program, gl.LINK_STATUS ) ) {
+	if ( !GL.getProgramParameter( program, GL.LINK_STATUS ) ) {
 
 		console.error( log );
-		gl.deleteProgram( program );
+		GL.deleteProgram( program );
 		return null;
 
 	}
@@ -60,11 +60,11 @@ function createProgram( gl, ...shaders ) {
  * @param {String} vertexShaderSrc
  * @param {String} fragmentShaderSrc
  */
-function createShaderProgram( gl, vertexShaderSrc, fragmentShaderSrc ) {
+function createShaderProgram( vertexShaderSrc, fragmentShaderSrc ) {
 
-	var vs = createShader( gl, 'vs', vertexShaderSrc );
-	var fs = createShader( gl, 'fs', fragmentShaderSrc );
-	return createProgram( gl, vs, fs );
+	var vs = createShader( 'vs', vertexShaderSrc );
+	var fs = createShader( 'fs', fragmentShaderSrc );
+	return createProgram( vs, fs );
 
 }
 

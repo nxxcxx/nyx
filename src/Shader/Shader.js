@@ -10,7 +10,7 @@ class Shader {
 
 		this.vertexShaderSrc   = opts.vs || NYX.CONST.DEFAULT_VERTEX_SHADER;
       this.fragmentShaderSrc = opts.fs || NYX.CONST.DEFAULT_FRAGMENT_SHADER;
-		this.drawMode          = opts.drawMode === undefined ? NYX.CONST.TRIANGLES : opts.drawMode;
+		this.drawMode          = opts.drawMode || 'TRIANGLES';
 
 		this.depthTest         = null;
 		this.blenEquation      = null;

@@ -2,32 +2,47 @@
 
 class Texture2D {
 
-	constructor( opts ) {
+	constructor( opts = {} ) {
 
 		this.data             = opts.data;
-		this.format           = null;
-		this.type             = null;
-		this.mapping          = null;
-		this.wrapS            = null;
-		this.wrapT            = null;
-		this.minFilter        = null;
-		this.magFilter        = null;
-		this.offset           = null;
-		this.repeat           = null;
-		this.generateMipmap   = null;
-		this.preMultiplyAlpha = null;
-		this.flipY            = null;
+
+		this.wrapS            = opts.wrapS || 'CLAMP_TO_EDGE';
+		this.wrapT            = opts.wrapT || 'CLAMP_TO_EDGE';
+		this.minFilter        = opts.minFilter ||  'LINEAR_MIPMAP_NEAREST';
+		this.magFilter        = opts.magFilter || 'LINEAR';
 
 	}
 
 }
 
-class ImageTexture {}
+class ImageTexture extends Texture2D {
 
-class DataTexture {}
+	constructor( opts = {} ) {
+
+		super( {
+			data: opts.data
+		} );
+
+	}
+
+}
+
+class DataTexture extends Texture2D {
+
+	constructor( size ) {
+
+		super( {
+
+		} );
+
+	}
+
+}
 
 module.exports = {
 
+	ImageTexture,
+	DataTexture
 
 };
 
@@ -35,23 +50,23 @@ function createTexture( gl, tex ) {
 
 	var glTex = gl.createTexture();
 	gl.bindTexture( gl.TEXTURE_2D, glTex );
-	gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, tex.data );
 
-	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, tex.wrapS || gl.CLAMP_TO_EDGE );
-	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, tex.wrapT || gl.CLAMP_TO_EDGE );
+	if ( tex instanceof ImageTexture ) {
 
-	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, tex.minFilter || gl.LINEAR_MIPMAP_NEAREST );
-	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, tex.magFilter || gl.LINEAR );
+		gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, tex.data );
 
-	/* if not dataTexture
-	var ext = gl.getExtension("MOZ_EXT_texture_filter_anisotropic");
-	gl.texParameterf(gl.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4);
-	var max_anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
-	gl.texParameterf( gl.TEXTURE_2D, 34046, 16 );
-	*/
+	}
+	else if ( tex instanceof DataTexture ) {
 
-	// if not dataTexture
-	gl.generateMipmap( gl.TEXTURE_2D );
+	}
+
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, tex.wrapS );
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, tex.wrapT );
+
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, tex.minFilter );
+	gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, tex.magFilter );
+
+	if ( tex.generateMipmap ) gl.generateMipmap( gl.TEXTURE_2D );
 
 	gl.bindTexture( gl.TEXTURE_2D, null );
 	return glTex;

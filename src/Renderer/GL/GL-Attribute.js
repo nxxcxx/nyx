@@ -9,9 +9,9 @@ var GL_BUFFER = require( './GL-Buffer' );
  * @param  {Object}       attribute
  * @param  {WebGLProgram} program
  */
-function bindBufferAttribute( gl, name, buffer, attribute, program ) {
+function bindBufferAttribute( name, buffer, attribute, program ) {
 
-	var location = gl.getAttribLocation( program, name );
+	var location = GL.getAttribLocation( program, name );
 
 	if ( location === -1 ) {
 
@@ -19,9 +19,9 @@ function bindBufferAttribute( gl, name, buffer, attribute, program ) {
 
 	} else {
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, buffer );
-		gl.enableVertexAttribArray( location );
-		gl.vertexAttribPointer( location, attribute.shape[ 1 ], gl.FLOAT, false, 0, 0 );
+		GL.bindBuffer( GL.ARRAY_BUFFER, buffer );
+		GL.enableVertexAttribArray( location );
+		GL.vertexAttribPointer( location, attribute.shape[ 1 ], GL.FLOAT, false, 0, 0 );
 
 	}
 
@@ -39,19 +39,19 @@ function bindBufferAttribute( gl, name, buffer, attribute, program ) {
  *             }
  * @param  {WebGLProgram} program
  */
-function assembleAttributesBuffer( gl, attributes, program ) {
+function assembleAttributesBuffer( attributes, program ) {
 
 	Object.keys( attributes ).forEach( name => {
 
 		var attr = attributes[ name ];
-		var buffer = GL_BUFFER.createBuffer( gl, attr.data, name === 'index' );
-		bindBufferAttribute( gl, name, buffer, attr, program );
+		var buffer = GL_BUFFER.createBuffer( attr.data, name === 'index' );
+		bindBufferAttribute( name, buffer, attr, program );
 
 	} );
 
 }
 
-function activateAttributes( gl, attributes ) {
+function activateAttributes( attributes ) {
 
 	Object.keys( attributes ).forEach( name => {
 
@@ -59,16 +59,15 @@ function activateAttributes( gl, attributes ) {
 
 		if ( attr.location === -1  ) return;
 
-		gl.bindBuffer( gl.ARRAY_BUFFER, attr.buffer );
-		gl.vertexAttribPointer( attr.location, attr.shape[ 1 ], gl.FLOAT, false, 0, 0 );
+		GL.bindBuffer( GL.ARRAY_BUFFER, attr.buffer );
+		GL.vertexAttribPointer( attr.location, attr.shape[ 1 ], GL.FLOAT, false, 0, 0 );
 
 	} );
 
 	// enable/disable attributes
-	GL_STATE.enableAttributes( gl, attributes );
+	GL_STATE.enableAttributes( attributes );
 
 }
-
 
 module.exports = {
 

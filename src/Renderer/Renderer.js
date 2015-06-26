@@ -9,29 +9,29 @@ var GL_TEXTURE   = require( './GL/GL-Texture' );
 
 function Renderer( opts ) {
 
-	var { gl, canvas } = GL_INIT.initContext( opts );
+	GL_INIT.initContext( opts );
 	GL_INIT.getExtensions();
-	GL_STATE.setDefaultState( gl );
+	GL_STATE.setDefaultState();
 
 	function render( mesh, camera ) {
 
 		_initMesh( mesh, camera );
 
-		gl.useProgram( mesh.shader._program );
+		GL.useProgram( mesh.shader._program );
 
 		_activateAttributes( mesh );
 		_activateUniforms( mesh );
 
 		if ( mesh.geometry.attributes.index ) {
 
-			var type = ( mesh.geometry.attributes.index.data instanceof Uint16Array ) ? gl.UNSIGNED_SHORT : gl.UNSIGNED_INT;
-			gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, mesh.geometry.attributes.index.buffer );
-			gl.drawElements( mesh.shader.drawMode, mesh.geometry.attributes.index.shape[ 0 ], type, 0 );
+			var type = ( mesh.geometry.attributes.index.data instanceof Uint16Array ) ? GL.UNSIGNED_SHORT : GL.UNSIGNED_INT;
+			GL.bindBuffer( GL.ELEMENT_ARRAY_BUFFER, mesh.geometry.attributes.index.buffer );
+			GL.drawElements( GL[ mesh.shader.drawMode ], mesh.geometry.attributes.index.shape[ 0 ], type, 0 );
 
 		} else {
 
-			gl.bindBuffer( gl.ARRAY_BUFFER, mesh.geometry.attributes.position.buffer );
-			gl.drawArrays( mesh.shader.drawMode, 0, mesh.geometry.attributes.position.shape[ 0 ] );
+			GL.bindBuffer( GL.ARRAY_BUFFER, mesh.geometry.attributes.position.buffer );
+			GL.drawArrays( GL[ mesh.shader.drawMode ], 0, mesh.geometry.attributes.position.shape[ 0 ] );
 
 		}
 
@@ -68,62 +68,63 @@ function Renderer( opts ) {
 			if ( uni.type === 't' ) {
 
 				uni.unit = currUnit++;
-				uni._WebGLTexture = GL_TEXTURE.createTexture( gl, uni.value );
+				uni._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
 
 			}
 
 		} );
 
-		GL_UNIFORM.assembleUniformsBuffer( gl, unis, mesh.shader._program );
+		GL_UNIFORM.assembleUniformsBuffer( unis, mesh.shader._program );
 
 	}
 
 	function _initBuffers( mesh ) {
 
-		GL_ATTRIBUTE.assembleAttributesBuffer( gl, mesh.geometry.attributes, mesh.shader._program );
+		GL_ATTRIBUTE.assembleAttributesBuffer( mesh.geometry.attributes, mesh.shader._program );
 
 	}
 
 	function _activateUniforms( mesh ) {
 
-		GL_UNIFORM.activateUniforms( gl, mesh.shader.uniforms );
+		GL_UNIFORM.activateUniforms( mesh.shader.uniforms );
 
 	}
 
 	function _activateAttributes( mesh ) {
 
-		GL_ATTRIBUTE.activateAttributes( gl, mesh.geometry.attributes );
+		GL_ATTRIBUTE.activateAttributes( mesh.geometry.attributes );
 
 	}
 
 	function _initShaders( shader ) {
 
-		shader._program = GL_PROGRAM.createShaderProgram( gl, shader.vertexShaderSrc, shader.fragmentShaderSrc );
+		shader._program = GL_PROGRAM.createShaderProgram( shader.vertexShaderSrc, shader.fragmentShaderSrc );
 
 	}
 
 	function setClearColor( r, g, b, a ) {
 
-		gl.clearColor( r, g, b, a );
+		GL.clearColor( r, g, b, a );
 
 	}
 
 	function clear() {
 
-		gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT );
+		GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
 
 	}
 
 	function setViewport( width, height ) {
 
-		gl.viewport( 0.0, 0.0, width, height );
+		GL.viewport( 0.0, 0.0, width, height );
 
 	}
 
 	return {
 
-		gl,
-		canvas,
+		get GL() { return GL_INIT.GL },
+		get canvas() { return GL_INIT.canvas },
+
 		setClearColor,
 		setViewport,
 		clear,

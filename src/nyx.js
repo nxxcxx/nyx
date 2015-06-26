@@ -28,11 +28,17 @@ global.NYX = {
    BufferGeometry    : require( './Geometry/BufferGeometry' ),
    Shader            : require( './Shader/Shader' ),
    Util              : require( './Util/Util' ),
-
+   Texture           : require( './Texture/Texture.js' ),
    TestGeometry      : require( './Geometry/TestGeometry' ),
-
    AssetManager      : require( './Manager/AssetManager')
 
 };
 
 module.exports = NYX;
+
+
+
+
+
+var GL_INIT = require( './Renderer/GL/GL-Init' );
+Object.defineProperty( global, 'GL', { get: () => { return  GL_INIT.GL; } } );

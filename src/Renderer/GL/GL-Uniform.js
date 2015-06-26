@@ -5,9 +5,9 @@
  * @param  {Object}  uniform
  * @param  {WebGLProgram} program
  */
-function bindBufferUniform( gl, name, uniform, program ) {
+function bindBufferUniform( name, uniform, program ) {
 
-	uniform.location = gl.getUniformLocation( program, name );
+	uniform.location = GL.getUniformLocation( program, name );
 
 	if ( !uniform.location ) {
 		console.warn( `${name} uniform is defined but never used by shader.` );
@@ -16,18 +16,18 @@ function bindBufferUniform( gl, name, uniform, program ) {
 	var setter;
 	switch ( uniform.type ) {
 
-		case 'f': setter = val => gl.uniform1f( uniform.location, val );
+		case 'f': setter = val => GL.uniform1f( uniform.location, val );
 			break;
 
-		case 'm4': setter =  val => gl.uniformMatrix4fv( uniform.location, false, val );
+		case 'm4': setter =  val => GL.uniformMatrix4fv( uniform.location, false, val );
 			break;
 
 		case 't': setter = val => {
 
 				// todo if texture image data ready ...
-				gl.activeTexture( gl.TEXTURE0 + uniform.unit );
-				gl.bindTexture( gl.TEXTURE_2D, val );
-				gl.uniform1i( uniform.location, uniform.unit );
+				GL.activeTexture( GL.TEXTURE0 + uniform.unit );
+				GL.bindTexture( GL.TEXTURE_2D, val );
+				GL.uniform1i( uniform.location, uniform.unit );
 
 			};
 			break;
@@ -47,12 +47,12 @@ function bindBufferUniform( gl, name, uniform, program ) {
  *             }
  * @param  {WebGLProgram} program
  */
-function assembleUniformsBuffer( gl, uniforms, program ) {
+function assembleUniformsBuffer( uniforms, program ) {
 
 	Object.keys( uniforms ).forEach( name => {
 
 		var uni = uniforms[ name ];
-		bindBufferUniform( gl, name, uni, program );
+		bindBufferUniform( name, uni, program );
 
 	} );
 
@@ -61,7 +61,7 @@ function assembleUniformsBuffer( gl, uniforms, program ) {
 /*
  * @param  {Object} uniforms
  */
-function activateUniforms( gl, uniforms ) {
+function activateUniforms( uniforms ) {
 
 	Object.keys( uniforms ).forEach( name => {
 

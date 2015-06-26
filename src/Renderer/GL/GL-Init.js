@@ -1,14 +1,14 @@
 'use strict';
 
-var gl = null;
+var GL = null;
 var canvas = null;
 
 function initContext( opts = {} ) {
 
    canvas = opts.canvas || document.createElement( 'canvas' );
-	gl = canvas.getContext( 'webgl', opts );
-   if ( !gl ) console.error( 'WebGL not supported.' );
-   return { gl, canvas };
+	GL = canvas.getContext( 'webgl', opts );
+   if ( !GL ) console.error( 'WebGL not supported.' );
+   return { GL, canvas };
 
 }
 
@@ -16,7 +16,7 @@ function getExtensions() {
 
 	NYX.CONST.WEBGL_EXTENSIONS.forEach( ext => {
 
-      if ( !gl.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
+      if ( !GL.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
 
    } );
 
@@ -33,6 +33,6 @@ module.exports = {
    initContext,
    getExtensions,
    get canvas() { return canvas; },
-   get gl() { return gl; }
+   get GL() { return GL; }
 
 };

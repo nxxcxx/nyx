@@ -3,7 +3,7 @@
 var activeAttributes = new Uint8Array( 16 );
 var incomingAttributes = new Uint8Array( 16 );
 
-function enableAttributes( gl, attributes ) {
+function enableAttributes( attributes ) {
 
    // reset incomingAttributes
    for( let i = 0; i < incomingAttributes.length; i ++ ) {
@@ -17,7 +17,7 @@ function enableAttributes( gl, attributes ) {
       if ( slot === -1 ) return;
       incomingAttributes[ slot ] = 1;
       activeAttributes[ slot ] = 1;
-      gl.enableVertexAttribArray( slot );
+      GL.enableVertexAttribArray( slot );
 
    } );
 
@@ -26,7 +26,7 @@ function enableAttributes( gl, attributes ) {
 
       if ( activeAttributes[ i ] !== incomingAttributes[ i ] ) {
 
-         gl.disableVertexAttribArray( i );
+         GL.disableVertexAttribArray( i );
          activeAttributes[ i ] = 0;
 
       }
@@ -35,23 +35,23 @@ function enableAttributes( gl, attributes ) {
 
 }
 
-function setDefaultState( gl ) {
+function setDefaultState() {
 
-	gl.clearColor( 0.12, 0.12, 0.15, 1.0 );
-	gl.clearDepth( 1.0 );
-	gl.clearStencil( 0.0 );
-	gl.enable( gl.DEPTH_TEST );
-	gl.depthFunc( gl.LEQUAL );
+	GL.clearColor( 0.12, 0.12, 0.15, 1.0 );
+	GL.clearDepth( 1.0 );
+	GL.clearStencil( 0.0 );
+	GL.enable( GL.DEPTH_TEST );
+	GL.depthFunc( GL.LEQUAL );
 
-	// gl.frontFace( gl.CCW );
-	// gl.cullFace( gl.BACK );
-	// gl.enable( gl.CULL_FACE );
+	// GL.frontFace( GL.CCW );
+	// GL.cullFace( GL.BACK );
+	// GL.enable( GL.CULL_FACE );
 
-	gl.enable( gl.BLEND );
-	gl.blendEquation( gl.FUNC_ADD );
-	gl.blendFunc( gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA );
+	GL.enable( GL.BLEND );
+	GL.blendEquation( GL.FUNC_ADD );
+	GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
 
-   gl.bindFramebuffer( gl.FRAMEBUFFER, null );
+   GL.bindFramebuffer( GL.FRAMEBUFFER, null );
 
 }
 
