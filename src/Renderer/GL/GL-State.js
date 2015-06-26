@@ -1,6 +1,5 @@
 'use strict';
 
-
 var activeAttributes = new Uint8Array( 16 );
 var incomingAttributes = new Uint8Array( 16 );
 

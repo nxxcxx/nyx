@@ -30,7 +30,11 @@ RENDERER.clear();
 
 global.CAMERA = new NYX.PerspectiveCamera( NYX.Util.rad( 45 ), ASPECT_RATIO, 1, 10000 );
 NYX.OrbitCtrl( canvas, CAMERA );
-CAMERA.updateViewMatrix();
+
+// OrthographicCamera Test
+// global.CAMERA = new NYX.OrthographicCamera( -1, 1, -1, 1, 1, 10 );
+// vec3.set( CAMERA.position, 0, 0, -5 );
+// CAMERA.updateViewMatrix();
 
 NYX.AssetManager.fetch( {
 
@@ -101,8 +105,8 @@ function main() {
       geom.addAttribute( 'index', vidx.data, vidx.shape );
 
       geom.computeVertexNormals();
-
 }
+
 
 function run( time ) {
 
