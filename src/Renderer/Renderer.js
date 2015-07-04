@@ -1,37 +1,55 @@
 'use strict';
 
-var GL_PROGRAM   = require( './GL/GL-Program' );
-var GL_STATE     = require( './GL/GL-State' );
-var GL_INIT      = require( './GL/GL-Init' );
-var GL_ATTRIBUTE = require( './GL/GL-Attribute' );
-var GL_UNIFORM   = require( './GL/GL-Uniform' );
-var GL_TEXTURE   = require( './GL/GL-Texture' );
+var GL_PROGRAM     = require( './GL/GL-Program' );
+var GL_STATE       = require( './GL/GL-State' );
+var GL_INIT        = require( './GL/GL-Init' );
+var GL_ATTRIBUTE   = require( './GL/GL-Attribute' );
+var GL_UNIFORM     = require( './GL/GL-Uniform' );
+var GL_TEXTURE     = require( './GL/GL-Texture' );
+var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' );
 
 function Renderer( opts ) {
 
 	GL_INIT.initContext( opts );
-	GL_INIT.getExtensions();
+	GL_INIT.getExtensions( NYX.CONST.WEBGL_EXTENSIONS );
 	GL_STATE.setDefaultState();
 
-	function render( mesh, camera ) {
+	function render( mesh, camera, renderTarget ) {
+
+		_setRenderTarget( renderTarget );
 
 		_initMesh( mesh, camera );
+
+		// todo: _updateMesh() => bufferSubData... texImage2D...
 
 		GL.useProgram( mesh.shader._program );
 
 		_activateAttributes( mesh );
 		_activateUniforms( mesh );
 
-		if ( mesh.geometry.attributes.index ) {
+		_draw( mesh );
 
-			var type = ( mesh.geometry.attributes.index.data instanceof Uint16Array ) ? GL.UNSIGNED_SHORT : GL.UNSIGNED_INT;
-			GL.bindBuffer( GL.ELEMENT_ARRAY_BUFFER, mesh.geometry.attributes.index.buffer );
-			GL.drawElements( GL[ mesh.shader.drawMode ], mesh.geometry.attributes.index.shape[ 0 ], type, 0 );
+	}
+
+	function _setRenderTarget( renderTarget ) {
+
+		// todo if ( renderTarget === currentRenderTarget ) return;
+		if ( renderTarget ) {
+
+			if ( renderTarget._framebuffer === null ) {
+
+				renderTarget._texture = GL_TEXTURE.createTexture( renderTarget.dataTexture );
+
+				var fbo = GL_FRAMEBUFFER.createFramebuffer( renderTarget );
+				renderTarget._framebuffer = fbo;
+
+			}
+
+			GL.bindFramebuffer( GL.FRAMEBUFFER, renderTarget._framebuffer );
 
 		} else {
 
-			GL.bindBuffer( GL.ARRAY_BUFFER, mesh.geometry.attributes.position.buffer );
-			GL.drawArrays( GL[ mesh.shader.drawMode ], 0, mesh.geometry.attributes.position.shape[ 0 ] );
+			GL.bindFramebuffer( GL.FRAMEBUFFER, null );
 
 		}
 
@@ -52,6 +70,23 @@ function Renderer( opts ) {
 
 	}
 
+	function _draw( mesh ) {
+
+		if ( mesh.geometry.attributes.index ) {
+
+			var type = ( mesh.geometry.attributes.index.data instanceof Uint16Array ) ? GL.UNSIGNED_SHORT : GL.UNSIGNED_INT;
+			GL.bindBuffer( GL.ELEMENT_ARRAY_BUFFER, mesh.geometry.attributes.index.buffer );
+			GL.drawElements( GL[ mesh.shader.drawMode ], mesh.geometry.attributes.index.shape[ 0 ], type, 0 );
+
+		} else {
+
+			GL.bindBuffer( GL.ARRAY_BUFFER, mesh.geometry.attributes.position.buffer );
+			GL.drawArrays( GL[ mesh.shader.drawMode ], 0, mesh.geometry.attributes.position.shape[ 0 ] );
+
+		}
+
+	}
+
 	function _initUniforms( mesh, camera ) {
 
 		var unis = mesh.shader.uniforms;
@@ -67,7 +102,7 @@ function Renderer( opts ) {
 			var uni = unis[ name ];
 			if ( uni.type === 't' ) {
 
-				uni.unit = currUnit++;
+				uni.unit = currUnit ++;
 				uni._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
 
 			}
@@ -114,6 +149,14 @@ function Renderer( opts ) {
 
 	}
 
+	function clearRenderTarget( renderTarget ) {
+
+		GL.bindFramebuffer( GL.FRAMEBUFFER, renderTarget._framebuffer );
+		GL.clear( GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT );
+		GL.bindFramebuffer( GL.FRAMEBUFFER, null );
+
+	}
+
 	function setViewport( width, height ) {
 
 		GL.viewport( 0.0, 0.0, width, height );
@@ -128,7 +171,8 @@ function Renderer( opts ) {
 		setClearColor,
 		setViewport,
 		clear,
-		render
+		render,
+		clearRenderTarget
 
 	};
 

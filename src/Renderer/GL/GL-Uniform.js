@@ -32,7 +32,7 @@ function bindBufferUniform( name, uniform, program ) {
 			};
 			break;
 
-      default: console.error( `${name} uniform type is unknown.` );
+      default: console.error( `${name} uniform type is unknown` );
 
 	}
 

@@ -25,7 +25,6 @@ global.RENDERER = NYX.Renderer( {} );
 
 } )();
 
-
 RENDERER.setViewport( WIDTH, HEIGHT );
 RENDERER.setClearColor( 0.12, 0.12, 0.13, 1.0 );
 RENDERER.clear();
@@ -82,7 +81,8 @@ function main() {
       geom.addAttribute( 'index', indices, [ indices.length, 1 ] );
       geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
 
-      shader.uniforms.uTexture = { type: 't', value: ASSETS.images.stone.data };
+      var tex = new NYX.Texture.ImageTexture( { data: ASSETS.images.stone.data } );
+      shader.uniforms.uTexture = { type: 't', value: tex };
 
    // Mesh2 - json & normal test
 
@@ -107,6 +107,14 @@ function main() {
       geom.addAttribute( 'index', vidx.data, vidx.shape );
 
       geom.computeVertexNormals();
+
+   // FBO RTT test
+
+      var dt = new NYX.Texture.DataTexture( 512 );
+      global.rt = new NYX.RenderTarget( dt );
+
+      //mesh.shader.uniforms.uTexture._WebGLTexture = rt._texture;
+
 }
 
 
@@ -114,7 +122,12 @@ function run( time ) {
 
    requestAnimationFrame( run );
 
+   RENDERER.setClearColor( 0.12, 0.12, 0.13, 1.0 );
    RENDERER.clear();
+
+   RENDERER.setClearColor( 0.5, 0.12, 0.13, 1.0 );
+   RENDERER.clearRenderTarget( rt );
+   RENDERER.render( mesh2, CAMERA, rt );
 
    RENDERER.render( mesh, CAMERA );
    RENDERER.render( mesh2, CAMERA );
@@ -132,4 +145,4 @@ window.addEventListener( 'resize', NYX.Util.debounce( event => {
    CAMERA.aspectRatio = ASPECT_RATIO;
    CAMERA.updateProjectionMatrix();
 
-}, 50) );
+}, 50 ) );

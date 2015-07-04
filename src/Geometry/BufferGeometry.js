@@ -19,6 +19,8 @@ class BufferGeometry {
 
 	computeVertexNormals() {
 
+		if ( !this.attributes.position || !this.attributes.index ) return;
+
 		var positions = this.attributes.position;
 		var indices = this.attributes.index;
 

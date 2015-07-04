@@ -12,9 +12,9 @@ function initContext( opts = {} ) {
 
 }
 
-function getExtensions() {
+function getExtensions( extensions ) {
 
-	NYX.CONST.WEBGL_EXTENSIONS.forEach( ext => {
+	extensions.forEach( ext => {
 
       if ( !GL.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
 

@@ -15,8 +15,6 @@ function createBuffer( data, isIndexed ) {
 
 }
 
-
-
 module.exports = {
 
 	createBuffer

@@ -55,7 +55,6 @@ function setDefaultState() {
 
 }
 
-
 module.exports = {
 
    enableAttributes,
