@@ -16,8 +16,6 @@ function Renderer( opts ) {
 
 	function render( mesh, camera, renderTarget ) {
 
-		_setRenderTarget( renderTarget );
-
 		_initMesh( mesh, camera );
 
 		// todo: _updateMesh() => bufferSubData... texImage2D...
@@ -25,6 +23,8 @@ function Renderer( opts ) {
 		_activateProgram( mesh );
 		_activateAttributes( mesh );
 		_activateUniforms( mesh );
+
+		_setRenderTarget( renderTarget );
 
 		_draw( mesh );
 
@@ -35,7 +35,7 @@ function Renderer( opts ) {
 		// todo if ( renderTarget === currentRenderTarget ) return;
 		if ( renderTarget ) {
 
-			if ( renderTarget._framebuffer === null /* && renderTarget.dataTexture._WebGLTexture */ ) {
+			if ( renderTarget._framebuffer === null ) {
 
 				renderTarget.dataTexture._WebGLTexture = GL_TEXTURE.createTexture( renderTarget.dataTexture );
 				var fbo = GL_FRAMEBUFFER.createFramebuffer( renderTarget );
