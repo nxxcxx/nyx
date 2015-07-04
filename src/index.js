@@ -55,7 +55,6 @@ NYX.AssetManager.fetch( {
 }, assets => {
 
    global.ASSETS = assets;
-   console.log( 'Assets:', ASSETS );
    main();
    run();
 
@@ -81,8 +80,13 @@ function main() {
       geom.addAttribute( 'index', indices, [ indices.length, 1 ] );
       geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
 
+      // FBO RTT test
+         var dt = new NYX.Texture.DataTexture( 512 );
+         global.rt = new NYX.RenderTarget( dt );
+
       var tex = new NYX.Texture.ImageTexture( { data: ASSETS.images.stone.data } );
-      shader.uniforms.uTexture = { type: 't', value: tex };
+      
+      shader.uniforms.uTexture = { type: 't', value: rt /* dt or tex */};
 
    // Mesh2 - json & normal test
 
@@ -108,12 +112,6 @@ function main() {
 
       geom.computeVertexNormals();
 
-   // FBO RTT test
-
-      var dt = new NYX.Texture.DataTexture( 512 );
-      global.rt = new NYX.RenderTarget( dt );
-
-      //mesh.shader.uniforms.uTexture._WebGLTexture = rt._texture;
 
 }
 

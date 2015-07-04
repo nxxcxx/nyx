@@ -22,8 +22,7 @@ function Renderer( opts ) {
 
 		// todo: _updateMesh() => bufferSubData... texImage2D...
 
-		GL.useProgram( mesh.shader._program );
-
+		_activateProgram( mesh );
 		_activateAttributes( mesh );
 		_activateUniforms( mesh );
 
@@ -36,10 +35,9 @@ function Renderer( opts ) {
 		// todo if ( renderTarget === currentRenderTarget ) return;
 		if ( renderTarget ) {
 
-			if ( renderTarget._framebuffer === null ) {
+			if ( renderTarget._framebuffer === null /* && renderTarget.dataTexture._WebGLTexture */ ) {
 
-				renderTarget._texture = GL_TEXTURE.createTexture( renderTarget.dataTexture );
-
+				renderTarget.dataTexture._WebGLTexture = GL_TEXTURE.createTexture( renderTarget.dataTexture );
 				var fbo = GL_FRAMEBUFFER.createFramebuffer( renderTarget );
 				renderTarget._framebuffer = fbo;
 
@@ -97,13 +95,14 @@ function Renderer( opts ) {
 
 		// set texture unit
 		var currUnit = 0;
+
 		Object.keys( unis ).forEach( name => {
 
 			var uni = unis[ name ];
 			if ( uni.type === 't' ) {
 
 				uni.unit = currUnit ++;
-				uni._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
+				if ( ! ( uni.value instanceof NYX.RenderTarget ) ) uni.value._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
 
 			}
 
@@ -116,6 +115,12 @@ function Renderer( opts ) {
 	function _initBuffers( mesh ) {
 
 		GL_ATTRIBUTE.assembleAttributesBuffer( mesh.geometry.attributes, mesh.shader._program );
+
+	}
+
+	function _activateProgram( mesh ) {
+
+		GL.useProgram( mesh.shader._program );
 
 	}
 
@@ -165,8 +170,8 @@ function Renderer( opts ) {
 
 	return {
 
-		get GL() { return GL_INIT.GL },
-		get canvas() { return GL_INIT.canvas },
+		get GL() { return GL_INIT.GL; },
+		get canvas() { return GL_INIT.canvas; },
 
 		setClearColor,
 		setViewport,

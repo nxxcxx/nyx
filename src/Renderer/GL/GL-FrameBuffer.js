@@ -4,8 +4,7 @@ function createFramebuffer( renderTarget ) {
 
 	var fb = GL.createFramebuffer();
 	GL.bindFramebuffer( GL.FRAMEBUFFER, fb );
-
-	GL.framebufferTexture2D( GL.FRAMEBUFFER, GL.COLOR_ATTACHMENT0, GL.TEXTURE_2D, renderTarget._texture, 0 );
+	GL.framebufferTexture2D( GL.FRAMEBUFFER, GL.COLOR_ATTACHMENT0, GL.TEXTURE_2D, renderTarget.dataTexture._WebGLTexture, 0 );
 
    // depth write
    var rb = GL.createRenderbuffer();
@@ -15,7 +14,6 @@ function createFramebuffer( renderTarget ) {
    GL.bindRenderbuffer( GL.RENDERBUFFER, null );
 
 	GL.bindFramebuffer( GL.FRAMEBUFFER, null );
-
 
 	return fb;
 

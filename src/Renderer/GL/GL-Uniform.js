@@ -68,7 +68,7 @@ function activateUniforms( uniforms ) {
 		var uni = uniforms[ name ];
 		if ( uni.type === 't' ) {
 
-			uni.setter( uni._WebGLTexture );
+			uni.setter( uni.value.dataTexture._WebGLTexture );
 
 		} else {
 
