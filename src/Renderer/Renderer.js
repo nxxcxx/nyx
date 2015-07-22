@@ -93,6 +93,18 @@ function Renderer( opts ) {
 		unis.viewMatrix.value = camera.viewMatrix;
 		unis.modelMatrix.value = mesh.modelMatrix;
 
+		// todo update uniforms every frame
+			//test
+			var mvm = mat4.create();
+			mat4.multiply( mvm, camera.viewMatrix, mesh.modelMatrix );
+			unis.modelViewMatrix.value = mvm;
+
+			var nm = mat4.create();
+			mat4.invert( nm, mvm );
+			mat4.transpose( nm, nm );
+			unis.normalMatrix.value = nm;
+
+
 		// set texture unit
 		var currUnit = 0;
 

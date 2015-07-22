@@ -6,11 +6,12 @@ class Texture2D {
 
 		this.data             = opts.data;
 
-		this.wrapS            = opts.wrapS || 'CLAMP_TO_EDGE';
-		this.wrapT            = opts.wrapT || 'CLAMP_TO_EDGE';
-		this.minFilter        = opts.minFilter ||  'LINEAR_MIPMAP_NEAREST';
-		this.magFilter        = opts.magFilter || 'LINEAR';
-		this.generateMipmap   = opts.generateMipmap;
+		this.flipY          = opts.flipY === undefined ? true : opts.flipY;
+		this.wrapS          = opts.wrapS || 'CLAMP_TO_EDGE';
+		this.wrapT          = opts.wrapT || 'CLAMP_TO_EDGE';
+		this.minFilter      = opts.minFilter || 'LINEAR_MIPMAP_NEAREST';
+		this.magFilter      = opts.magFilter || 'LINEAR';
+		this.generateMipmap = opts.generateMipmap;
 
 	}
 
@@ -49,9 +50,22 @@ class DataTexture extends Texture2D {
 
 }
 
+class CubeMapTexture extends Texture2D {
+
+	constructor( opts = {} ) {
+		super( {
+
+			generateMipmap: false
+
+		} );
+	}
+
+}
+
 module.exports = {
 
 	ImageTexture,
-	DataTexture
+	DataTexture,
+	CubeMapTexture
 
 };

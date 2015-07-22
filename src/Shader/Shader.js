@@ -22,7 +22,9 @@ class Shader {
 		this.uniforms = {
 			projectionMatrix: { type: 'm4', value: null },
 			viewMatrix: { type: 'm4', value: null },
-			modelMatrix: { type: 'm4', value: null }
+			modelMatrix: { type: 'm4', value: null },
+			modelViewMatrix: { type: 'm4', value: null },
+			normalMatrix: { type: 'm4', value: null }
 		};
 
 		// append user uniforms

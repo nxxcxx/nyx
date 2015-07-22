@@ -9,7 +9,7 @@ function OrbitCtrl( canvas, camera ) {
    var CAM_ANGLE = vec2.new( Math.PI * 0.5, 0 );
    var TMP_CAM_ANGLE = vec2.new();
    var DELTA = vec2.new();
-   var CAM_DIST = 10.0;
+   var CAM_DIST = 5.0;
    var GAIN = 0.01;
    var CLAMP_EPS = 0.01;
 
@@ -71,7 +71,7 @@ function OrbitCtrl( canvas, camera ) {
    canvas.addEventListener( 'mousewheel', event => {
 
       var dt = event.wheelDelta;
-      CAM_DIST -= dt * 0.01;
+      CAM_DIST -= dt * 0.005;
       CAM_DIST = clamp( CAM_DIST, 1, 50 );
       ctrlCamera();
 

@@ -34,22 +34,25 @@ NYX.OrbitCtrl( canvas, CAMERA );
 
 // OrthographicCamera Test
 // global.CAMERA = new NYX.OrthographicCamera( -1, 1, -1, 1, 1, 10 );
-// vec3.set( CAMERA.position, 0, 0, -5 );
+// vec3.set( CAMERA.position, 0, 0, 4 );
 // CAMERA.updateViewMatrix();
 
 NYX.AssetManager.fetch( {
 
    images: {
-      stone: './assets/tex/stone.jpg'
+      stone: './assets/tex/stone.jpg',
+      matcap: './assets/tex/mc_skymetal.jpg'
    },
    json: {
-      skull: './assets/ext/skull-high.json'
+      skull: './assets/ext/skull.json'
    },
    shaders: {
       textureExampleVert: './assets/shaders/textureExample.vert',
       textureExampleFrag: './assets/shaders/textureExample.frag',
       normalExampleVert: './assets/shaders/normalExample.vert',
-      normalExampleFrag: './assets/shaders/normalExample.frag'
+      normalExampleFrag: './assets/shaders/normalExample.frag',
+      matcapVert: './assets/shaders/matcap.vert',
+      matcapFrag: './assets/shaders/matcap.frag'
    }
 
 }, assets => {
@@ -87,20 +90,29 @@ function main() {
 
       } );
       global.mesh = new NYX.Mesh( geom, shader );
+      vec3.set( mesh.position, -3.0, 0.0, 0.0 );
+      mesh.updateModelMatrix();
 
    // Mesh2 - json & normal test
+
+      var matcap = new NYX.Texture.ImageTexture( { data: ASSETS.images.matcap.data } );
 
       var geom = new NYX.BufferGeometry();
       var shader = new NYX.Shader( {
 
-         vs: ASSETS.shaders.normalExampleVert.data,
-         fs: ASSETS.shaders.normalExampleFrag.data
+         // vs: ASSETS.shaders.normalExampleVert.data,
+         // fs: ASSETS.shaders.normalExampleFrag.data
+         vs: ASSETS.shaders.matcapVert.data,
+         fs: ASSETS.shaders.matcapFrag.data,
+         uniforms: {
+            uMatcap: { type: 't', value: matcap }
+         }
 
       } );
 
       global.mesh2 = new NYX.Mesh( geom, shader );
-      vec3.set( mesh2.scale, 0.5, 0.5, 0.5 );
-      vec3.set( mesh2.position, -2.5, 0.0, 0.0 );
+      vec3.set( mesh2.scale, 1.0, 1.0, 1.0 );
+      // vec3.set( mesh2.position, -2.5, 0.0, 0.0 );
       mesh2.updateModelMatrix();
 
       var res = ASSETS.json.skull.data;
@@ -122,11 +134,11 @@ function run( time ) {
    RENDERER.setClearColor( 0.12, 0.12, 0.13, 1.0 );
    RENDERER.clear();
 
-   RENDERER.setClearColor( 0.5, 0.12, 0.13, 1.0 );
+   RENDERER.setClearColor( 0.0, 1.0, 0.0, 1.0 );
    RENDERER.clearRenderTarget( rt );
    RENDERER.render( mesh2, CAMERA, rt );
 
-   RENDERER.render( mesh, CAMERA );
+   // RENDERER.render( mesh, CAMERA );
    RENDERER.render( mesh2, CAMERA );
 
 }
