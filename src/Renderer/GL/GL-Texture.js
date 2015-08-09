@@ -5,6 +5,8 @@
 // var max_anisotropy = GL.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
 // GL.texParameterf( GL.TEXTURE_2D, 34046, 16 );
 
+var Texture = require( '../../Texture' );
+
 function createTexture( tex ) {
 
 	var glTex = GL.createTexture();
@@ -12,12 +14,12 @@ function createTexture( tex ) {
 
 	GL.pixelStorei( GL.UNPACK_FLIP_Y_WEBGL, tex.flipY );
 
-	if ( tex instanceof NYX.Texture.ImageTexture ) {
+	if ( tex instanceof Texture.ImageTexture ) {
 
 		GL.texImage2D( GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, tex.data );
 
 	}
-	else if ( tex instanceof NYX.Texture.DataTexture ) {
+	else if ( tex instanceof Texture.DataTexture ) {
 
 		GL.texImage2D( GL.TEXTURE_2D, 0, GL.RGBA, tex.size, tex.size, 0, GL.RGBA, GL.FLOAT, null );
 

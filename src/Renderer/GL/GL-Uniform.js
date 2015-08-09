@@ -1,5 +1,7 @@
 'use strict';
 
+var RenderTarget = require( '../../RenderTarget' );
+
 /*
  * @param  {String}  name
  * @param  {Object}  uniform
@@ -68,7 +70,7 @@ function activateUniforms( uniforms ) {
 		var uni = uniforms[ name ];
 		if ( uni.type === 't' ) {
 
-			if ( uni.value instanceof NYX.RenderTarget ) {
+			if ( uni.value instanceof RenderTarget ) {
 				uni.setter( uni.value.dataTexture._WebGLTexture );
 			} else {
 				uni.setter( uni.value._WebGLTexture );

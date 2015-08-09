@@ -8,10 +8,13 @@ var GL_UNIFORM     = require( './GL/GL-Uniform' );
 var GL_TEXTURE     = require( './GL/GL-Texture' );
 var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' );
 
-function Renderer( opts ) {
+var RenderTarget = require( '../RenderTarget' );
+var extensions = require( '../Constants' ).WEBGL_EXTENSIONS;
+
+function renderer( opts ) {
 
 	GL_INIT.initContext( opts );
-	GL_INIT.getExtensions( NYX.CONST.WEBGL_EXTENSIONS );
+	GL_INIT.getExtensions( extensions );
 	GL_STATE.setDefaultState();
 
 	function render( mesh, camera, renderTarget ) {
@@ -114,7 +117,7 @@ function Renderer( opts ) {
 			if ( uni.type === 't' ) {
 
 				uni.unit = currUnit ++;
-				if ( ! ( uni.value instanceof NYX.RenderTarget ) ) uni.value._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
+				if ( ! ( uni.value instanceof RenderTarget ) ) uni.value._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
 
 			}
 
@@ -177,6 +180,8 @@ function Renderer( opts ) {
 	function setViewport( width, height ) {
 
 		GL.viewport( 0.0, 0.0, width, height );
+		GL_INIT.canvas.width = width;
+		GL_INIT.canvas.height = height;
 
 	}
 
@@ -193,6 +198,6 @@ function Renderer( opts ) {
 
 	};
 
-} // end of Renderer
+} // end of renderer
 
-module.exports = Renderer;
+module.exports = renderer;

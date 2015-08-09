@@ -16,6 +16,6 @@ budo( './src/index.js', {
 .watch( [ './assets' ] )
 .on( 'connect', function ( event ) {
 
-   console.log( chalk.green( '► server running on ' + event.uri ) );
+   console.log( chalk.green( '► Listening on: ' + event.uri ) );
 
 } );

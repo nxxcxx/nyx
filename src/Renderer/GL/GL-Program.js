@@ -70,8 +70,6 @@ function createShaderProgram( vertexShaderSrc, fragmentShaderSrc ) {
 
 module.exports = {
 
-	createShader,
-	createProgram,
 	createShaderProgram
 
 };

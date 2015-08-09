@@ -55,6 +55,10 @@ function setDefaultState() {
 
 }
 
+function reportCurrentState() {
+   // todo log current state to console for debugging
+}
+
 module.exports = {
 
    enableAttributes,
