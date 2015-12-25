@@ -6,7 +6,6 @@ var chalk = require( 'chalk' );
 
 budo( './src/index.js', {
 
-	host: '0.0.0.0',
 	port: 3000,
 	live: true,
 	transform: babelify,
@@ -16,6 +15,6 @@ budo( './src/index.js', {
 .watch( [ './assets' ] )
 .on( 'connect', function ( event ) {
 
-   console.log( chalk.green( '► Listening on: ' + event.uri ) );
+	console.log( chalk.green( '► Listening on: ' + event.uri ) );
 
 } );

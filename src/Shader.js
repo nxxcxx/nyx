@@ -8,15 +8,15 @@ class Shader {
 
 		opts = opts || {};
 
-		this.vertexShaderSrc   = opts.vs || NYX.CONST.DEFAULT_VERTEX_SHADER;
-      this.fragmentShaderSrc = opts.fs || NYX.CONST.DEFAULT_FRAGMENT_SHADER;
-		this.drawMode          = opts.drawMode || 'TRIANGLES';
+		this.vertexShaderSrc	= opts.vs || NYX.CONST.DEFAULT_VERTEX_SHADER;
+		this.fragmentShaderSrc = opts.fs || NYX.CONST.DEFAULT_FRAGMENT_SHADER;
+		this.drawMode			 = opts.drawMode || 'TRIANGLES';
 
-		this.depthTest         = null;
-		this.blenEquation      = null;
-		this.blendFunc         = null;
-		this.culling           = null;
-		this.cullside          = null;
+		this.depthTest			= null;
+		this.blenEquation		= null;
+		this.blendFunc			= null;
+		this.culling			  = null;
+		this.cullside			 = null;
 
 		// built-in uniforms
 		this.uniforms = {

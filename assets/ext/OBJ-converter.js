@@ -13,7 +13,7 @@ var face_pattern = /f( +-?\d+)( +-?\d+)( +-?\d+)/;
 var geom = {
    vertices: [],
    faces: []
-}
+};
 
 function parseFaceIndex( idx ) {
    return parseInt( idx ) - 1;

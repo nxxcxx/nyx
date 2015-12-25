@@ -18,6 +18,7 @@ class Mesh {
 
 	updateModelMatrix() {
 
+		// todo static variable ( closure )
 		var m4rt = mat4.create();
 		var m4s = mat4.create();
 

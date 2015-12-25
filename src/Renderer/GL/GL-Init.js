@@ -5,10 +5,10 @@ var canvas = null;
 
 function initContext( opts = {} ) {
 
-   canvas = opts.canvas || document.createElement( 'canvas' );
+	canvas = opts.canvas || document.createElement( 'canvas' );
 	GL = canvas.getContext( 'webgl', opts );
-   if ( !GL ) console.error( 'WebGL not supported.' );
-   return { GL, canvas };
+	if ( !GL ) console.error( 'WebGL not supported.' );
+	return { GL, canvas };
 
 }
 
@@ -16,23 +16,23 @@ function getExtensions( extensions ) {
 
 	extensions.forEach( ext => {
 
-      if ( !GL.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
+		if ( !GL.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
 
-   } );
+	} );
 
 }
 
 function getCanvas() {
 
-   return canvas;
+	return canvas;
 
 }
 
 module.exports = {
 
-   initContext,
-   getExtensions,
-   get canvas() { return canvas; },
-   get GL() { return GL; }
+	initContext,
+	getExtensions,
+	get canvas() { return canvas; },
+	get GL() { return GL; }
 
 };

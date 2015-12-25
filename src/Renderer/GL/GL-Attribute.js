@@ -4,9 +4,9 @@ var GL_STATE = require( './GL-State' );
 var GL_BUFFER = require( './GL-Buffer' );
 
 /*
- * @param  {String}       name
+ * @param  {String}		 name
  * @param  {WebGLBuffer}  buffer
- * @param  {Object}       attribute
+ * @param  {Object}		 attribute
  * @param  {WebGLProgram} program
  */
 function bindBufferAttribute( name, buffer, attribute, program ) {
@@ -33,10 +33,10 @@ function bindBufferAttribute( name, buffer, attribute, program ) {
 
 /*
  * @param  {Object} attributes
- *    example: attributes = {
- *                position: { data: new Float32Array( [1,2,3,4,5,6] ), shape: [2,3] },
- *                index:    { data: new Uint16Array( [1,2,3,4,5,6] ) , shape: [1,6] }
- *             }
+ *	 example: attributes = {
+ *					 position: { data: new Float32Array( [1,2,3,4,5,6] ), shape: [2,3] },
+ *					 index:	 { data: new Uint16Array( [1,2,3,4,5,6] ) , shape: [1,6] }
+ *				 }
  * @param  {WebGLProgram} program
  */
 function assembleAttributesBuffer( attributes, program ) {
@@ -71,7 +71,7 @@ function activateAttributes( attributes ) {
 
 module.exports = {
 
-   activateAttributes,
-   assembleAttributesBuffer
+	activateAttributes,
+	assembleAttributesBuffer
 
 };

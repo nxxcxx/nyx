@@ -2,7 +2,7 @@
 
 /*
  * @param  {TypedArray}  data
- * @param  {boolean}     isIndexed
+ * @param  {boolean}	  isIndexed
  * @return {WebGLBuffer}
  */
 function createBuffer( data, isIndexed ) {

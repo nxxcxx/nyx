@@ -34,7 +34,7 @@ function bindBufferUniform( name, uniform, program ) {
 			};
 			break;
 
-      default: console.error( `${name} uniform type is unknown` );
+			default: console.error( `${name} uniform type is unknown` );
 
 	}
 
@@ -44,9 +44,9 @@ function bindBufferUniform( name, uniform, program ) {
 
 /*
  * @param  {Object} uniforms
- *    example: uniforms = {
- *                modelMatrix: { type: 'm4', value: mat4 },
- *             }
+ *	 example: uniforms = {
+ *					 modelMatrix: { type: 'm4', value: mat4 },
+ *				 }
  * @param  {WebGLProgram} program
  */
 function assembleUniformsBuffer( uniforms, program ) {
@@ -88,7 +88,7 @@ function activateUniforms( uniforms ) {
 
 module.exports = {
 
-   activateUniforms,
-   assembleUniformsBuffer
+	activateUniforms,
+	assembleUniformsBuffer
 
 };

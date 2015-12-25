@@ -3,12 +3,12 @@
 /*
 var uriObj = {
 
-   images: {
-      name: 'path/to/file'
-   },
-   shaders: {
-      name: 'path/to/file'
-   }
+	images: {
+		name: 'path/to/file'
+	},
+	shaders: {
+		name: 'path/to/file'
+	}
 
 };
 */

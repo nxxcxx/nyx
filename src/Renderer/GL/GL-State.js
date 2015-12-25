@@ -5,33 +5,33 @@ var incomingAttributes = new Uint8Array( 16 );
 
 function enableAttributes( attributes ) {
 
-   // reset incomingAttributes
-   for( let i = 0; i < incomingAttributes.length; i ++ ) {
-      incomingAttributes[ i ] = 0;
-   }
+	// reset incomingAttributes
+	for( let i = 0; i < incomingAttributes.length; i ++ ) {
+		incomingAttributes[ i ] = 0;
+	}
 
-   // set and enable incomingAttributes
-   Object.keys( attributes ).forEach( name => {
+	// set and enable incomingAttributes
+	Object.keys( attributes ).forEach( name => {
 
-      var slot = attributes[ name ].location;
-      if ( slot === -1 ) return;
-      incomingAttributes[ slot ] = 1;
-      activeAttributes[ slot ] = 1;
-      GL.enableVertexAttribArray( slot );
+		var slot = attributes[ name ].location;
+		if ( slot === -1 ) return;
+		incomingAttributes[ slot ] = 1;
+		activeAttributes[ slot ] = 1;
+		GL.enableVertexAttribArray( slot );
 
-   } );
+	} );
 
-   // disable inactive attributes
-   for( let i = 0; i < incomingAttributes.length; i ++ ) {
+	// disable inactive attributes
+	for( let i = 0; i < incomingAttributes.length; i ++ ) {
 
-      if ( activeAttributes[ i ] !== incomingAttributes[ i ] ) {
+		if ( activeAttributes[ i ] !== incomingAttributes[ i ] ) {
 
-         GL.disableVertexAttribArray( i );
-         activeAttributes[ i ] = 0;
+			GL.disableVertexAttribArray( i );
+			activeAttributes[ i ] = 0;
 
-      }
+		}
 
-   }
+	}
 
 }
 
@@ -51,17 +51,17 @@ function setDefaultState() {
 	GL.blendEquation( GL.FUNC_ADD );
 	GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
 
-   GL.bindFramebuffer( GL.FRAMEBUFFER, null );
+	GL.bindFramebuffer( GL.FRAMEBUFFER, null );
 
 }
 
 function reportCurrentState() {
-   // todo log current state to console for debugging
+	// todo log current state to console for debugging
 }
 
 module.exports = {
 
-   enableAttributes,
-   setDefaultState
+	enableAttributes,
+	setDefaultState
 
 };

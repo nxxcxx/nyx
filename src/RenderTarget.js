@@ -2,12 +2,12 @@
 
 class RenderTarget {
 
-   constructor( dataTexture ) {
+	constructor( dataTexture ) {
 
-      this._framebuffer = null;
-      this.dataTexture = dataTexture;
+		this._framebuffer = null;
+		this.dataTexture = dataTexture;
 
-   }
+	}
 
 }
 

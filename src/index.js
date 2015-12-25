@@ -6,7 +6,7 @@ engine.start( {
 
 	assets: {
 		images: {
-			matcap: './assets/tex/mc_red.jpg'
+			matcap: './assets/tex/mc_chrome.jpg'
 		},
 		json: {
 			skull: './assets/ext/skull.json'
@@ -18,7 +18,6 @@ engine.start( {
 	}
 
 }, setup, draw );
-
 
 var PerspectiveCamera = require( './Camera/PerspectiveCamera' );
 var OrbitCtrl = require( './Camera/Ctrl/OrbitCtrl' );
@@ -79,18 +78,18 @@ function createSkullMesh() {
 function draw( $ ) {
 
 	$.renderer.setClearColor( 0.12, 0.12, 0.13, 1.0 );
-   $.renderer.clear();
-   $.renderer.render( $.mesh_skull, $.camera );
+	$.renderer.clear();
+	$.renderer.render( $.mesh_skull, $.camera );
 
 }
 
 function appendCanvasToBody( $ ) {
 
 	var cv = $.renderer.canvas;
-   cv.style.position = 'absolute';
-   cv.style.top = '0px';
-   cv.style.left = '0px';
-   document.body.appendChild( cv );
+	cv.style.position = 'absolute';
+	cv.style.top = '0px';
+	cv.style.left = '0px';
+	document.body.appendChild( cv );
 
 }
 

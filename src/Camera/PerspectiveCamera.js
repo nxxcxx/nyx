@@ -12,11 +12,11 @@ class PerspectiveCamera extends Camera {
 
 	}
 
-   updateProjectionMatrix() {
+	updateProjectionMatrix() {
 
-      mat4.perspective( this.projectionMatrix, this.fov, this.aspectRatio, this.near, this.far );
+		mat4.perspective( this.projectionMatrix, this.fov, this.aspectRatio, this.near, this.far );
 
-   }
+	}
 
 }
 
