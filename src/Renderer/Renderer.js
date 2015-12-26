@@ -14,7 +14,6 @@ var extensions = require( '../Constants' ).WEBGL_EXTENSIONS;
 function renderer( opts ) {
 
 	GL_INIT.initContext( opts );
-	GL_INIT.getExtensions( extensions );
 	GL_STATE.setDefaultState();
 
 	function render( mesh, camera, renderTarget ) {
@@ -97,6 +96,7 @@ function renderer( opts ) {
 		unis.projectionMatrix.value = camera.projectionMatrix;
 		unis.viewMatrix.value = camera.viewMatrix;
 		unis.modelMatrix.value = mesh.modelMatrix;
+		unis.camera.value = camera.position;
 
 			//test
 			var mvm = mat4.create();

@@ -16,24 +16,5 @@ global.vec3.new = function( x, y, z ) {
 
 global.ndarray = require( 'ndarray' );
 
-
-// global.NYX = {
-//
-//	 CONST				 : require( './Global/Constants' ),
-//	 Renderer			 : require( './Renderer/Renderer' ),
-//	 PerspectiveCamera : require( './Camera/PerspectiveCamera' ),
-//	 OrthographicCamera: require( './Camera/OrthographicCamera' ),
-//	 OrbitCtrl			: require( './Camera/Ctrl/OrbitCtrl'),
-//	 Mesh				  : require( './Mesh/Mesh' ),
-//	 BufferGeometry	 : require( './Geometry/BufferGeometry' ),
-//	 Shader				: require( './Shader/Shader' ),
-//	 Util				  : require( './Util/Util' ),
-//	 Texture			  : require( './Texture/Texture.js' ),
-//	 TestGeometry		: require( './Geometry/TestGeometry' ),
-//	 AssetManager		: require( './Manager/AssetManager'),
-//	 RenderTarget		: require( './RenderTarget/RenderTarget' )
-//
-// };
-
 var GL_INIT = require( './Renderer/GL/GL-Init' );
 Object.defineProperty( global, 'GL', { get: () => { return  GL_INIT.GL; } } );

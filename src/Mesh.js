@@ -4,7 +4,7 @@ class Mesh {
 
 	constructor( geometry, shader ) {
 
-      this._initialized = false;
+		this._initialized = false;
 
 		this.geometry = geometry;
 		this.shader = shader;

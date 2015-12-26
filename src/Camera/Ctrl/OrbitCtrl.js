@@ -9,7 +9,7 @@ function OrbitCtrl( canvas, camera ) {
 	var CAM_ANGLE = vec2.new( Math.PI * 0.5, 0 );
 	var TMP_CAM_ANGLE = vec2.new();
 	var DELTA = vec2.new();
-	var CAM_DIST = 5.0;
+	var CAM_DIST = 10;
 	var GAIN = 0.01;
 	var CLAMP_EPS = 0.01;
 

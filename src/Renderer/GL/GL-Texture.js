@@ -1,8 +1,10 @@
 'use strict';
 
-// var ext = GL.getExtension("MOZ_EXT_texture_filter_anisotropic");
-// GL.texParameterf(GL.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4);
-// var max_anisotropy = GL.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+// Anisotropic Filtering
+// var ext = GL.getExtension( "MOZ_EXT_texture_filter_anisotropic" );
+// GL.texParameterf( GL.TEXTURE_2D, ext.TEXTURE_MAX_ANISOTROPY_EXT, 4 );
+// var max_anisotropy = GL.getParameter( ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT );
+// console.log( max_anisotropy );
 // GL.texParameterf( GL.TEXTURE_2D, 34046, 16 );
 
 var Texture = require( '../../Texture' );

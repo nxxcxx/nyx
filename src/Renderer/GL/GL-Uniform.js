@@ -24,6 +24,9 @@ function bindBufferUniform( name, uniform, program ) {
 		case 'm4': setter =  val => GL.uniformMatrix4fv( uniform.location, false, val );
 			break;
 
+		case 'v3': setter = val => GL.uniform3fv( uniform.location, val );
+			break;
+
 		case 't': setter = val => {
 
 				// todo if texture image data ready ...

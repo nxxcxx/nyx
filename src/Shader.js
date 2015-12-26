@@ -24,7 +24,8 @@ class Shader {
 			viewMatrix: { type: 'm4', value: null },
 			modelMatrix: { type: 'm4', value: null },
 			modelViewMatrix: { type: 'm4', value: null },
-			normalMatrix: { type: 'm4', value: null }
+			normalMatrix: { type: 'm4', value: null },
+			camera: { type: 'v3', value: null }
 		};
 
 		// append user uniforms

@@ -7,7 +7,9 @@ function enableAttributes( attributes ) {
 
 	// reset incomingAttributes
 	for( let i = 0; i < incomingAttributes.length; i ++ ) {
+
 		incomingAttributes[ i ] = 0;
+
 	}
 
 	// set and enable incomingAttributes
@@ -51,6 +53,7 @@ function setDefaultState() {
 	GL.blendEquation( GL.FUNC_ADD );
 	GL.blendFunc( GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA );
 
+	// bind to null = default screen buffer
 	GL.bindFramebuffer( GL.FRAMEBUFFER, null );
 
 }
