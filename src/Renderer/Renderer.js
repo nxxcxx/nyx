@@ -9,7 +9,7 @@ var GL_TEXTURE     = require( './GL/GL-Texture' );
 var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' );
 
 var RenderTarget = require( '../RenderTarget' );
-var extensions = require( '../Constants' ).WEBGL_EXTENSIONS;
+var Texture = require( '../Texture' );
 
 function renderer( opts ) {
 
@@ -118,7 +118,11 @@ function renderer( opts ) {
 			if ( uni.type === 't' ) {
 
 				uni.unit = currUnit ++;
-				if ( ! ( uni.value instanceof RenderTarget ) ) uni.value._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
+				if ( !( uni.value instanceof RenderTarget ) ) {
+
+					uni.value._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
+
+				}
 
 			}
 

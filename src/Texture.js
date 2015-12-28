@@ -53,11 +53,16 @@ class DataTexture extends Texture2D {
 class CubeMapTexture extends Texture2D {
 
 	constructor( opts = {} ) {
+
 		super( {
 
-			generateMipmap: false
+			data: opts.data,
+			generateMipmap: false,
+			minFilter: 'LINEAR',
+			magFilter: 'LINEAR'
 
 		} );
+
 	}
 
 }

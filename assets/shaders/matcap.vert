@@ -13,10 +13,10 @@ varying vec3 n;
 
 void main() {
 
-   mat4 modelViewMatrix = viewMatrix * modelMatrix;
-   e = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
-   n = normalize( vec3( modelViewMatrix * vec4( normal, 0.0 ) ) );
+	mat4 modelViewMatrix = viewMatrix * modelMatrix;
+	e = normalize( vec3( modelViewMatrix * vec4( position, 1.0 ) ) );
+	n = normalize( vec3( modelViewMatrix * vec4( normal, 0.0 ) ) );
 
-   gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+	gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 
 }

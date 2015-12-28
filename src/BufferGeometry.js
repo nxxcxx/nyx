@@ -11,8 +11,10 @@ class BufferGeometry {
 	addAttribute( name, data, shape ) {
 
 		this.attributes[ name ] = {
+
 			data: data,
 			shape: shape
+			
 		};
 
 	}

@@ -45,9 +45,9 @@ function setDefaultState() {
 	GL.enable( GL.DEPTH_TEST );
 	GL.depthFunc( GL.LEQUAL );
 
-	// GL.frontFace( GL.CCW );
-	// GL.cullFace( GL.BACK );
-	// GL.enable( GL.CULL_FACE );
+	GL.frontFace( GL.CCW );
+	GL.cullFace( GL.BACK );
+	GL.enable( GL.CULL_FACE );
 
 	GL.enable( GL.BLEND );
 	GL.blendEquation( GL.FUNC_ADD );

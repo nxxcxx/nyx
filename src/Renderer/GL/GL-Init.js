@@ -29,13 +29,14 @@ function initContext( opts = {
 function enableExtensions() {
 
 	var glExts = GL.getSupportedExtensions();
-	console.info( `Enable WebGL extensions: ${glExts}` );
 
 	glExts.forEach( ext => {
 
 		if ( !GL.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
 
 	} );
+
+	console.info( `Enabled WebGL extensions: ${glExts}` );
 
 }
 
