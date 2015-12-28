@@ -9,20 +9,22 @@ var Shader = require( './Shader' );
 var Mesh = require( './Mesh' );
 var Util = require( './Util' );
 
-// test glslify
+// // test glslify
 // var glsl = require( 'glslify' );
 // var src = glsl( '../assets/shaders/matcap.frag' );
 // console.log( src );
-// console.log( __dirname );
 
 $.start( {
 
 	renderer: {
+
 		alpha: true,
 		premultipliedAlpha: false
+
 	},
 
 	assets: {
+
 		images: {
 
 			matcap_deepskin: './assets/tex/mc_deepskin.jpg',
@@ -37,11 +39,14 @@ $.start( {
 			pz: './assets/skybox/pz.png'
 
 		},
+
 		json: {
 
-			skull: './assets/ext/skull.json'
+			skull: './assets/ext/skull.json',
+			ico: './assets/ext/ico.json'
 
 		},
+
 		shaders: {
 
 			matcapVert: './assets/shaders/matcap.vert',
@@ -52,6 +57,7 @@ $.start( {
 			cubeMapFrag: './assets/shaders/cubeMap.frag',
 
 		}
+
 	}
 
 }, setup, draw );
@@ -172,7 +178,7 @@ function createCubeMap() {
 
 	] } );
 
-	var skullData = $.assets.json.skull.data;
+	var skullData = $.assets.json.ico.data;
 	var vpos = ndarray( new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ] );
 	var vidx = ndarray( new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
 

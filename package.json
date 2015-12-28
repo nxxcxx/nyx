@@ -1,10 +1,20 @@
 {
   "dependencies": {
-    "babelify": "^6.1.2",
-    "budo": "^4.0.0",
-    "chalk": "^1.0.0",
     "gl-matrix": "^2.3.1",
-    "minimist": "^1.1.1",
     "ndarray": "^1.0.18"
+  },
+  "devDependencies": {
+    "babelify": "^6.1.2",
+    "browser-sync": "^2.7.13",
+    "browserify": "^10.2.4",
+    "chalk": "^1.0.0",
+    "glslify": "^5.0.0",
+    "gulp": "^3.9.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-util": "^3.0.6",
+    "lodash.assign": "^3.2.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.3"
   }
 }

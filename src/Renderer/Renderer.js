@@ -8,8 +8,8 @@ var GL_UNIFORM     = require( './GL/GL-Uniform' );
 var GL_TEXTURE     = require( './GL/GL-Texture' );
 var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' );
 
-var RenderTarget = require( '../RenderTarget' );
-var Texture = require( '../Texture' );
+var RenderTarget = require( 'RenderTarget' );
+var Texture = require( 'Texture' );
 
 function renderer( opts ) {
 
