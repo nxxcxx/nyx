@@ -7,6 +7,7 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
+uniform mat4 normalMatrix;
 
 varying vec3 e;
 varying vec3 n;

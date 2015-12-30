@@ -171,16 +171,16 @@ function createCubeMap() {
 
 		$.assets.images.px.data,
 		$.assets.images.nx.data,
-		$.assets.images.py.data,
 		$.assets.images.ny.data,
+		$.assets.images.py.data,
 		$.assets.images.pz.data,
 		$.assets.images.nz.data
 
 	] } );
 
-	var skullData = $.assets.json.ico.data;
-	var vpos = ndarray( new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ] );
-	var vidx = ndarray( new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
+	var ico = $.assets.json.ico.data;
+	var vpos = ndarray( new Float32Array( ico.vertices ), [ ico.vertices.length / 3, 3 ] );
+	var vidx = ndarray( new Uint32Array( ico.faces ), [ ico.faces.length, 1 ] );
 
 	var geom = new BufferGeometry();
 	geom.addAttribute( 'position', vpos.data, vpos.shape );
@@ -197,10 +197,9 @@ function createCubeMap() {
 
 	} );
 
-	$.mesh_skull3 = new Mesh( geom, shader );
-	vec3.set( $.mesh_skull3.position, -1.0, -1.0, 0.0 );
-	$.mesh_skull3.updateModelMatrix();
-
+	$.ico = new Mesh( geom, shader );
+	vec3.set( $.ico.position, -1.0, -1.0, 0.0 );
+	$.ico.updateModelMatrix();
 
 }
 
@@ -211,7 +210,7 @@ function draw( $ ) {
 	$.renderer.render( $.mesh_skull, $.camera );
 	$.renderer.render( $.mesh_skull2, $.camera );
 	$.renderer.render( $.box, $.camera );
-	$.renderer.render( $.mesh_skull3, $.camera );
+	$.renderer.render( $.ico, $.camera );
 
 }
 

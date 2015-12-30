@@ -90,15 +90,15 @@ function renderer( opts ) {
 	function _initUniforms( mesh, camera ) {
 
 		// todo: uniforms needs to be updated every frame if modified
-
 		var unis = mesh.shader.uniforms;
+
 		// set predefined uniforms
 		unis.projectionMatrix.value = camera.projectionMatrix;
 		unis.viewMatrix.value = camera.viewMatrix;
 		unis.modelMatrix.value = mesh.modelMatrix;
 		unis.camera.value = camera.position;
 
-			//test
+			// test
 			var mvm = mat4.create();
 			mat4.multiply( mvm, camera.viewMatrix, mesh.modelMatrix );
 			unis.modelViewMatrix.value = mvm;

@@ -40,9 +40,8 @@ function createTexture2D( tex ) {
 	GL.texParameteri( GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL[ tex.minFilter ] );
 	GL.texParameteri( GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL[ tex.magFilter ] );
 
-	/*
-	Enable Anisotropic Filtering
-	todo: this should not be here
+	//Enable Anisotropic Filtering
+	//todo: this should not be here
 	var ext = GL.getExtension( "EXT_texture_filter_anisotropic" );
 	if ( ext ) {
 
@@ -50,7 +49,6 @@ function createTexture2D( tex ) {
 		GL.texParameterf( GL.TEXTURE_2D, 34046, max_anisotropy );
 
 	}
-	*/
 
 	if ( tex.generateMipmap ) GL.generateMipmap( GL.TEXTURE_2D );
 

@@ -14,15 +14,7 @@ function initContext( opts = {
 	canvas = opts.canvas || document.createElement( 'canvas' );
 	GL = canvas.getContext( 'webgl', opts );
 	if ( !GL ) throw 'WebGL not supported.';
-
 	enableExtensions();
-
-	return {
-
-		GL,
-		canvas
-
-	};
 
 }
 

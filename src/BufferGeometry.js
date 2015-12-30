@@ -14,7 +14,7 @@ class BufferGeometry {
 
 			data: data,
 			shape: shape
-			
+
 		};
 
 	}
@@ -31,7 +31,9 @@ class BufferGeometry {
 		var normals = ndarray( new Float32Array( positions.data.length ), positions.shape );
 
 		for ( let i = 0; i < normals.data.length; i ++ ) {
+
 			normals.data[ i ] = 0;
+
 		}
 
 		for ( let i = 0; i < indices.data.length; i += 3 ) {
