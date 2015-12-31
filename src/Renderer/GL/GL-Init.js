@@ -28,7 +28,7 @@ function enableExtensions() {
 
 	} );
 
-	console.info( `Enabled WebGL extensions: ${glExts}` );
+	// console.info( `Enabled WebGL extensions: ${glExts}` );
 
 }
 

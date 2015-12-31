@@ -8,12 +8,13 @@ class BufferGeometry {
 
 	}
 
-	addAttribute( name, data, shape ) {
+	addAttribute( name, data, shape, isDynamic ) {
 
 		this.attributes[ name ] = {
 
 			data: data,
-			shape: shape
+			shape: shape,
+			isDynamic: !!isDynamic
 
 		};
 

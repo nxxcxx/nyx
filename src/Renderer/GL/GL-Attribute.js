@@ -48,7 +48,7 @@ function assembleAttributesBuffer( attributes, program ) {
 	Object.keys( attributes ).forEach( name => {
 
 		var attr = attributes[ name ];
-		var buffer = GL_BUFFER.createBuffer( attr.data, name === 'index' );
+		var buffer = GL_BUFFER.createBuffer( attr.data, name === 'index', attr.isDynamic );
 		bindBufferAttribute( name, buffer, attr, program );
 
 	} );

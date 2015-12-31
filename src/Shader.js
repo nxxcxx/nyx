@@ -80,6 +80,12 @@ class Shader {
 
 	}
 
+	_setProgram( program ) {
+
+		this._program = program;
+
+	}
+
 }
 
 module.exports = Shader;

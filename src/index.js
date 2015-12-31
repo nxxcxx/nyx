@@ -64,7 +64,7 @@ $.start( {
 
 function setup( $ ) {
 
-	console.log( '$', $ );
+	console.log( 'Engine:', $ );
 	$.width = window.innerWidth;
 	$.height = window.innerHeight;
 	$.aspectRatio = $.width / $.height;
@@ -107,7 +107,7 @@ function createSkullMesh() {
 	var vpos = ndarray( new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ] );
 	var vidx = ndarray( new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
 
-	geom.addAttribute( 'position', vpos.data, vpos.shape );
+	geom.addAttribute( 'position', vpos.data, vpos.shape, true );
 	geom.addAttribute( 'index', vidx.data, vidx.shape );
 	geom.computeVertexNormals();
 
@@ -166,8 +166,6 @@ function createBoxMesh() {
 
 	} );
 
-	$.sss = shader;
-
 	$.box = new Mesh( geom, shader );
 	vec3.set( $.box.position, -3.0, 2.0, 0.0 );
 	$.box.updateModelMatrix();
@@ -222,6 +220,13 @@ function draw( $, time ) {
 	$.renderer.setClearColor( 0.5, 0.5, 0.55, 1.0 );
 	$.renderer.clearRenderTarget( $.renderTarget );
 	$.renderer.render( $.mesh_skull, $.camera, $.renderTarget );
+
+	// test dynamic position attribute
+	for ( let i = 0; i < $.mesh_skull.geometry.attributes.position.data.length; i ++ ) {
+
+		$.mesh_skull.geometry.attributes.position.data[ i ] += ( Math.random() - 0.5 ) * 0.01;
+
+	}
 
 	$.renderer.render( $.mesh_skull, $.camera );
 	$.renderer.render( $.mesh_skull2, $.camera );

@@ -8,6 +8,7 @@ var GL_UNIFORM     = require( './GL/GL-Uniform' );
 var GL_TEXTURE     = require( './GL/GL-Texture' );
 var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' );
 
+
 var RenderTarget = require( 'RenderTarget' );
 var Texture = require( 'Texture' );
 
@@ -20,14 +21,13 @@ function renderer( opts ) {
 
 		_initMesh( mesh, camera );
 
-		// todo: _updateMesh() => bufferSubData... texImage2D...
-
 		_activateProgram( mesh );
 		_activateAttributes( mesh );
 		_activateUniforms( mesh );
 
 		_setRenderTarget( renderTarget );
 
+		_updateDynamicBuffer( mesh );
 		_draw( mesh );
 
 	}
@@ -63,25 +63,47 @@ function renderer( opts ) {
 			_initBuffers( mesh );
 			_initUniforms( mesh, camera );
 
-			if ( mesh.shader.drawMode === undefined ) console.warn( `drawMode is ${mesh.shader.drawMode}:`, mesh );
+			if ( mesh.shader.drawMode === undefined ) throw 'drawMode is undefined';
 			mesh._initialized = true;
 
 		}
 
 	}
 
+	function _updateDynamicBuffer( mesh ) {
+
+		var attrs = mesh.geometry.attributes;
+
+		Object.keys( attrs ).forEach( name => {
+
+			let attr = attrs[ name ];
+
+			if ( attr.isDynamic ) {
+
+				// todo: this does not work with index buffer
+				GL.bindBuffer( GL.ARRAY_BUFFER, attr.buffer );
+				GL.bufferSubData( GL.ARRAY_BUFFER, 0, attr.data );
+
+			}
+
+		} );
+
+	}
+
 	function _draw( mesh ) {
 
-		if ( mesh.geometry.attributes.index ) {
+		var attrs = mesh.geometry.attributes;
 
-			var type = ( mesh.geometry.attributes.index.data instanceof Uint16Array ) ? GL.UNSIGNED_SHORT : GL.UNSIGNED_INT;
-			GL.bindBuffer( GL.ELEMENT_ARRAY_BUFFER, mesh.geometry.attributes.index.buffer );
-			GL.drawElements( GL[ mesh.shader.drawMode ], mesh.geometry.attributes.index.shape[ 0 ], type, 0 );
+		if ( attrs.index ) {
+
+			var type = ( attrs.index.data instanceof Uint16Array ) ? GL.UNSIGNED_SHORT : GL.UNSIGNED_INT;
+			GL.bindBuffer( GL.ELEMENT_ARRAY_BUFFER, attrs.index.buffer );
+			GL.drawElements( GL[ mesh.shader.drawMode ], attrs.index.shape[ 0 ], type, 0 );
 
 		} else {
 
-			GL.bindBuffer( GL.ARRAY_BUFFER, mesh.geometry.attributes.position.buffer );
-			GL.drawArrays( GL[ mesh.shader.drawMode ], 0, mesh.geometry.attributes.position.shape[ 0 ] );
+			GL.bindBuffer( GL.ARRAY_BUFFER, attrs.position.buffer );
+			GL.drawArrays( GL[ mesh.shader.drawMode ], 0, attrs.position.shape[ 0 ] );
 
 		}
 
@@ -158,7 +180,7 @@ function renderer( opts ) {
 
 	function _initShaders( shader ) {
 
-		shader._program = GL_PROGRAM.createShaderProgram( shader.vertexShaderSrc, shader.fragmentShaderSrc );
+		shader._setProgram( GL_PROGRAM.createShaderProgram( shader.vertexShaderSrc, shader.fragmentShaderSrc ) );
 
 	}
 
