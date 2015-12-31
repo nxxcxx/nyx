@@ -11,10 +11,10 @@ engine.start = function ( opts, setup, draw ) {
 		engine.assets = assets;
 		setup( engine );
 
-		( function tick() {
+		( function tick( time ) {
 
 			requestAnimationFrame( tick );
-			draw( engine );
+			draw( engine, time );
 
 		} )();
 

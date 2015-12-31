@@ -27,9 +27,9 @@ $.start( {
 
 		images: {
 
-			matcap_deepskin: './assets/tex/mc_deepskin.jpg',
-			matcap_red: './assets/tex/mc_red.jpg',
+			matcap_red: './assets/tex/mc_deepskin.jpg',
 			stone: './assets/tex/stone.jpg',
+			noise256: './assets/tex/noise256.png',
 
 			nx: './assets/skybox/nx.png',
 			ny: './assets/skybox/ny.png',
@@ -89,13 +89,18 @@ function initCamera() {
 function createSkullMesh() {
 
 	var matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap_red.data } );
+	var noiseTexture = new Texture.ImageTexture( { data: $.assets.images.noise256.data } );
 	var geom = new BufferGeometry();
 	var shader = new Shader( {
 		vs: $.assets.shaders.matcapVert.data,
 		fs: $.assets.shaders.matcapFrag.data,
+
 		uniforms: {
+
 			uMatcap: { type: 't', value: matcapTexture }
+
 		}
+
 	} );
 
 	var skullData = $.assets.json.skull.data;
@@ -107,14 +112,11 @@ function createSkullMesh() {
 	geom.computeVertexNormals();
 
 	$.mesh_skull = new Mesh( geom, shader );
-	$.mesh_skull.position[0] = 1.0;
 	$.mesh_skull.updateModelMatrix();
 
 }
 
 function createSkullMesh2() {
-
-	var matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap_deepskin.data } );
 
 	var skullData = $.assets.json.skull.data;
 	var vpos = ndarray( new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ] );
@@ -144,9 +146,11 @@ function createBoxMesh() {
 	geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
 
 	// FBO RTT texture
-		var dt = new Texture.DataTexture( 512 );
+		// if using dataTexture as screen buffer, size need to be equal to screen size
+		var dataTexture = new Texture.DataTexture( 1024 );
 		var RenderTarget = require( './RenderTarget' );
-		$.rt = new RenderTarget( dt );
+		$.renderTarget = new RenderTarget( dataTexture );
+
 	// image texture
 		var stoneTexture = new Texture.ImageTexture( { data: $.assets.images.stone.data } );
 
@@ -155,10 +159,15 @@ function createBoxMesh() {
 		vs: $.assets.shaders.textureExampleVert.data,
 		fs: $.assets.shaders.textureExampleFrag.data,
 		uniforms: {
-			uTexture: { type: 't', value: stoneTexture } // value: renderTarger or texture
+
+			uTexture: { type: 't', value: $.renderTarget } // value: renderTarget or Texture
+
 		}
 
 	} );
+
+	$.sss = shader;
+
 	$.box = new Mesh( geom, shader );
 	vec3.set( $.box.position, -3.0, 2.0, 0.0 );
 	$.box.updateModelMatrix();
@@ -198,15 +207,22 @@ function createCubeMap() {
 	} );
 
 	$.ico = new Mesh( geom, shader );
-	vec3.set( $.ico.position, -1.0, -1.0, 0.0 );
+	vec3.set( $.ico.position, -2.0, -1.0, 0.0 );
+	// var s = 1000.0;
+	// vec3.set( $.ico.scale, s, s, s );
 	$.ico.updateModelMatrix();
 
 }
 
-function draw( $ ) {
+function draw( $, time ) {
 
 	$.renderer.setClearColor( 0.12, 0.12, 0.13, 1.0 );
 	$.renderer.clear();
+
+	$.renderer.setClearColor( 0.5, 0.5, 0.55, 1.0 );
+	$.renderer.clearRenderTarget( $.renderTarget );
+	$.renderer.render( $.mesh_skull, $.camera, $.renderTarget );
+
 	$.renderer.render( $.mesh_skull, $.camera );
 	$.renderer.render( $.mesh_skull2, $.camera );
 	$.renderer.render( $.box, $.camera );

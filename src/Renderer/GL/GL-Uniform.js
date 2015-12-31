@@ -14,7 +14,7 @@ function bindBufferUniform( name, uniform, program ) {
 
 	if ( !uniform.location ) {
 
-		console.warn( `${name} uniform is defined but never used by shader.` );
+		// console.warn( `${name} uniform is defined but never used by shader.` );
 		return;
 
 	}

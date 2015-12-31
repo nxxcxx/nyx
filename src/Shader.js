@@ -56,8 +56,8 @@ class Shader {
 		this.depthTest			= null;
 		this.blenEquation		= null;
 		this.blendFunc			= null;
-		this.culling			  = null;
-		this.cullside			 = null;
+		this.culling			= null;
+		this.cullside			= null;
 
 		// built-in uniforms
 		this.uniforms = {

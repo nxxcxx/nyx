@@ -17,7 +17,7 @@ function bindBufferAttribute( name, buffer, attribute, program ) {
 
 		if ( name !== 'index' ) {
 
-			console.warn( `${name} attribute is defined but never used by vertex shader.` );
+			// console.warn( `${name} attribute is defined but never used by vertex shader.` );
 
 		}
 

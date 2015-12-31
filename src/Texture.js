@@ -4,7 +4,7 @@ class Texture2D {
 
 	constructor( opts = {} ) {
 
-		this.data             = opts.data;
+		this.data           = opts.data;
 
 		this.flipY          = opts.flipY === undefined ? true : opts.flipY;
 		this.wrapS          = opts.wrapS || 'CLAMP_TO_EDGE';
