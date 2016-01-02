@@ -40,8 +40,7 @@ function renderer( opts ) {
 			if ( renderTarget._framebuffer === null ) {
 
 				renderTarget.dataTexture._WebGLTexture = GL_TEXTURE.createTexture( renderTarget.dataTexture );
-				var fbo = GL_FRAMEBUFFER.createFramebuffer( renderTarget );
-				renderTarget._framebuffer = fbo;
+				renderTarget._framebuffer = GL_FRAMEBUFFER.createFramebuffer( renderTarget );
 
 			}
 

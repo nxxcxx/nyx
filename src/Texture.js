@@ -11,7 +11,7 @@ class Texture2D {
 		this.wrapT          = opts.wrapT || 'CLAMP_TO_EDGE';
 		this.minFilter      = opts.minFilter || 'LINEAR_MIPMAP_NEAREST';
 		this.magFilter      = opts.magFilter || 'LINEAR';
-		this.generateMipmap = opts.generateMipmap;
+		this.generateMipmap = opts.generateMipmap === undefined ? true : opts.generateMipmap;
 
 	}
 
@@ -21,12 +21,8 @@ class ImageTexture extends Texture2D {
 
 	constructor( opts = {} ) {
 
-		super( {
-
-			data: opts.data,
-			generateMipmap: true
-
-		} );
+		super( opts );
+		this.generateMipmap = true;
 
 	}
 
@@ -36,14 +32,10 @@ class DataTexture extends Texture2D {
 
 	constructor( size ) {
 
-		super( {
-
-			minFilter: 'NEAREST',
-			magFilter: 'NEAREST',
-			generateMipmap: false
-
-		} );
-
+		super();
+		this.minFilter = 'NEAREST';
+		this.magFilter = 'NEAREST';
+		this.generateMipmap = false;
 		this.size = size;
 
 	}
@@ -54,14 +46,11 @@ class CubeMapTexture extends Texture2D {
 
 	constructor( opts = {} ) {
 
-		super( {
+		super( opts );
 
-			data: opts.data,
-			generateMipmap: false,
-			minFilter: 'LINEAR',
-			magFilter: 'LINEAR'
-
-		} );
+		this.minFilter = 'LINEAR';
+		this.magFilter = 'LINEAR';
+		this.generateMipmap = false;
 
 	}
 

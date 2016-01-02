@@ -72,7 +72,7 @@ function OrbitCtrl( canvas, camera ) {
 
 		var dt = event.wheelDelta;
 		CAM_DIST -= dt * 0.005;
-		CAM_DIST = clamp( CAM_DIST, 1, 50 );
+		CAM_DIST = clamp( CAM_DIST, 1, 1000 );
 		ctrlCamera();
 
 	} );

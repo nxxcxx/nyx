@@ -7,7 +7,7 @@ class PerspectiveCamera extends Camera {
 	constructor( fov, aspectRatio, near = 1, far = 10000 ) {
 
 		super();
-		[ this.fov, this.aspectRatio, this.near, this.far ] = arguments
+		[ this.fov, this.aspectRatio, this.near, this.far ] = arguments;
 		this.updateProjectionMatrix();
 
 	}

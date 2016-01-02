@@ -30,14 +30,28 @@ var loader = {
 
 	XHR: ( uri, done ) => {
 
-		var request = new XMLHttpRequest();
-		request.open( 'GET', uri, true );
-		request.addEventListener( 'load', () => {
+		var req = new XMLHttpRequest();
+		req.open( 'GET', uri, true );
+		req.addEventListener( 'load', () => {
 
-			done( request.response );
+			done( req.response );
 
 		} );
-		request.send();
+		req.send();
+
+	},
+
+	XHRB: ( uri, done ) => {
+
+		var req = new XMLHttpRequest();
+		req.responseType = 'arraybuffer';
+		req.open( 'GET', uri, true );
+		req.addEventListener( 'load', () => {
+
+			done( req.response );
+
+		} );
+		req.send();
 
 	}
 
@@ -47,7 +61,8 @@ var fetcher = {
 
 	fetchText: text => enqueue( loader.XHR, text, null ),
 	fetchImages: images => enqueue( loader.image, images, null ),
-	fetchJSON: jsons => enqueue( loader.XHR, jsons, JSON.parse )
+	fetchJSON: jsons => enqueue( loader.XHR, jsons, JSON.parse ),
+	fetchBinary: binary => enqueue( loader.XHRB, binary, null )
 
 };
 
@@ -108,9 +123,10 @@ function fetchFiles( uriObj, done ) {
 
 	onLoadComplete = done;
 
-	fetcher.fetchImages( assets.images );
-	fetcher.fetchJSON( assets.json );
-	fetcher.fetchText( assets.shaders );
+	fetcher.fetchImages( assets.images || {} );
+	fetcher.fetchJSON( assets.json || {} );
+	fetcher.fetchText( assets.shaders || {} );
+	fetcher.fetchBinary( assets.binary || {} );
 
 }
 
