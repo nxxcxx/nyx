@@ -9,6 +9,7 @@ var BufferGeometry = require( './BufferGeometry' );
 var Shader = require( './Shader' );
 var Mesh = require( './Mesh' );
 var Util = require( './Util' );
+var SkinnedMesh = require( './SkinnedMesh' );
 
 // // test glslify
 // var glsl = require( 'glslify' );
@@ -39,7 +40,8 @@ $.start( {
 			py: './assets/skybox/py.png',
 			pz: './assets/skybox/pz.png',
 
-			duck: './assets/glTF/duck/duckCM.png'
+			duck: './assets/glTF/duck/duckCM.png',
+			cesium: './assets/glTF/cesiumMan/cesium_Man.jpg'
 
 		},
 
@@ -97,93 +99,48 @@ function setup( $ ) {
 	createSkullMesh();
 	createSkullMesh2();
 	createBoxMesh();
-
 	createCubeMap();
 
 
-		$.assets.json.ico.data.vertices = $.assets.json.ico.data.vertices.map( v => v * 0.01 );
-	require( './gltf' );
 	// test gltf
+		$.assets.json.ico.data.vertices = $.assets.json.ico.data.vertices.map( v => v * 0.01 );
+
 		var gltf = $.assets.json[ 'cesium' ].data;
 		var bin = $.assets.binary[ 'cesium' ].data;
-		$.hero = [];
-		Object.keys( gltf.meshes ).forEach( meshId => {
+		$.character = [];
 
-			var prim = gltf.meshes[ meshId ].primitives[ 0 ];
-			var geom = new BufferGeometry();
+		var GLTF_PARSER = require( './gltfParser' );
+		global.gltfParser = new GLTF_PARSER( gltf, bin );
+		console.log( gltfParser );
 
-			var idxAccs = getAccessor( gltf, prim.indices );
-			var idxBuff = getBufferView( gltf, idxAccs.bufferView );
-			// console.log( idxAccs );
-			// console.log( idxBuff );
-			var vidx = new Uint16Array( bin, idxAccs.byteOffset + idxBuff.byteOffset, idxAccs.count * 1 );
-			// console.log( vidx );
+		gltfParser._parseMesh();
+		gltfParser._parseNodes();
+		gltfParser._parseSkins();
+		gltfParser._linkSkinInstances();
+		gltfParser._parseAnimation();
 
-			var posAccs = getAccessor( gltf, prim.attributes.POSITION );
-			var posBuff = getBufferView( gltf, posAccs.bufferView );
-			var vpos = new Float32Array( bin, posAccs.byteOffset + posBuff.byteOffset, posAccs.count * 3 );
-			// console.log( vpos );
 
-			var uvAccs = getAccessor( gltf, prim.attributes.TEXCOORD_0 );
-			var uvBuff = getBufferView( gltf, uvAccs.bufferView );
-			var vuv = new Float32Array( bin, uvAccs.byteOffset + uvBuff.byteOffset, uvAccs.count * 2 );
-			// console.log( vuv );
 
-			var normalAccs = getAccessor( gltf, prim.attributes.NORMAL );
-			var normalBuff = getBufferView( gltf, normalAccs.bufferView );
-			var vnormal = new Float32Array( bin, normalAccs.byteOffset + normalBuff.byteOffset, normalAccs.count * 3 );
-			// console.log( vnormal );
+		var geom =  gltfParser.geometries[ Object.keys( gltfParser.geometries )[ 0 ] ];
+		var skel = gltfParser.skeletons[ Object.keys( gltfParser.skeletons )[ 0 ] ];
 
-			var jointAccs = getAccessor( gltf, prim.attributes.JOINT );
-			var jointBuff = getBufferView( gltf, jointAccs.bufferView );
-			var vjoint = new Float32Array( bin, jointAccs.byteOffset + jointBuff.byteOffset, jointAccs.count * 4 );
-			// console.log( vjoint );
-
-			var weightAccs = getAccessor( gltf, prim.attributes.WEIGHT );
-			var weightBuff = getBufferView( gltf, weightAccs.bufferView );
-			var vweight = new Float32Array( bin, weightAccs.byteOffset + weightBuff.byteOffset, weightAccs.count * 4 );
-			// console.log( vweight );
-
-			var ibpAccs = getAccessor( gltf, 'IBM_Armature_Cesium_Man-skin' );
-			var ibpBuff = getBufferView( gltf, ibpAccs.bufferView );
-			$.ibpMat = new Float32Array( bin, ibpAccs.byteOffset + ibpBuff.byteOffset, ibpAccs.count * 16 );
-
-			var sk = $.skins[ 'Armature_Cesium_Man-skin' ];
-			var cesiumGltf = $.assets.json[ 'cesium' ].data;
-			var orderedJoints = cesiumGltf.skins[ 'Armature_Cesium_Man-skin' ].jointNames;
-			$.jointMat = new Float32Array( 19 * 16 );
-			for ( let i = 0; i < orderedJoints.length; i ++ ) {
-				var currentJointMat = sk[ orderedJoints[ i ] ].matrix;
-				$.jointMat.set( currentJointMat, i * 16 );
-			}
-
-			geom.addAttribute( 'index',  vidx, [ idxAccs.count, 1 ] );
-			geom.addAttribute( 'position', vpos, [ posAccs.count, 3 ] );
-			geom.addAttribute( 'uv', vuv, [ uvAccs.count, 2 ] );
-			geom.addAttribute( 'normal', vnormal, [ normalAccs.count, 3 ] );
-			geom.addAttribute( 'jointIndex', vjoint, [ jointAccs.count, 4 ] );
-			geom.addAttribute( 'weight', vweight, [ weightAccs.count, 4 ] );
-
-			var shader = new Shader( {
-				vs: $.assets.shaders.cesiumVert.data,
-				fs: $.assets.shaders.cesiumFrag.data,
-				uniforms: {
-					inverseBindPose: { type: 'm4', value: $.ibpMat },
-					jointMatrices: { type: 'm4', value: $.jointMat }
-				},
-				drawMode: 'LINES'
-			} );
-
-			var mesh = new Mesh( geom, shader );
-			// vec3.set( mesh.scale, 0.01, 0.01, 0.01 );
-			mesh.updateModelMatrix();
-
-			$.hero.push( mesh );
-
+		var shader = new Shader( {
+			vs: $.assets.shaders.cesiumVert.data,
+			fs: $.assets.shaders.cesiumFrag.data,
+			uniforms: {
+				uTexture: { type: 't', value: new Texture.ImageTexture( { data: $.assets.images.cesium.data, flipY: false } ) }
+			},
+			drawMode: 'LINES'
 		} );
 
-		function getAccessor( gltf, id ) { return gltf.accessors[ id ]; }
-		function getBufferView( gltf, id ) { return gltf.bufferViews[ id ]; }
+		global.skinnedMesh = new SkinnedMesh( geom, skel, shader );
+
+		// test animation frame
+		skinnedMesh.applySkinningFrame( gltfParser.skinningFrame, 0 );
+
+		$.character.push( skinnedMesh.mesh );
+
+	// end gltf
 
 }
 
@@ -198,7 +155,6 @@ function createSkullMesh() {
 
 	var matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap_red.data } );
 	var noiseTexture = new Texture.ImageTexture( { data: $.assets.images.noise256.data } );
-	var geom = new BufferGeometry();
 	var shader = new Shader( {
 		vs: $.assets.shaders.matcapVert.data,
 		fs: $.assets.shaders.matcapFrag.data,
@@ -211,12 +167,10 @@ function createSkullMesh() {
 
 	} );
 
+	var geom = new BufferGeometry();
 	var skullData = $.assets.json.skull.data;
-	var vpos = ndarray( new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ] );
-	var vidx = ndarray( new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
-
-	geom.addAttribute( 'position', vpos.data, vpos.shape, true );
-	geom.addAttribute( 'index', vidx.data, vidx.shape );
+	geom.addAttribute( 'position', new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ], true );
+	geom.addAttribute( 'index', new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
 	geom.computeVertexNormals();
 
 	$.mesh_skull = new Mesh( geom, shader );
@@ -225,13 +179,11 @@ function createSkullMesh() {
 
 function createSkullMesh2() {
 
-	var skullData = $.assets.json.skull.data;
-	var vpos = ndarray( new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ] );
-	var vidx = ndarray( new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
 
 	var geom = new BufferGeometry();
-	geom.addAttribute( 'position', vpos.data, vpos.shape );
-	geom.addAttribute( 'index', vidx.data, vidx.shape );
+	var skullData = $.assets.json.skull.data;
+	geom.addAttribute( 'position', new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ], true );
+	geom.addAttribute( 'index', new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
 	geom.computeVertexNormals();
 
 	var shader = new Shader( { drawMode: 'LINES' } );
@@ -327,76 +279,26 @@ function draw( $, time ) {
 	// $.renderer.setClearColor( 0.5, 0.5, 0.55, 1.0 );
 	// $.renderer.clearRenderTarget( $.renderTarget );
 	// $.renderer.render( $.mesh_skull, $.camera, $.renderTarget );
-
-	// test dynamic position attribute
+	//
+	// // test dynamic position attribute
 	// for ( let i = 0; i < $.mesh_skull.geometry.attributes.position.data.length; i ++ ) {
-
-		// $.mesh_skull.geometry.attributes.position.data[ i ] += ( Math.random() - 0.5 ) * 0.01;
-
+	//
+	// 	$.mesh_skull.geometry.attributes.position.data[ i ] += ( Math.random() - 0.5 ) * 0.01;
+	//
 	// }
-
+	//
 	// $.renderer.render( $.mesh_skull, $.camera );
 	// $.renderer.render( $.mesh_skull2, $.camera );
 	// $.renderer.render( $.box, $.camera );
 	// $.renderer.render( $.ico, $.camera );
 
-	$.hero.forEach( mesh => {
+	$.character.forEach( mesh => {
 
 		$.renderer.render( mesh, $.camera );
 
 	} );
 
-	for ( let skin in $.skins ) {
-
-		for ( let joint in $.skins[ skin ] ) {
-
-			let mesh = $.skins[ skin ][ joint ].mesh;
-
-			$.renderer.render( mesh, $.camera );
-
-		}
-
-	}
-
 }
-
-global.testJointStep = function() {
-
-	for ( let skin in $.skins ) {
-		for ( let joint in $.skins[ skin ] ) {
-			$.skins[ skin ][ joint ].stepSequence();
-		}
-	}
-
-	global.updateMatrixHierarchy( $.skins[ 'Armature_Cesium_Man-skin' ][ 'Skeleton_torso_joint_1' ], $.skins[ 'Armature_Cesium_Man-skin' ] );
-
-	for ( let skin in $.skins ) {
-		for ( let joint in $.skins[ skin ] ) {
-			$.skins[ skin ][ joint ].updateMesh();
-		}
-	}
-
-	var sk = $.skins[ 'Armature_Cesium_Man-skin' ];
-	var cesiumGltf = $.assets.json[ 'cesium' ].data;
-	var orderedJoints = cesiumGltf.skins[ 'Armature_Cesium_Man-skin' ].jointNames;
-	for ( let i = 0; i < orderedJoints.length; i ++ ) {
-		var currentJointMat = sk[ orderedJoints[ i ] ].matrix;
-		$.jointMat.set( currentJointMat, i * 16 );
-	}
-
-};
-
-global.updateMatrixHierarchy = function( root, currentSkin ) {
-	var rmat = root.matrix;
-	for ( let i in root.children ) {
-		var jointName = root.children[ i ];
-		var cmat = currentSkin[ jointName ].matrix;
-		mat4.multiply( currentSkin[ jointName ].matrix, rmat, cmat );
-		if ( currentSkin[ jointName ].children.length !== 0 ) {
-			updateMatrixHierarchy( currentSkin[ jointName ], currentSkin );
-		}
-	}
-};
 
 window.addEventListener( 'resize', Util.debounce( () => {
 
@@ -420,9 +322,3 @@ function deployCanvas() {
 	document.body.appendChild( cv );
 
 }
-
-window.addEventListener( 'keypress', key => {
-
-	if ( key.which === 97 ) global.testJointStep();
-
-} );
