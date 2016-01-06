@@ -15,6 +15,7 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
+uniform mat4 normalMatrix;
 
 varying vec2 vUv;
 varying vec3 vNormal;
@@ -22,12 +23,13 @@ varying vec3 vNormal;
 void main() {
 
 	vUv = uv;
-	vNormal = normalize( normal );
 
 	mat4 skinMat = weight.x * jointMatrices[ int( jointIndex.x ) ] * inverseBindMatrices[ int( jointIndex.x ) ];
 	skinMat += weight.y * jointMatrices[ int( jointIndex.y ) ] * inverseBindMatrices[ int( jointIndex.y ) ];
 	skinMat += weight.z * jointMatrices[ int( jointIndex.z ) ] * inverseBindMatrices[ int( jointIndex.z ) ];
 	skinMat += weight.w * jointMatrices[ int( jointIndex.w ) ] * inverseBindMatrices[ int( jointIndex.w ) ];
+
+	vNormal = normalize( vec3( normalMatrix * skinMat * vec4( normal, 0.0 ) ) );
 
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * skinMat * vec4( position, 1.0 );
 

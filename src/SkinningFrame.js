@@ -29,15 +29,15 @@ class SkinningFrame {
 		switch( channelPath ) {
 
 			case 'rotation':
-				frames = [ dat[ o2 + 0 ], dat[ o2 + 1 ], dat[ o2 + 2 ], dat[ o2 + 3 ] ];
+				frames = dat.slice( o2, o2 + 4 );
 				break;
 
 			case 'translation':
-				frames = [ dat[ o1 + 0 ], dat[ o1 + 1 ], dat[ o1 + 2 ] ];
+				frames = dat.slice( o1, o2 + 3 );
 				break;
 
 			case 'scale':
-				frames = [ dat[ o1 + 0 ], dat[ o1 + 1 ], dat[ o1 + 2 ] ];
+				frames = dat.slice( o1, o2 + 3 );
 				break;
 
 			default:

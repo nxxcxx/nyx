@@ -101,46 +101,7 @@ function setup( $ ) {
 	createBoxMesh();
 	createCubeMap();
 
-
-	// test gltf
-		$.assets.json.ico.data.vertices = $.assets.json.ico.data.vertices.map( v => v * 0.01 );
-
-		var gltf = $.assets.json[ 'cesium' ].data;
-		var bin = $.assets.binary[ 'cesium' ].data;
-		$.character = [];
-
-		var GLTF_PARSER = require( './gltfParser' );
-		global.gltfParser = new GLTF_PARSER( gltf, bin );
-		console.log( gltfParser );
-
-		gltfParser._parseMesh();
-		gltfParser._parseNodes();
-		gltfParser._parseSkins();
-		gltfParser._linkSkinInstances();
-		gltfParser._parseAnimation();
-
-
-
-		var geom =  gltfParser.geometries[ Object.keys( gltfParser.geometries )[ 0 ] ];
-		var skel = gltfParser.skeletons[ Object.keys( gltfParser.skeletons )[ 0 ] ];
-
-		var shader = new Shader( {
-			vs: $.assets.shaders.cesiumVert.data,
-			fs: $.assets.shaders.cesiumFrag.data,
-			uniforms: {
-				uTexture: { type: 't', value: new Texture.ImageTexture( { data: $.assets.images.cesium.data, flipY: false } ) }
-			},
-			drawMode: 'LINES'
-		} );
-
-		global.skinnedMesh = new SkinnedMesh( geom, skel, shader );
-
-		// test animation frame
-		skinnedMesh.applySkinningFrame( gltfParser.skinningFrame, 0 );
-
-		$.character.push( skinnedMesh.mesh );
-
-	// end gltf
+	testGLTF();
 
 }
 
@@ -268,6 +229,50 @@ function createCubeMap() {
 	// var s = 1000.0;
 	// vec3.set( $.ico.scale, s, s, s );
 	$.ico.updateModelMatrix();
+
+}
+
+function testGLTF() {
+
+	$.assets.json.ico.data.vertices = $.assets.json.ico.data.vertices.map( v => v * 0.01 );
+
+	var gltf = $.assets.json[ 'cesium' ].data;
+	var bin = $.assets.binary[ 'cesium' ].data;
+	$.character = [];
+
+	var GLTF_PARSER = require( './gltfParser' );
+	global.gltfParser = new GLTF_PARSER( gltf, bin );
+	console.log( gltfParser );
+
+	gltfParser._parseMesh();
+	gltfParser._parseNodes();
+	gltfParser._parseSkins();
+	gltfParser._linkSkinInstances();
+	gltfParser._parseAnimation();
+
+
+
+	var geom =  gltfParser.geometries[ Object.keys( gltfParser.geometries )[ 0 ] ];
+	var skel = gltfParser.skeletons[ Object.keys( gltfParser.skeletons )[ 0 ] ];
+
+	var shader = new Shader( {
+		vs: $.assets.shaders.cesiumVert.data,
+		fs: $.assets.shaders.cesiumFrag.data,
+		uniforms: {
+			uTexture: { type: 't', value: new Texture.ImageTexture( { data: $.assets.images.cesium.data, flipY: false } ) }
+		},
+		// drawMode: 'LINES'
+	} );
+
+	global.skinnedMesh = new SkinnedMesh( geom, skel, shader );
+	quat.rotateX( skinnedMesh.mesh.quaternion, skinnedMesh.mesh.quaternion, -Math.PI * 0.5 );
+	skinnedMesh.mesh.updateModelMatrix();
+
+	// test animation frame
+	skinnedMesh.applySkinningFrame( gltfParser.skinningFrame, 0 );
+
+	$.character.push( skinnedMesh.mesh );
+
 
 }
 
