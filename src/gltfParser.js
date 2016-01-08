@@ -33,12 +33,12 @@ const AC_TYPE = {
 
 const SEMANTIC_MAP = {
 
-		'POSITION': 'position',
-		'NORMAL': 'normal',
-		'TEXCOORD_0': 'uv',
-		'JOINT': 'jointIndex',
-		'WEIGHT': 'weight',
-		'indices': 'index'
+	'POSITION': 'position',
+	'NORMAL': 'normal',
+	'TEXCOORD_0': 'uv',
+	'JOINT': 'jointIndex',
+	'WEIGHT': 'weight',
+	'indices': 'index'
 
 };
 

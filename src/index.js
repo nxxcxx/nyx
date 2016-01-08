@@ -1,7 +1,7 @@
 /* jshint -W069 */
 require( './nyx' );
 
-var $ = require( './engine' );
+var $ = require( './shell' );
 var PerspectiveCamera = require( './Camera/PerspectiveCamera' );
 var OrbitCtrl = require( './Camera/Ctrl/OrbitCtrl' );
 var Texture = require( './Texture' );
@@ -10,11 +10,6 @@ var Shader = require( './Shader' );
 var Mesh = require( './Mesh' );
 var Util = require( './Util' );
 var SkinnedMesh = require( './SkinnedMesh' );
-
-// // test glslify
-// var glsl = require( 'glslify' );
-// var src = glsl( '../assets/shaders/matcap.frag' );
-// console.log( src );
 
 $.start( {
 
@@ -89,7 +84,7 @@ $.start( {
 
 function setup( $ ) {
 
-	console.log( 'Engine:', $ );
+	console.log( 'Shell:', $ );
 	$.width = window.innerWidth;
 	$.height = window.innerHeight;
 	$.aspectRatio = $.width / $.height;
@@ -234,8 +229,6 @@ function createCubeMap() {
 
 function testGLTF() {
 
-	$.assets.json.ico.data.vertices = $.assets.json.ico.data.vertices.map( v => v * 0.01 );
-
 	var gltf = $.assets.json[ 'cesium' ].data;
 	var bin = $.assets.binary[ 'cesium' ].data;
 	$.character = [];
@@ -250,8 +243,6 @@ function testGLTF() {
 	gltfParser._linkSkinInstances();
 	gltfParser._parseAnimation();
 
-
-
 	var geom =  gltfParser.geometries[ Object.keys( gltfParser.geometries )[ 0 ] ];
 	var skel = gltfParser.skeletons[ Object.keys( gltfParser.skeletons )[ 0 ] ];
 
@@ -261,7 +252,7 @@ function testGLTF() {
 		uniforms: {
 			uTexture: { type: 't', value: new Texture.ImageTexture( { data: $.assets.images.cesium.data, flipY: false } ) }
 		},
-		// drawMode: 'LINES'
+		drawMode: 'LINES'
 	} );
 
 	global.skinnedMesh = new SkinnedMesh( geom, skel, shader );
@@ -272,7 +263,6 @@ function testGLTF() {
 	skinnedMesh.applySkinningFrame( gltfParser.skinningFrame, 0 );
 
 	$.character.push( skinnedMesh.mesh );
-
 
 }
 
