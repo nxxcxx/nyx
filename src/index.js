@@ -282,16 +282,16 @@ function draw( $, time ) {
 	//
 	// }
 	//
-	// $.renderer.render( $.mesh_skull, $.camera );
+	$.renderer.render( $.mesh_skull, $.camera );
 	// $.renderer.render( $.mesh_skull2, $.camera );
 	// $.renderer.render( $.box, $.camera );
 	// $.renderer.render( $.ico, $.camera );
 
-	$.character.forEach( mesh => {
-
-		$.renderer.render( mesh, $.camera );
-
-	} );
+	// $.character.forEach( mesh => {
+	//
+	// 	$.renderer.render( mesh, $.camera );
+	//
+	// } );
 
 }
 
