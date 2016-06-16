@@ -10,7 +10,7 @@ var Mesh = require( './Mesh' );
 var Util = require( './Util' );
 var SkinnedMesh = require( './SkinnedMesh' );
 
-$.start( {
+$( {
 
 	renderer: {
 
@@ -18,7 +18,7 @@ $.start( {
 		premultipliedAlpha: false
 
 	},
-
+	
 	assets: {
 
 		images: {
@@ -88,25 +88,25 @@ function setup( $ ) {
 	$.height = window.innerHeight;
 	$.aspectRatio = $.width / $.height;
 	$.renderer.setViewport( $.width, $.height );
-	deployCanvas();
-	initCamera();
-	createSkullMesh();
-	createSkullMesh2();
-	createBoxMesh();
-	createCubeMap();
+	deployCanvas( $ );
+	initCamera( $ );
+	createSkullMesh( $ );
+	createSkullMesh2( $ );
+	createBoxMesh( $ );
+	createCubeMap( $ );
 
-	testGLTF();
+	testGLTF( $ );
 
 }
 
-function initCamera() {
+function initCamera( $ ) {
 
 	$.camera = new PerspectiveCamera( Util.rad( 45 ), $.aspectRatio, 1, 10000 );
 	OrbitCtrl( $.renderer.canvas, $.camera );
 
 }
 
-function createSkullMesh() {
+function createSkullMesh( $ ) {
 
 	var matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap_red.data } );
 	var noiseTexture = new Texture.ImageTexture( { data: $.assets.images.noise256.data } );
@@ -132,7 +132,7 @@ function createSkullMesh() {
 
 }
 
-function createSkullMesh2() {
+function createSkullMesh2( $ ) {
 
 
 	var geom = new BufferGeometry();
@@ -149,7 +149,7 @@ function createSkullMesh2() {
 
 }
 
-function createBoxMesh() {
+function createBoxMesh( $ ) {
 
 	var geom = new BufferGeometry();
 	var vertices = new Float32Array([-1,-1,1,1,-1,1,1,1,1,-1,1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,1,-1,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,1,1,-1,-1,1,1,-1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1] );
@@ -186,7 +186,7 @@ function createBoxMesh() {
 
 }
 
-function createCubeMap() {
+function createCubeMap( $ ) {
 
 	var cubeMap = new Texture.CubeMapTexture( { data: [
 
@@ -226,7 +226,7 @@ function createCubeMap() {
 
 }
 
-function testGLTF() {
+function testGLTF( $ ) {
 
 	var gltf = $.assets.json[ 'cesium' ].data;
 	var bin = $.assets.binary[ 'cesium' ].data;
@@ -294,25 +294,25 @@ function draw( $, time ) {
 
 }
 
-window.addEventListener( 'resize', Util.debounce( () => {
-
-	$.width = window.innerWidth;
-	$.height = window.innerHeight;
-	$.aspectRatio = $.width / $.height;
-	$.renderer.canvas.width = $.width;
-	$.renderer.canvas.height = $.height;
-	$.renderer.setViewport( $.width, $.height );
-	$.camera.aspectRatio = $.aspectRatio;
-	$.camera.updateProjectionMatrix();
-
-}, 100 ) );
-
-function deployCanvas() {
+function deployCanvas( $ ) {
 
 	var cv = $.renderer.canvas;
 	cv.style.position = 'absolute';
 	cv.style.top = '0px';
 	cv.style.left = '0px';
 	document.body.appendChild( cv );
+
+	window.addEventListener( 'resize', Util.debounce( () => {
+
+		$.width = window.innerWidth;
+		$.height = window.innerHeight;
+		$.aspectRatio = $.width / $.height;
+		$.renderer.canvas.width = $.width;
+		$.renderer.canvas.height = $.height;
+		$.renderer.setViewport( $.width, $.height );
+		$.camera.aspectRatio = $.aspectRatio;
+		$.camera.updateProjectionMatrix();
+
+	}, 100 ) );
 
 }
