@@ -15,6 +15,3 @@ global.vec3.new = function( x, y, z ) {
 };
 
 global.ndarray = require( 'ndarray' );
-
-var GL_INIT = require( './Renderer/GL/GL-Init' );
-Object.defineProperty( global, 'GL', { get: () => { return  GL_INIT.GL; } } );

@@ -3,7 +3,7 @@
 var activeAttributes = new Uint8Array( 16 );
 var incomingAttributes = new Uint8Array( 16 );
 
-function enableAttributes( attributes ) {
+function enableAttributes( GL, attributes ) {
 
 	// reset incomingAttributes
 	for( let i = 0; i < incomingAttributes.length; i ++ ) {
@@ -37,7 +37,7 @@ function enableAttributes( attributes ) {
 
 }
 
-function setDefaultState() {
+function setDefaultState( GL ) {
 
 	GL.clearColor( 0.12, 0.12, 0.15, 1.0 );
 	GL.clearDepth( 1.0 );
@@ -58,8 +58,8 @@ function setDefaultState() {
 
 }
 
-function reportCurrentState() {
-	// todo log current state to console for debugging
+function reportCurrentState( GL ) {
+	// todo log current state for debugging
 }
 
 module.exports = {

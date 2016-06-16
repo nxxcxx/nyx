@@ -8,7 +8,7 @@ var Texture = require( 'src/Texture' );
  * @param  {Object}  uniform
  * @param  {WebGLProgram} program
  */
-function bindBufferUniform( name, uniform, program ) {
+function bindBufferUniform( GL, name, uniform, program ) {
 
 	uniform.location = GL.getUniformLocation( program, name );
 
@@ -66,12 +66,12 @@ function bindBufferUniform( name, uniform, program ) {
  *				 }
  * @param  {WebGLProgram} program
  */
-function assembleUniformsBuffer( uniforms, program ) {
+function assembleUniformsBuffer( GL, uniforms, program ) {
 
 	Object.keys( uniforms ).forEach( name => {
 
 		var uni = uniforms[ name ];
-		bindBufferUniform( name, uni, program );
+		bindBufferUniform( GL, name, uni, program );
 
 	} );
 

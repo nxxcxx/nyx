@@ -1,6 +1,6 @@
 'use strict';
 
-function createFramebuffer( renderTarget ) {
+function createFramebuffer( GL, renderTarget ) {
 
 	var fb = GL.createFramebuffer();
 	GL.bindFramebuffer( GL.FRAMEBUFFER, fb );

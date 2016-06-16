@@ -1,7 +1,6 @@
-/* jshint -W117 */
 'use strict';
 
-require( './nyx' );
+require( 'src/globals' );
 
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;

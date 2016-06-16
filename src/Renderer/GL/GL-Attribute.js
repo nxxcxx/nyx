@@ -9,7 +9,7 @@ var GL_BUFFER = require( './GL-Buffer' );
  * @param  {Object}		 attribute
  * @param  {WebGLProgram} program
  */
-function bindBufferAttribute( name, buffer, attribute, program ) {
+function bindBufferAttribute( GL, name, buffer, attribute, program ) {
 
 	var location = GL.getAttribLocation( program, name );
 
@@ -43,19 +43,19 @@ function bindBufferAttribute( name, buffer, attribute, program ) {
  *				 }
  * @param  {WebGLProgram} program
  */
-function assembleAttributesBuffer( attributes, program ) {
+function assembleAttributesBuffer( GL, attributes, program ) {
 
 	Object.keys( attributes ).forEach( name => {
 
 		var attr = attributes[ name ];
-		var buffer = GL_BUFFER.createBuffer( attr.data, name === 'index', attr.isDynamic );
-		bindBufferAttribute( name, buffer, attr, program );
+		var buffer = GL_BUFFER.createBuffer( GL, attr.data, name === 'index', attr.isDynamic );
+		bindBufferAttribute( GL, name, buffer, attr, program );
 
 	} );
 
 }
 
-function activateAttributes( attributes ) {
+function activateAttributes( GL, attributes ) {
 
 	Object.keys( attributes ).forEach( name => {
 
@@ -69,7 +69,7 @@ function activateAttributes( attributes ) {
 	} );
 
 	// enable/disable attributes
-	GL_STATE.enableAttributes( attributes );
+	GL_STATE.enableAttributes( GL, attributes );
 
 }
 

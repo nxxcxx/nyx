@@ -5,7 +5,7 @@
  * @param  {boolean}	  isIndexed
  * @return {WebGLBuffer}
  */
-function createBuffer( data, isIndexed, isDynamic ) {
+function createBuffer( GL, data, isIndexed, isDynamic ) {
 
 	var buffer = GL.createBuffer();
 	var target = isIndexed ? GL.ELEMENT_ARRAY_BUFFER : GL.ARRAY_BUFFER;

@@ -1,4 +1,4 @@
-require( './nyx' );
+require( 'src/globals' );
 
 var $ = require( './shell' );
 var PerspectiveCamera = require( './Camera/PerspectiveCamera' );

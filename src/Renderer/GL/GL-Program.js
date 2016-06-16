@@ -4,7 +4,7 @@
  * @param {String} type; shader type 'vs' or 'fs'
  * @param {String} src
  */
-function createShader( type, src ) {
+function createShader( GL, type, src ) {
 
 	var shaderType;
 
@@ -34,7 +34,7 @@ function createShader( type, src ) {
 /**
  * @param {WebGLShader}
  */
-function createProgram( ...shaders ) {
+function createProgram( GL, ...shaders ) {
 
 	var program = GL.createProgram();
 	shaders.forEach( shader => GL.attachShader( program, shader ) );
@@ -60,11 +60,11 @@ function createProgram( ...shaders ) {
  * @param {String} vertexShaderSrc
  * @param {String} fragmentShaderSrc
  */
-function createShaderProgram( vertexShaderSrc, fragmentShaderSrc ) {
+function createShaderProgram( GL, vertexShaderSrc, fragmentShaderSrc ) {
 
-	var vs = createShader( 'vs', vertexShaderSrc );
-	var fs = createShader( 'fs', fragmentShaderSrc );
-	return createProgram( vs, fs );
+	var vs = createShader( GL, 'vs', vertexShaderSrc );
+	var fs = createShader( GL, 'fs', fragmentShaderSrc );
+	return createProgram( GL, vs, fs );
 
 }
 

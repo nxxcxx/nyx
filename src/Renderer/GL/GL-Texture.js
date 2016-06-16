@@ -1,22 +1,22 @@
 'use strict';
 
-var Texture = require( '../../Texture' );
+var Texture = require( 'src/Texture' );
 
-function createTexture( tex ) {
+function createTexture( GL, tex ) {
 
 	if ( tex instanceof Texture.CubeMapTexture ) {
 
-		return createTextureCubeMap( tex );
+		return createTextureCubeMap( GL, tex );
 
 	} else {
 
-		return createTexture2D( tex );
+		return createTexture2D( GL, tex );
 
 	}
 
 }
 
-function createTexture2D( tex ) {
+function createTexture2D( GL, tex ) {
 
 	var glTex = GL.createTexture();
 	GL.bindTexture( GL.TEXTURE_2D, glTex );
@@ -42,7 +42,7 @@ function createTexture2D( tex ) {
 
 	//Enable Anisotropic Filtering
 	//todo: this should not be here
-	var ext = GL.getExtension( "EXT_texture_filter_anisotropic" );
+	var ext = GL.getExtension( 'EXT_texture_filter_anisotropic' );
 	if ( ext ) {
 
 		var max_anisotropy = GL.getParameter( ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT );
@@ -57,7 +57,7 @@ function createTexture2D( tex ) {
 
 }
 
-function createTextureCubeMap( tex ) {
+function createTextureCubeMap( GL, tex ) {
 
 	var glTex = GL.createTexture();
 	GL.bindTexture( GL.TEXTURE_CUBE_MAP, glTex );

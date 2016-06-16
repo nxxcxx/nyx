@@ -11,9 +11,9 @@ var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' );
 var RenderTarget = require( 'src/RenderTarget' );
 
 function renderer( opts ) {
-	
-	GL_INIT.initContext( opts );
-	GL_STATE.setDefaultState();
+
+	var [ GL, canvas ] = GL_INIT.initContext( opts );
+	GL_STATE.setDefaultState( GL );
 
 	function render( mesh, camera, renderTarget ) {
 
@@ -37,8 +37,8 @@ function renderer( opts ) {
 
 			if ( renderTarget._framebuffer === null ) {
 
-				renderTarget.dataTexture._WebGLTexture = GL_TEXTURE.createTexture( renderTarget.dataTexture );
-				renderTarget._framebuffer = GL_FRAMEBUFFER.createFramebuffer( renderTarget );
+				renderTarget.dataTexture._WebGLTexture = GL_TEXTURE.createTexture( GL, renderTarget.dataTexture );
+				renderTarget._framebuffer = GL_FRAMEBUFFER.createFramebuffer( GL, renderTarget );
 
 			}
 
@@ -139,7 +139,7 @@ function renderer( opts ) {
 				uni.unit = currUnit ++;
 				if ( !( uni.value instanceof RenderTarget ) ) {
 
-					uni.value._WebGLTexture = GL_TEXTURE.createTexture( uni.value );
+					uni.value._WebGLTexture = GL_TEXTURE.createTexture( GL, uni.value );
 
 				}
 
@@ -147,13 +147,13 @@ function renderer( opts ) {
 
 		} );
 
-		GL_UNIFORM.assembleUniformsBuffer( unis, mesh.shader._program );
+		GL_UNIFORM.assembleUniformsBuffer( GL, unis, mesh.shader._program );
 
 	}
 
 	function _initBuffers( mesh ) {
 
-		GL_ATTRIBUTE.assembleAttributesBuffer( mesh.geometry.attributes, mesh.shader._program );
+		GL_ATTRIBUTE.assembleAttributesBuffer( GL, mesh.geometry.attributes, mesh.shader._program );
 
 	}
 
@@ -171,13 +171,13 @@ function renderer( opts ) {
 
 	function _activateAttributes( mesh ) {
 
-		GL_ATTRIBUTE.activateAttributes( mesh.geometry.attributes );
+		GL_ATTRIBUTE.activateAttributes( GL, mesh.geometry.attributes );
 
 	}
 
 	function _initShaders( shader ) {
 
-		shader._setProgram( GL_PROGRAM.createShaderProgram( shader.vertexShaderSrc, shader.fragmentShaderSrc ) );
+		shader._setProgram( GL_PROGRAM.createShaderProgram( GL, shader.vertexShaderSrc, shader.fragmentShaderSrc ) );
 
 	}
 
@@ -204,15 +204,15 @@ function renderer( opts ) {
 	function setViewport( width, height ) {
 
 		GL.viewport( 0.0, 0.0, width, height );
-		GL_INIT.canvas.width = width;
-		GL_INIT.canvas.height = height;
+		canvas.width = width;
+		canvas.height = height;
 
 	}
 
 	return {
 
-		get GL() { return GL_INIT.GL; },
-		get canvas() { return GL_INIT.canvas; },
+		get GL() { return GL; },
+		get canvas() { return canvas; },
 
 		setClearColor,
 		setViewport,
