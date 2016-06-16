@@ -4,10 +4,9 @@
 var BufferGeometry = require( './BufferGeometry' );
 var Node = require( './Node' );
 var Skeleton = require( './Skeleton' );
-var SkinnedMesh = require( './SkinnedMesh' );
 var SkinningFrame = require( './SkinningFrame' );
 
-const VERSION = 1.0;
+const VERSION = '1.0';
 
 const AC_COMPONENT_TYPE = {
 

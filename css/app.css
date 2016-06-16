@@ -1,17 +1,9 @@
 body {
 	margin: 0px;
 	padding: 0px;
-	overflow: hidden;
 }
 
 canvas {
-	display: block; /* fix necessary to remove space at bottom of canvas */
+	display: block;
 	vertical-align: top;
-}
-
-#stats {
-	position: absolute;
-	top: 0px;
-	left: 0px;	
-	-webkit-user-select: none;
 }

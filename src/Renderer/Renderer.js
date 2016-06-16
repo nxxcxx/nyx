@@ -8,12 +8,10 @@ var GL_UNIFORM     = require( './GL/GL-Uniform' );
 var GL_TEXTURE     = require( './GL/GL-Texture' );
 var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' );
 
-
-var RenderTarget = require( 'RenderTarget' );
-var Texture = require( 'Texture' );
+var RenderTarget = require( 'src/RenderTarget' );
 
 function renderer( opts ) {
-
+	
 	GL_INIT.initContext( opts );
 	GL_STATE.setDefaultState();
 
@@ -119,15 +117,15 @@ function renderer( opts ) {
 		unis.modelMatrix.value = mesh.modelMatrix;
 		unis.camera.value = camera.position;
 
-			// test
-			var mvm = mat4.create();
-			mat4.multiply( mvm, camera.viewMatrix, mesh.modelMatrix );
-			unis.modelViewMatrix.value = mvm;
+		// test
+		var mvm = mat4.create();
+		mat4.multiply( mvm, camera.viewMatrix, mesh.modelMatrix );
+		unis.modelViewMatrix.value = mvm;
 
-			var nm = mat4.create();
-			mat4.invert( nm, mvm );
-			mat4.transpose( nm, nm );
-			unis.normalMatrix.value = nm;
+		var nm = mat4.create();
+		mat4.invert( nm, mvm );
+		mat4.transpose( nm, nm );
+		unis.normalMatrix.value = nm;
 
 
 		// set texture unit

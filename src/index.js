@@ -1,4 +1,3 @@
-/* jshint -W069 */
 require( './nyx' );
 
 var $ = require( './shell' );

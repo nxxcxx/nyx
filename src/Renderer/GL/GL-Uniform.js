@@ -1,7 +1,7 @@
 'use strict';
 
-var RenderTarget = require( 'RenderTarget' );
-var Texture = require( 'Texture' );
+var RenderTarget = require( 'src/RenderTarget' );
+var Texture = require( 'src/Texture' );
 
 /*
  * @param  {String}  name
