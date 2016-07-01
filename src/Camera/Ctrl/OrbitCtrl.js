@@ -1,14 +1,16 @@
 'use strict';
 
+let vec2 = require( 'src/Math/vec2' );
+let vec3 = require( 'src/Math/vec3' );
 
 function OrbitCtrl( canvas, camera ) {
 
-	var MOUSE = vec2.new();
-	var PREV_MOUSE = vec2.new();
+	var MOUSE = vec2.create();
+	var PREV_MOUSE = vec2.create();
 	var MOUSE_HOLD = false;
-	var CAM_ANGLE = vec2.new( Math.PI * 0.5, 0 );
-	var TMP_CAM_ANGLE = vec2.new();
-	var DELTA = vec2.new();
+	var CAM_ANGLE = vec2.fromValues( Math.PI * 0.5, 0 );
+	var TMP_CAM_ANGLE = vec2.create();
+	var DELTA = vec2.create();
 	var CAM_DIST = 10;
 	var GAIN = 0.01;
 	var CLAMP_EPS = 0.01;

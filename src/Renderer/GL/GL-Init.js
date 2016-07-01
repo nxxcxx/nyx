@@ -2,7 +2,7 @@
 
 function initContext( opts = {
 
-	// defaule opts
+	// default opts
 	alpha: true,
 	premultipliedAlpha: false
 

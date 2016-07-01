@@ -1,6 +1,7 @@
 'use strict';
 
-var Camera = require( './Camera' );
+let mat4 = require( 'src/Math/mat4' );
+let Camera = require( './Camera' );
 
 class PerspectiveCamera extends Camera {
 

@@ -36,7 +36,7 @@ const DEFAULT_SHADER = {
 
 		}
 
-		`,
+		`
 
 };
 
@@ -48,16 +48,16 @@ class Shader {
 
 		opts = opts || {};
 
-		this.vertexShaderSrc	= opts.vs || DEFAULT_SHADER.VERTEX;
+		this.vertexShaderSrc = opts.vs || DEFAULT_SHADER.VERTEX;
 		this.fragmentShaderSrc = opts.fs || DEFAULT_SHADER.FRAGMENT;
-		this.drawMode			 = opts.drawMode || 'TRIANGLES';
+		this.drawMode = opts.drawMode || 'TRIANGLES';
 
 		// todos
-		this.depthTest			= null;
-		this.blenEquation		= null;
-		this.blendFunc			= null;
-		this.culling			= null;
-		this.cullside			= null;
+		this.depthTest = null;
+		this.blenEquation = null;
+		this.blendFunc = null;
+		this.culling = null;
+		this.cullside = null;
 
 		// built-in uniforms
 		this.uniforms = {

@@ -1,5 +1,7 @@
 'use strict';
 
+let mat4 = require( 'src/Math/mat4' );
+
 class Node {
 
 	constructor( name ) {

@@ -1,5 +1,7 @@
 'use strict';
 
+let mat4 = require( 'src/Math/mat4' );
+
 var GL_PROGRAM     = require( './GL/GL-Program' );
 var GL_STATE       = require( './GL/GL-State' );
 var GL_INIT        = require( './GL/GL-Init' );
@@ -77,7 +79,7 @@ function renderer( opts ) {
 
 			if ( attr.isDynamic ) {
 
-				// todo: this does not work with index buffer
+				// TODO: this does not work with index buffer
 				GL.bindBuffer( GL.ARRAY_BUFFER, attr.buffer );
 				GL.bufferSubData( GL.ARRAY_BUFFER, 0, attr.data );
 
@@ -108,7 +110,7 @@ function renderer( opts ) {
 
 	function _initUniforms( mesh, camera ) {
 
-		// todo: uniforms needs to be updated every frame if modified
+		// TODO: uniforms needs to be updated every frame if modified
 		var unis = mesh.shader.uniforms;
 
 		// set predefined uniforms
@@ -117,7 +119,7 @@ function renderer( opts ) {
 		unis.modelMatrix.value = mesh.modelMatrix;
 		unis.camera.value = camera.position;
 
-		// test
+		// TODO:
 		var mvm = mat4.create();
 		mat4.multiply( mvm, camera.viewMatrix, mesh.modelMatrix );
 		unis.modelViewMatrix.value = mvm;

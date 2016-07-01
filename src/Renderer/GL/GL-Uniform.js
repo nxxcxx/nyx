@@ -61,9 +61,9 @@ function bindBufferUniform( GL, name, uniform, program ) {
 
 /*
  * @param  {Object} uniforms
- *	 example: uniforms = {
- *					 modelMatrix: { type: 'm4', value: mat4 },
- *				 }
+ * example: uniforms = {
+ *   modelMatrix: { type: 'm4', value: mat4 }, ...
+ * }
  * @param  {WebGLProgram} program
  */
 function assembleUniformsBuffer( GL, uniforms, program ) {

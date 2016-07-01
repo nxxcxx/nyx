@@ -1,5 +1,9 @@
 'use strict';
 
+let vec3 = require( 'src/Math/vec3' );
+let mat4 = require( 'src/Math/mat4' );
+let quat = require( 'src/Math/quat' );
+
 class Mesh {
 
 	constructor( geometry, shader ) {
@@ -9,8 +13,8 @@ class Mesh {
 		this.geometry = geometry;
 		this.shader = shader;
 
-		this.position = vec3.new();
-		this.scale = vec3.new( 1.0, 1.0, 1.0 );
+		this.position = vec3.create();
+		this.scale = vec3.fromValues( 1.0, 1.0, 1.0 );
 		this.quaternion = quat.create();
 		this.modelMatrix = mat4.create();
 
