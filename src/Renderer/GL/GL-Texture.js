@@ -1,6 +1,6 @@
 'use strict'
 
-var Texture = require( 'src/Texture' )
+let Texture = require( 'src/Texture' )
 
 function createTexture( GL, tex ) {
 
@@ -18,7 +18,7 @@ function createTexture( GL, tex ) {
 
 function createTexture2D( GL, tex ) {
 
-	var glTex = GL.createTexture()
+	let glTex = GL.createTexture()
 	GL.bindTexture( GL.TEXTURE_2D, glTex )
 
 	GL.pixelStorei( GL.UNPACK_FLIP_Y_WEBGL, tex.flipY )
@@ -42,10 +42,10 @@ function createTexture2D( GL, tex ) {
 
 	//Enable Anisotropic Filtering
 	// TODO: this should not be here
-	var ext = GL.getExtension( 'EXT_texture_filter_anisotropic' )
+	let ext = GL.getExtension( 'EXT_texture_filter_anisotropic' )
 	if ( ext ) {
 
-		var max_anisotropy = GL.getParameter( ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT )
+		let max_anisotropy = GL.getParameter( ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT )
 		GL.texParameterf( GL.TEXTURE_2D, 34046, max_anisotropy )
 
 	}
@@ -59,7 +59,7 @@ function createTexture2D( GL, tex ) {
 
 function createTextureCubeMap( GL, tex ) {
 
-	var glTex = GL.createTexture()
+	let glTex = GL.createTexture()
 	GL.bindTexture( GL.TEXTURE_CUBE_MAP, glTex )
 
 	GL.pixelStorei( GL.UNPACK_FLIP_Y_WEBGL, tex.flipY )

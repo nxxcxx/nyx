@@ -1,7 +1,7 @@
 'use strict'
 
 /*
-var uriObj = {
+let uriObj = {
 
 	images: {
 		name: 'path/to/file'
@@ -13,16 +13,16 @@ var uriObj = {
 }
 */
 
-var assets = {}
-var total = 0
-var loaded = 0
-var onLoadComplete = null
+let assets = {}
+let total = 0
+let loaded = 0
+let onLoadComplete = null
 
-var loader = {
+let loader = {
 
 	image: ( uri, done ) => {
 
-		var img = new Image()
+		let img = new Image()
 		img.onload = () => done( img )
 		img.src = uri
 
@@ -30,7 +30,7 @@ var loader = {
 
 	XHR: ( uri, done ) => {
 
-		var req = new XMLHttpRequest()
+		let req = new XMLHttpRequest()
 		req.open( 'GET', uri, true )
 		req.addEventListener( 'load', () => {
 
@@ -43,7 +43,7 @@ var loader = {
 
 	XHRB: ( uri, done ) => {
 
-		var req = new XMLHttpRequest()
+		let req = new XMLHttpRequest()
 		req.responseType = 'arraybuffer'
 		req.open( 'GET', uri, true )
 		req.addEventListener( 'load', () => {
@@ -57,7 +57,7 @@ var loader = {
 
 }
 
-var fetcher = {
+let fetcher = {
 
 	fetchText: text => enqueue( loader.XHR, text, null ),
 	fetchImages: images => enqueue( loader.image, images, null ),

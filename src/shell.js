@@ -1,5 +1,5 @@
-var Renderer = require( './Renderer/Renderer' )
-var AssetManager = require( './AssetManager' )
+let Renderer = require( './Renderer/Renderer' )
+let AssetManager = require( './AssetManager' )
 
 function shell( opts, setup, draw ) {
 

@@ -27,12 +27,12 @@ class BufferGeometry {
 
 		if ( !this.attributes.position || !this.attributes.index ) return
 
-		var positions = this.attributes.position
-		var indices = this.attributes.index
+		let positions = this.attributes.position
+		let indices = this.attributes.index
 
-		var pos = positions.data
+		let pos = positions.data
 
-		var normals = ndarray( new Float32Array( positions.data.length ), positions.shape )
+		let normals = ndarray( new Float32Array( positions.data.length ), positions.shape )
 
 		for ( let i = 0; i < normals.data.length; i ++ ) {
 
@@ -42,17 +42,17 @@ class BufferGeometry {
 
 		for ( let i = 0; i < indices.data.length; i += 3 ) {
 
-			var vA = indices.data[ i + 0 ] * 3
-			var vB = indices.data[ i + 1 ] * 3
-			var vC = indices.data[ i + 2 ] * 3
+			let vA = indices.data[ i + 0 ] * 3
+			let vB = indices.data[ i + 1 ] * 3
+			let vC = indices.data[ i + 2 ] * 3
 
-			var pA = vec3.fromValues( pos[ vA + 0 ], pos[ vA + 1 ], pos[ vA + 2 ] )
-			var pB = vec3.fromValues( pos[ vB + 0 ], pos[ vB + 1 ], pos[ vB + 2 ] )
-			var pC = vec3.fromValues( pos[ vC + 0 ], pos[ vC + 1 ], pos[ vC + 2 ] )
+			let pA = vec3.fromValues( pos[ vA + 0 ], pos[ vA + 1 ], pos[ vA + 2 ] )
+			let pB = vec3.fromValues( pos[ vB + 0 ], pos[ vB + 1 ], pos[ vB + 2 ] )
+			let pC = vec3.fromValues( pos[ vC + 0 ], pos[ vC + 1 ], pos[ vC + 2 ] )
 
-			var cb = vec3.fromValues()
+			let cb = vec3.fromValues()
 			vec3.sub( cb, pC, pB )
-			var ab = vec3.fromValues()
+			let ab = vec3.fromValues()
 			vec3.sub( ab, pA, pB )
 			vec3.cross( cb, cb, ab )
 

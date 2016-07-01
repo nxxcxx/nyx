@@ -1,7 +1,7 @@
 'use strict'
 
-var GL_STATE = require( './GL-State' )
-var GL_BUFFER = require( './GL-Buffer' )
+let GL_STATE = require( './GL-State' )
+let GL_BUFFER = require( './GL-Buffer' )
 
 /*
  * @param  {String}		 name
@@ -11,7 +11,7 @@ var GL_BUFFER = require( './GL-Buffer' )
  */
 function bindBufferAttribute( GL, name, buffer, attribute, program ) {
 
-	var location = GL.getAttribLocation( program, name )
+	let location = GL.getAttribLocation( program, name )
 
 	if ( location === -1 ) {
 
@@ -47,8 +47,8 @@ function assembleAttributesBuffer( GL, attributes, program ) {
 
 	Object.keys( attributes ).forEach( name => {
 
-		var attr = attributes[ name ]
-		var buffer = GL_BUFFER.createBuffer( GL, attr.data, name === 'index', attr.isDynamic )
+		let attr = attributes[ name ]
+		let buffer = GL_BUFFER.createBuffer( GL, attr.data, name === 'index', attr.isDynamic )
 		bindBufferAttribute( GL, name, buffer, attr, program )
 
 	} )
@@ -59,7 +59,7 @@ function activateAttributes( GL, attributes ) {
 
 	Object.keys( attributes ).forEach( name => {
 
-		var attr = attributes[ name ]
+		let attr = attributes[ name ]
 
 		if ( attr.location === -1  ) return
 

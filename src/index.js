@@ -1,10 +1,10 @@
-var $ = require( './shell' )
-var PerspectiveCamera = require( './Camera/PerspectiveCamera' )
-var OrbitCtrl = require( './Camera/Ctrl/OrbitCtrl' )
-var Texture = require( './Texture' )
-var BufferGeometry = require( './BufferGeometry' )
-var Shader = require( './Shader' )
-var Mesh = require( './Mesh' )
+let $ = require( './shell' )
+let PerspectiveCamera = require( './Camera/PerspectiveCamera' )
+let OrbitCtrl = require( './Camera/Ctrl/OrbitCtrl' )
+let Texture = require( './Texture' )
+let BufferGeometry = require( './BufferGeometry' )
+let Shader = require( './Shader' )
+let Mesh = require( './Mesh' )
 
 // TODO replace AssetManager w/ webpack loader
 // webpack raw loader console.log( require( 'raw!root/assets/shaders/matcap.frag' ) )
@@ -30,16 +30,16 @@ function initCamera( $ ) {
 }
 
 function createSkullMesh( $ ) {
-	var matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap.data } )
-	var shader = new Shader( {
+	let matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap.data } )
+	let shader = new Shader( {
 		vs: $.assets.shaders.matcapVert.data,
 		fs: $.assets.shaders.matcapFrag.data,
 		uniforms: {
 			uMatcap: { type: 't', value: matcapTexture }
 		}
 	} )
-	var geom = new BufferGeometry()
-	var skullData = $.assets.json.skull.data
+	let geom = new BufferGeometry()
+	let skullData = $.assets.json.skull.data
 	geom.addAttribute( 'position', new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ], true )
 	geom.addAttribute( 'index', new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] )
 	geom.computeVertexNormals()
@@ -63,7 +63,7 @@ function draw( $ ) {
 }
 
 function deployCanvas( $ ) {
-	var cv = $.renderer.canvas
+	let cv = $.renderer.canvas
 	document.body.appendChild( cv )
 	window.addEventListener( 'resize', require( 'src/Util/debounce' )( () => {
 		$.width = window.innerWidth

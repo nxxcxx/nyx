@@ -1,8 +1,8 @@
 'use strict'
 
 // TODO: do not store state in the module
-var activeAttributes = new Uint8Array( 16 )
-var incomingAttributes = new Uint8Array( 16 )
+let activeAttributes = new Uint8Array( 16 )
+let incomingAttributes = new Uint8Array( 16 )
 
 function enableAttributes( GL, attributes ) {
 
@@ -16,7 +16,7 @@ function enableAttributes( GL, attributes ) {
 	// set and enable incomingAttributes
 	Object.keys( attributes ).forEach( name => {
 
-		var slot = attributes[ name ].location
+		let slot = attributes[ name ].location
 		if ( slot === -1 ) return
 		incomingAttributes[ slot ] = 1
 		activeAttributes[ slot ] = 1

@@ -2,19 +2,19 @@
 
 let mat4 = require( 'src/Math/mat4' )
 
-var GL_PROGRAM     = require( './GL/GL-Program' )
-var GL_STATE       = require( './GL/GL-State' )
-var GL_INIT        = require( './GL/GL-Init' )
-var GL_ATTRIBUTE   = require( './GL/GL-Attribute' )
-var GL_UNIFORM     = require( './GL/GL-Uniform' )
-var GL_TEXTURE     = require( './GL/GL-Texture' )
-var GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' )
+let GL_PROGRAM     = require( './GL/GL-Program' )
+let GL_STATE       = require( './GL/GL-State' )
+let GL_INIT        = require( './GL/GL-Init' )
+let GL_ATTRIBUTE   = require( './GL/GL-Attribute' )
+let GL_UNIFORM     = require( './GL/GL-Uniform' )
+let GL_TEXTURE     = require( './GL/GL-Texture' )
+let GL_FRAMEBUFFER = require( './GL/GL-FrameBuffer' )
 
-var RenderTarget = require( 'src/RenderTarget' )
+let RenderTarget = require( 'src/RenderTarget' )
 
 function renderer( opts ) {
 
-	var [ GL, canvas ] = GL_INIT.initContext( opts )
+	let [ GL, canvas ] = GL_INIT.initContext( opts )
 	GL_STATE.setDefaultState( GL )
 
 	function render( mesh, camera, renderTarget ) {
@@ -71,7 +71,7 @@ function renderer( opts ) {
 
 	function _updateDynamicBuffer( mesh ) {
 
-		var attrs = mesh.geometry.attributes
+		let attrs = mesh.geometry.attributes
 
 		Object.keys( attrs ).forEach( name => {
 
@@ -91,11 +91,11 @@ function renderer( opts ) {
 
 	function _draw( mesh ) {
 
-		var attrs = mesh.geometry.attributes
+		let attrs = mesh.geometry.attributes
 
 		if ( attrs.index ) {
 
-			var type = ( attrs.index.data instanceof Uint16Array ) ? GL.UNSIGNED_SHORT : GL.UNSIGNED_INT
+			let type = ( attrs.index.data instanceof Uint16Array ) ? GL.UNSIGNED_SHORT : GL.UNSIGNED_INT
 			GL.bindBuffer( GL.ELEMENT_ARRAY_BUFFER, attrs.index.buffer )
 			GL.drawElements( GL[ mesh.shader.drawMode ], attrs.index.shape[ 0 ], type, 0 )
 
@@ -111,7 +111,7 @@ function renderer( opts ) {
 	function _initUniforms( mesh, camera ) {
 
 		// TODO: uniforms needs to be updated every frame if modified
-		var unis = mesh.shader.uniforms
+		let unis = mesh.shader.uniforms
 
 		// set predefined uniforms
 		unis.projectionMatrix.value = camera.projectionMatrix
@@ -120,22 +120,22 @@ function renderer( opts ) {
 		unis.camera.value = camera.position
 
 		// TODO:
-		var mvm = mat4.create()
+		let mvm = mat4.create()
 		mat4.multiply( mvm, camera.viewMatrix, mesh.modelMatrix )
 		unis.modelViewMatrix.value = mvm
 
-		var nm = mat4.create()
+		let nm = mat4.create()
 		mat4.invert( nm, mvm )
 		mat4.transpose( nm, nm )
 		unis.normalMatrix.value = nm
 
 
 		// set texture unit
-		var currUnit = 0
+		let currUnit = 0
 
 		Object.keys( unis ).forEach( name => {
 
-			var uni = unis[ name ]
+			let uni = unis[ name ]
 			if ( uni.type === 't' ) {
 
 				uni.unit = currUnit ++

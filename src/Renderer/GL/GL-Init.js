@@ -19,7 +19,7 @@ function initContext( opts = {
 
 function enableAllSupportedExtensions( GL ) {
 
-	var glExts = GL.getSupportedExtensions()
+	let glExts = GL.getSupportedExtensions()
 
 	glExts.forEach( ext => {
 
@@ -27,7 +27,7 @@ function enableAllSupportedExtensions( GL ) {
 
 	} )
 
-	console.info( `Enabled WebGL extensions: ${glExts}` )
+	// console.info( `Enabled WebGL extensions: ${glExts}` )
 
 }
 

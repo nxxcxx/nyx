@@ -1,5 +1,5 @@
-var path = require( 'path' );
-var HtmlWebpackPlugin = require( 'html-webpack-plugin' );
+var path = require( 'path' )
+var HtmlWebpackPlugin = require( 'html-webpack-plugin' )
 
 module.exports = {
 	entry: [
@@ -29,4 +29,4 @@ module.exports = {
 		} )
 	],
 	devtool: '#inline-source-map'
-};
+}

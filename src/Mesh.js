@@ -22,9 +22,9 @@ class Mesh {
 
 	updateModelMatrix() {
 
-		// todo static variable ( closure )
-		var m4rt = mat4.create()
-		var m4s = mat4.create()
+		// todo static letiable ( closure )
+		let m4rt = mat4.create()
+		let m4s = mat4.create()
 
 		mat4.identity( m4s )
 		mat4.scale( m4s, m4s, this.scale )

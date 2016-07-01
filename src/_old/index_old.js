@@ -1,14 +1,14 @@
 require( 'src/globals' );
 
-var $ = require( './shell' );
-var PerspectiveCamera = require( './Camera/PerspectiveCamera' );
-var OrbitCtrl = require( './Camera/Ctrl/OrbitCtrl' );
-var Texture = require( './Texture' );
-var BufferGeometry = require( './BufferGeometry' );
-var Shader = require( './Shader' );
-var Mesh = require( './Mesh' );
-var Util = require( './Util' );
-var SkinnedMesh = require( './SkinnedMesh' );
+let $ = require( './shell' );
+let PerspectiveCamera = require( './Camera/PerspectiveCamera' );
+let OrbitCtrl = require( './Camera/Ctrl/OrbitCtrl' );
+let Texture = require( './Texture' );
+let BufferGeometry = require( './BufferGeometry' );
+let Shader = require( './Shader' );
+let Mesh = require( './Mesh' );
+let Util = require( './Util' );
+let SkinnedMesh = require( './SkinnedMesh' );
 
 // TODO replace AssetManager w/ webpack loader
 // using webpack raw loader
@@ -112,9 +112,9 @@ function initCamera( $ ) {
 
 function createSkullMesh( $ ) {
 
-	var matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap_red.data } );
-	var noiseTexture = new Texture.ImageTexture( { data: $.assets.images.noise256.data } );
-	var shader = new Shader( {
+	let matcapTexture = new Texture.ImageTexture( { data: $.assets.images.matcap_red.data } );
+	let noiseTexture = new Texture.ImageTexture( { data: $.assets.images.noise256.data } );
+	let shader = new Shader( {
 		vs: $.assets.shaders.matcapVert.data,
 		fs: $.assets.shaders.matcapFrag.data,
 
@@ -126,8 +126,8 @@ function createSkullMesh( $ ) {
 
 	} );
 
-	var geom = new BufferGeometry();
-	var skullData = $.assets.json.skull.data;
+	let geom = new BufferGeometry();
+	let skullData = $.assets.json.skull.data;
 	geom.addAttribute( 'position', new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ], true );
 	geom.addAttribute( 'index', new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
 	geom.computeVertexNormals();
@@ -139,13 +139,13 @@ function createSkullMesh( $ ) {
 function createSkullMesh2( $ ) {
 
 
-	var geom = new BufferGeometry();
-	var skullData = $.assets.json.skull.data;
+	let geom = new BufferGeometry();
+	let skullData = $.assets.json.skull.data;
 	geom.addAttribute( 'position', new Float32Array( skullData.vertices ), [ skullData.vertices.length / 3, 3 ], true );
 	geom.addAttribute( 'index', new Uint32Array( skullData.faces ), [ skullData.faces.length, 1 ] );
 	geom.computeVertexNormals();
 
-	var shader = new Shader( { drawMode: 'LINES' } );
+	let shader = new Shader( { drawMode: 'LINES' } );
 
 	$.mesh_skull2 = new Mesh( geom, shader );
 	$.mesh_skull2.position[1] = 2.0;
@@ -155,24 +155,24 @@ function createSkullMesh2( $ ) {
 
 function createBoxMesh( $ ) {
 
-	var geom = new BufferGeometry();
-	var vertices = new Float32Array([-1,-1,1,1,-1,1,1,1,1,-1,1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,1,-1,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,1,1,-1,-1,1,1,-1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1] );
-	var indices = new Uint16Array([0,1,2,0,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23]);
-	var uv = new Float32Array([0,0,1,0,1,1,0,1,1,0,1,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,1,0,0,0,0,1,0,1,1,0,1]);
+	let geom = new BufferGeometry();
+	let vertices = new Float32Array([-1,-1,1,1,-1,1,1,1,1,-1,1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,1,-1,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,1,1,-1,-1,1,1,-1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1] );
+	let indices = new Uint16Array([0,1,2,0,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23]);
+	let uv = new Float32Array([0,0,1,0,1,1,0,1,1,0,1,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,1,0,0,0,0,1,0,1,1,0,1]);
 	geom.addAttribute( 'position', vertices, [ vertices.length / 3, 3 ] );
 	geom.addAttribute( 'index', indices, [ indices.length, 1 ] );
 	geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
 
 	// FBO RTT texture
 		// if using dataTexture as screen buffer, size need to be equal to screen size
-		var dataTexture = new Texture.DataTexture( 1024 );
-		var RenderTarget = require( './RenderTarget' );
+		let dataTexture = new Texture.DataTexture( 1024 );
+		let RenderTarget = require( './RenderTarget' );
 		$.renderTarget = new RenderTarget( dataTexture );
 
 	// image texture
-		var stoneTexture = new Texture.ImageTexture( { data: $.assets.images.stone.data } );
+		let stoneTexture = new Texture.ImageTexture( { data: $.assets.images.stone.data } );
 
-	var shader = new Shader( {
+	let shader = new Shader( {
 
 		vs: $.assets.shaders.textureExampleVert.data,
 		fs: $.assets.shaders.textureExampleFrag.data,
@@ -192,7 +192,7 @@ function createBoxMesh( $ ) {
 
 function createCubeMap( $ ) {
 
-	var cubeMap = new Texture.CubeMapTexture( { data: [
+	let cubeMap = new Texture.CubeMapTexture( { data: [
 
 		$.assets.images.px.data,
 		$.assets.images.nx.data,
@@ -203,16 +203,16 @@ function createCubeMap( $ ) {
 
 	] } );
 
-	var ico = $.assets.json.ico.data;
-	var vpos = ndarray( new Float32Array( ico.vertices ), [ ico.vertices.length / 3, 3 ] );
-	var vidx = ndarray( new Uint32Array( ico.faces ), [ ico.faces.length, 1 ] );
+	let ico = $.assets.json.ico.data;
+	let vpos = ndarray( new Float32Array( ico.vertices ), [ ico.vertices.length / 3, 3 ] );
+	let vidx = ndarray( new Uint32Array( ico.faces ), [ ico.faces.length, 1 ] );
 
-	var geom = new BufferGeometry();
+	let geom = new BufferGeometry();
 	geom.addAttribute( 'position', vpos.data, vpos.shape );
 	geom.addAttribute( 'index', vidx.data, vidx.shape );
 	geom.computeVertexNormals();
 
-	var shader = new Shader( {
+	let shader = new Shader( {
 
 		vs: $.assets.shaders.cubeMapVert.data,
 		fs: $.assets.shaders.cubeMapFrag.data,
@@ -224,7 +224,7 @@ function createCubeMap( $ ) {
 
 	$.ico = new Mesh( geom, shader );
 	vec3.set( $.ico.position, -2.0, -1.0, 0.0 );
-	// var s = 1000.0;
+	// let s = 1000.0;
 	// vec3.set( $.ico.scale, s, s, s );
 	$.ico.updateModelMatrix();
 
@@ -232,11 +232,11 @@ function createCubeMap( $ ) {
 
 function testGLTF( $ ) {
 
-	var gltf = $.assets.json[ 'cesium' ].data;
-	var bin = $.assets.binary[ 'cesium' ].data;
+	let gltf = $.assets.json[ 'cesium' ].data;
+	let bin = $.assets.binary[ 'cesium' ].data;
 	$.character = [];
 
-	var GLTF_PARSER = require( './gltfParser' );
+	let GLTF_PARSER = require( './gltfParser' );
 	global.gltfParser = new GLTF_PARSER( gltf, bin );
 	console.log( gltfParser );
 
@@ -246,10 +246,10 @@ function testGLTF( $ ) {
 	gltfParser._linkSkinInstances();
 	gltfParser._parseAnimation();
 
-	var geom =  gltfParser.geometries[ Object.keys( gltfParser.geometries )[ 0 ] ];
-	var skel = gltfParser.skeletons[ Object.keys( gltfParser.skeletons )[ 0 ] ];
+	let geom =  gltfParser.geometries[ Object.keys( gltfParser.geometries )[ 0 ] ];
+	let skel = gltfParser.skeletons[ Object.keys( gltfParser.skeletons )[ 0 ] ];
 
-	var shader = new Shader( {
+	let shader = new Shader( {
 		vs: $.assets.shaders.cesiumVert.data,
 		fs: $.assets.shaders.cesiumFrag.data,
 		uniforms: {
@@ -300,7 +300,7 @@ function draw( $, time ) {
 
 function deployCanvas( $ ) {
 
-	var cv = $.renderer.canvas;
+	let cv = $.renderer.canvas;
 	document.body.appendChild( cv );
 
 	window.addEventListener( 'resize', Util.debounce( () => {

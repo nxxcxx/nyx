@@ -6,16 +6,16 @@
  */
 function createShader( GL, type, src ) {
 
-	var shaderType
+	let shaderType
 
 	if ( type === 'vs' ) shaderType = GL.VERTEX_SHADER
 	else if ( type === 'fs' ) shaderType = GL.FRAGMENT_SHADER
 
-	var shader = GL.createShader( shaderType )
+	let shader = GL.createShader( shaderType )
 	GL.shaderSource( shader, src )
 	GL.compileShader( shader )
 
-	var log = GL.getShaderInfoLog( shader )
+	let log = GL.getShaderInfoLog( shader )
 
 	if ( !GL.getShaderParameter( shader, GL.COMPILE_STATUS ) ) {
 
@@ -36,12 +36,12 @@ function createShader( GL, type, src ) {
  */
 function createProgram( GL, ...shaders ) {
 
-	var program = GL.createProgram()
+	let program = GL.createProgram()
 	shaders.forEach( shader => GL.attachShader( program, shader ) )
 
 	GL.linkProgram( program )
 
-	var log = GL.getProgramInfoLog( program )
+	let log = GL.getProgramInfoLog( program )
 
 	if ( !GL.getProgramParameter( program, GL.LINK_STATUS ) ) {
 
@@ -62,8 +62,8 @@ function createProgram( GL, ...shaders ) {
  */
 function createShaderProgram( GL, vertexShaderSrc, fragmentShaderSrc ) {
 
-	var vs = createShader( GL, 'vs', vertexShaderSrc )
-	var fs = createShader( GL, 'fs', fragmentShaderSrc )
+	let vs = createShader( GL, 'vs', vertexShaderSrc )
+	let fs = createShader( GL, 'fs', fragmentShaderSrc )
 	return createProgram( GL, vs, fs )
 
 }

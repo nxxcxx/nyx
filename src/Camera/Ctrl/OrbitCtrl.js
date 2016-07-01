@@ -5,29 +5,29 @@ let vec3 = require( 'src/Math/vec3' )
 
 function OrbitCtrl( canvas, camera ) {
 
-	var MOUSE = vec2.create()
-	var PREV_MOUSE = vec2.create()
-	var MOUSE_HOLD = false
-	var CAM_ANGLE = vec2.fromValues( Math.PI * 0.5, 0 )
-	var TMP_CAM_ANGLE = vec2.create()
-	var DELTA = vec2.create()
-	var CAM_DIST = 10
-	var GAIN = 0.01
-	var CLAMP_EPS = 0.01
+	let MOUSE = vec2.create()
+	let PREV_MOUSE = vec2.create()
+	let MOUSE_HOLD = false
+	let CAM_ANGLE = vec2.fromValues( Math.PI * 0.5, 0 )
+	let TMP_CAM_ANGLE = vec2.create()
+	let DELTA = vec2.create()
+	let CAM_DIST = 10
+	let GAIN = 0.01
+	let CLAMP_EPS = 0.01
 
 	ctrlCamera()
 
 	function ctrlCamera() {
 
 		// control camera using spherical coordinate
-		var theta = CAM_ANGLE[ 0 ]
-		var phi = CAM_ANGLE[ 1 ]
+		let theta = CAM_ANGLE[ 0 ]
+		let phi = CAM_ANGLE[ 1 ]
 
-		var t = CAM_DIST * Math.cos( phi )
-		var y = CAM_DIST * Math.sin( phi )
+		let t = CAM_DIST * Math.cos( phi )
+		let y = CAM_DIST * Math.sin( phi )
 
-		var x = t * Math.cos( theta )
-		var z = t * Math.sin( theta )
+		let x = t * Math.cos( theta )
+		let z = t * Math.sin( theta )
 
 		vec3.set( camera.position, x, y, z )
 		vec3.set( camera.lookAt, 0.0, 0.0, 0.0 )
@@ -72,7 +72,7 @@ function OrbitCtrl( canvas, camera ) {
 
 	canvas.addEventListener( 'mousewheel', event => {
 
-		var dt = event.wheelDelta
+		let dt = event.wheelDelta
 		CAM_DIST -= dt * 0.005
 		CAM_DIST = clamp( CAM_DIST, 1, 1000 )
 		ctrlCamera()

@@ -2,9 +2,9 @@
 
 require( 'src/globals' );
 
-var WIDTH = window.innerWidth;
-var HEIGHT = window.innerHeight;
-var ASPECT_RATIO = WIDTH / HEIGHT;
+let WIDTH = window.innerWidth;
+let HEIGHT = window.innerHeight;
+let ASPECT_RATIO = WIDTH / HEIGHT;
 
 global.RENDERER = NYX.Renderer();
 
@@ -56,21 +56,21 @@ NYX.AssetManager.fetch( {
 function main() {
 
 	// Mesh - texture test
-		var geom = new NYX.BufferGeometry();
-		var vertices = new Float32Array([-1,-1,1,1,-1,1,1,1,1,-1,1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,1,-1,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,1,1,-1,-1,1,1,-1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1] );
-		var indices = new Uint16Array([0,1,2,0,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23]);
-		var uv = new Float32Array([0,0,1,0,1,1,0,1,1,0,1,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,1,0,0,0,0,1,0,1,1,0,1]);
+		let geom = new NYX.BufferGeometry();
+		let vertices = new Float32Array([-1,-1,1,1,-1,1,1,1,1,-1,1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,1,-1,-1,-1,-1,1,-1,-1,1,-1,1,-1,-1,1,1,-1,-1,1,1,-1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,1,-1,1,-1] );
+		let indices = new Uint16Array([0,1,2,0,2,3,4,5,6,4,6,7,8,9,10,8,10,11,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23]);
+		let uv = new Float32Array([0,0,1,0,1,1,0,1,1,0,1,1,0,1,0,0,0,1,0,0,1,0,1,1,1,1,0,1,0,0,1,0,1,0,1,1,0,1,0,0,0,0,1,0,1,1,0,1]);
 		geom.addAttribute( 'position', vertices, [ vertices.length / 3, 3 ] );
 		geom.addAttribute( 'index', indices, [ indices.length, 1 ] );
 		geom.addAttribute( 'uv', uv, [ uv.length / 2, 2 ] );
 
 		// FBO RTT test
-			var dt = new NYX.Texture.DataTexture( 512 );
+			let dt = new NYX.Texture.DataTexture( 512 );
 			global.rt = new NYX.RenderTarget( dt );
 		// normal texture
-			var tex = new NYX.Texture.ImageTexture( { data: ASSETS.images.stone.data } );
+			let tex = new NYX.Texture.ImageTexture( { data: ASSETS.images.stone.data } );
 
-		var shader = new NYX.Shader( {
+		let shader = new NYX.Shader( {
 
 			vs: ASSETS.shaders.textureExampleVert.data,
 			fs: ASSETS.shaders.textureExampleFrag.data,
@@ -85,10 +85,10 @@ function main() {
 
 	// Mesh2 - json & normal test
 
-		var matcap = new NYX.Texture.ImageTexture( { data: ASSETS.images.matcap.data } );
+		let matcap = new NYX.Texture.ImageTexture( { data: ASSETS.images.matcap.data } );
 
-		var geom = new NYX.BufferGeometry();
-		var shader = new NYX.Shader( {
+		let geom = new NYX.BufferGeometry();
+		let shader = new NYX.Shader( {
 
 			vs: ASSETS.shaders.matcapVert.data,
 			fs: ASSETS.shaders.matcapFrag.data,
@@ -103,9 +103,9 @@ function main() {
 		// vec3.set( mesh2.position, -2.5, 0.0, 0.0 );
 		mesh2.updateModelMatrix();
 
-		var res = ASSETS.json.skull.data;
-		var vpos = ndarray( new Float32Array( res.vertices ), [ res.vertices.length / 3, 3 ] );
-		var vidx = ndarray( new Uint32Array( res.faces ), [ res.faces.length, 1 ] );
+		let res = ASSETS.json.skull.data;
+		let vpos = ndarray( new Float32Array( res.vertices ), [ res.vertices.length / 3, 3 ] );
+		let vidx = ndarray( new Uint32Array( res.faces ), [ res.faces.length, 1 ] );
 
 		geom.addAttribute( 'position', vpos.data, vpos.shape );
 		geom.addAttribute( 'index', vidx.data, vidx.shape );

@@ -1,7 +1,7 @@
 'use strict'
 
-var RenderTarget = require( 'src/RenderTarget' )
-var Texture = require( 'src/Texture' )
+let RenderTarget = require( 'src/RenderTarget' )
+let Texture = require( 'src/Texture' )
 
 /*
  * @param  {String}  name
@@ -19,7 +19,7 @@ function bindBufferUniform( GL, name, uniform, program ) {
 
 	}
 
-	var setter
+	let setter
 	switch ( uniform.type ) {
 
 		case 'f': setter = val => GL.uniform1f( uniform.location, val )
@@ -70,7 +70,7 @@ function assembleUniformsBuffer( GL, uniforms, program ) {
 
 	Object.keys( uniforms ).forEach( name => {
 
-		var uni = uniforms[ name ]
+		let uni = uniforms[ name ]
 		bindBufferUniform( GL, name, uni, program )
 
 	} )
@@ -84,7 +84,7 @@ function activateUniforms( uniforms ) {
 
 	Object.keys( uniforms ).forEach( name => {
 
-		var uni = uniforms[ name ]
+		let uni = uniforms[ name ]
 
 		if ( !uni.location ) {
 
