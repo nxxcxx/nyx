@@ -17,8 +17,8 @@
 		],
 		"indent": [
 			"warn",
-		"tab", {
-			"SwitchCase": 1
+			"tab", {
+				"SwitchCase": 1
 			}
 		],
 		"linebreak-style": [
@@ -31,7 +31,7 @@
 		],
 		"semi": [
 			"warn",
-			"always"
+			"never"
 		],
 		"no-console": [
 			"warn"

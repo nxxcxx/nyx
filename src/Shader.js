@@ -1,23 +1,23 @@
-'use strict';
+'use strict'
 
 const DEFAULT_SHADER = {
 
 	VERTEX:
 		`
-		precision highp float;
+		precision highp float
 
-		attribute vec3 position;
-		attribute vec3 normal;
+		attribute vec3 position
+		attribute vec3 normal
 
-		uniform vec3 camera;
-		uniform mat4 modelMatrix;
-		uniform mat4 viewMatrix;
-		uniform mat4 modelViewMatrix;
-		uniform mat4 projectionMatrix;
+		uniform vec3 camera
+		uniform mat4 modelMatrix
+		uniform mat4 viewMatrix
+		uniform mat4 modelViewMatrix
+		uniform mat4 projectionMatrix
 
 		void main() {
 
-			gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
+			gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 )
 
 		}
 
@@ -25,39 +25,39 @@ const DEFAULT_SHADER = {
 
 	FRAGMENT:
 		`
-		precision highp float;
+		precision highp float
 
-		uniform vec3 camera;
+		uniform vec3 camera
 
 		void main() {
 
-			vec3 color = vec3( 0.8, 1.0, 1.0 );
-			gl_FragColor = vec4( color, 1.0 );
+			vec3 color = vec3( 0.8, 1.0, 1.0 )
+			gl_FragColor = vec4( color, 1.0 )
 
 		}
 
 		`
 
-};
+}
 
 class Shader {
 
 	constructor( opts ) {
 
-		this._program = null;
+		this._program = null
 
-		opts = opts || {};
+		opts = opts || {}
 
-		this.vertexShaderSrc = opts.vs || DEFAULT_SHADER.VERTEX;
-		this.fragmentShaderSrc = opts.fs || DEFAULT_SHADER.FRAGMENT;
-		this.drawMode = opts.drawMode || 'TRIANGLES';
+		this.vertexShaderSrc = opts.vs || DEFAULT_SHADER.VERTEX
+		this.fragmentShaderSrc = opts.fs || DEFAULT_SHADER.FRAGMENT
+		this.drawMode = opts.drawMode || 'TRIANGLES'
 
 		// todos
-		this.depthTest = null;
-		this.blenEquation = null;
-		this.blendFunc = null;
-		this.culling = null;
-		this.cullside = null;
+		this.depthTest = null
+		this.blenEquation = null
+		this.blendFunc = null
+		this.culling = null
+		this.cullside = null
 
 		// built-in uniforms
 		this.uniforms = {
@@ -69,23 +69,23 @@ class Shader {
 			normalMatrix: { type: 'm4', value: null },
 			camera: { type: 'v3', value: null }
 
-		};
+		}
 
 		// append user uniforms
 		Object.keys( opts.uniforms || {} ).forEach( name => {
 
-			this.uniforms[ name ] = opts.uniforms[ name ];
+			this.uniforms[ name ] = opts.uniforms[ name ]
 
-		} );
+		} )
 
 	}
 
 	_setProgram( program ) {
 
-		this._program = program;
+		this._program = program
 
 	}
 
 }
 
-module.exports = Shader;
+module.exports = Shader

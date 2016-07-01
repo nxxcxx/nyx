@@ -1,27 +1,27 @@
-var Renderer = require( './Renderer/Renderer' );
-var AssetManager = require( './AssetManager' );
+var Renderer = require( './Renderer/Renderer' )
+var AssetManager = require( './AssetManager' )
 
 function shell( opts, setup, draw ) {
 
-	let $ = {};
-	$.renderer = Renderer( opts.renderer );
+	let $ = {}
+	$.renderer = Renderer( opts.renderer )
 
 	AssetManager.fetch( opts.assets, assets => {
 
-		$.assets = assets;
-		setup( $ );
+		$.assets = assets
+		setup( $ )
 
-		( function tick( time ) {
+		;( function tick( time ) {
 
-			requestAnimationFrame( tick );
-			draw( $, time );
+			requestAnimationFrame( tick )
+			draw( $, time )
 
-		} )();
+		} )()
 
-	} );
+	} )
 
-	return $;
+	return $
 
 }
 
-module.exports = shell;
+module.exports = shell

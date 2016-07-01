@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 function initContext( opts = {
 
@@ -8,26 +8,26 @@ function initContext( opts = {
 
 } ) {
 
-	let canvas = opts.canvas || document.createElement( 'canvas' );
-	let GL = canvas.getContext( 'webgl', opts );
-	if ( !GL ) throw 'WebGL not supported.';
-	enableAllSupportedExtensions( GL );
+	let canvas = opts.canvas || document.createElement( 'canvas' )
+	let GL = canvas.getContext( 'webgl', opts )
+	if ( !GL ) throw 'WebGL not supported.'
+	enableAllSupportedExtensions( GL )
 
-	return [ GL, canvas ];
+	return [ GL, canvas ]
 
 }
 
 function enableAllSupportedExtensions( GL ) {
 
-	var glExts = GL.getSupportedExtensions();
+	var glExts = GL.getSupportedExtensions()
 
 	glExts.forEach( ext => {
 
-		if ( !GL.getExtension( ext ) ) console.warn( `${ext} extension not supported.` );
+		if ( !GL.getExtension( ext ) ) console.warn( `${ext} extension not supported.` )
 
-	} );
+	} )
 
-	console.info( `Enabled WebGL extensions: ${glExts}` );
+	console.info( `Enabled WebGL extensions: ${glExts}` )
 
 }
 
@@ -35,4 +35,4 @@ module.exports = {
 
 	initContext
 
-};
+}

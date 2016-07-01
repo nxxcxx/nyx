@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-var GL_STATE = require( './GL-State' );
-var GL_BUFFER = require( './GL-Buffer' );
+var GL_STATE = require( './GL-State' )
+var GL_BUFFER = require( './GL-Buffer' )
 
 /*
  * @param  {String}		 name
@@ -11,27 +11,27 @@ var GL_BUFFER = require( './GL-Buffer' );
  */
 function bindBufferAttribute( GL, name, buffer, attribute, program ) {
 
-	var location = GL.getAttribLocation( program, name );
+	var location = GL.getAttribLocation( program, name )
 
 	if ( location === -1 ) {
 
 		if ( name !== 'index' ) {
 
-			// console.warn( `${name} attribute is defined but never used by vertex shader.` );
+			// console.warn( `${name} attribute is defined but never used by vertex shader.` )
 
 		}
 
 	} else {
 
-		GL.bindBuffer( GL.ARRAY_BUFFER, buffer );
-		GL.enableVertexAttribArray( location );
-		GL.vertexAttribPointer( location, attribute.shape[ 1 ], GL.FLOAT, false, 0, 0 );
+		GL.bindBuffer( GL.ARRAY_BUFFER, buffer )
+		GL.enableVertexAttribArray( location )
+		GL.vertexAttribPointer( location, attribute.shape[ 1 ], GL.FLOAT, false, 0, 0 )
 
 	}
 
-	attribute.buffer = buffer;
-	attribute.location = location;
-	attribute.size = attribute.data.length;
+	attribute.buffer = buffer
+	attribute.location = location
+	attribute.size = attribute.data.length
 
 }
 
@@ -47,11 +47,11 @@ function assembleAttributesBuffer( GL, attributes, program ) {
 
 	Object.keys( attributes ).forEach( name => {
 
-		var attr = attributes[ name ];
-		var buffer = GL_BUFFER.createBuffer( GL, attr.data, name === 'index', attr.isDynamic );
-		bindBufferAttribute( GL, name, buffer, attr, program );
+		var attr = attributes[ name ]
+		var buffer = GL_BUFFER.createBuffer( GL, attr.data, name === 'index', attr.isDynamic )
+		bindBufferAttribute( GL, name, buffer, attr, program )
 
-	} );
+	} )
 
 }
 
@@ -59,17 +59,17 @@ function activateAttributes( GL, attributes ) {
 
 	Object.keys( attributes ).forEach( name => {
 
-		var attr = attributes[ name ];
+		var attr = attributes[ name ]
 
-		if ( attr.location === -1  ) return;
+		if ( attr.location === -1  ) return
 
-		GL.bindBuffer( GL.ARRAY_BUFFER, attr.buffer );
-		GL.vertexAttribPointer( attr.location, attr.shape[ 1 ], GL.FLOAT, false, 0, 0 );
+		GL.bindBuffer( GL.ARRAY_BUFFER, attr.buffer )
+		GL.vertexAttribPointer( attr.location, attr.shape[ 1 ], GL.FLOAT, false, 0, 0 )
 
-	} );
+	} )
 
 	// enable/disable attributes
-	GL_STATE.enableAttributes( GL, attributes );
+	GL_STATE.enableAttributes( GL, attributes )
 
 }
 
@@ -78,4 +78,4 @@ module.exports = {
 	activateAttributes,
 	assembleAttributesBuffer
 
-};
+}

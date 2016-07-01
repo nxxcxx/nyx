@@ -1,88 +1,88 @@
-'use strict';
+'use strict'
 
-let vec2 = require( 'src/Math/vec2' );
-let vec3 = require( 'src/Math/vec3' );
+let vec2 = require( 'src/Math/vec2' )
+let vec3 = require( 'src/Math/vec3' )
 
 function OrbitCtrl( canvas, camera ) {
 
-	var MOUSE = vec2.create();
-	var PREV_MOUSE = vec2.create();
-	var MOUSE_HOLD = false;
-	var CAM_ANGLE = vec2.fromValues( Math.PI * 0.5, 0 );
-	var TMP_CAM_ANGLE = vec2.create();
-	var DELTA = vec2.create();
-	var CAM_DIST = 10;
-	var GAIN = 0.01;
-	var CLAMP_EPS = 0.01;
+	var MOUSE = vec2.create()
+	var PREV_MOUSE = vec2.create()
+	var MOUSE_HOLD = false
+	var CAM_ANGLE = vec2.fromValues( Math.PI * 0.5, 0 )
+	var TMP_CAM_ANGLE = vec2.create()
+	var DELTA = vec2.create()
+	var CAM_DIST = 10
+	var GAIN = 0.01
+	var CLAMP_EPS = 0.01
 
-	ctrlCamera();
+	ctrlCamera()
 
 	function ctrlCamera() {
 
 		// control camera using spherical coordinate
-		var theta = CAM_ANGLE[ 0 ];
-		var phi = CAM_ANGLE[ 1 ];
+		var theta = CAM_ANGLE[ 0 ]
+		var phi = CAM_ANGLE[ 1 ]
 
-		var t = CAM_DIST * Math.cos( phi );
-		var y = CAM_DIST * Math.sin( phi );
+		var t = CAM_DIST * Math.cos( phi )
+		var y = CAM_DIST * Math.sin( phi )
 
-		var x = t * Math.cos( theta );
-		var z = t * Math.sin( theta );
+		var x = t * Math.cos( theta )
+		var z = t * Math.sin( theta )
 
-		vec3.set( camera.position, x, y, z );
-		vec3.set( camera.lookAt, 0.0, 0.0, 0.0 );
-		vec3.set( camera.upVector, 0.0, 1.0, 0.0 );
-		camera.updateViewMatrix();
+		vec3.set( camera.position, x, y, z )
+		vec3.set( camera.lookAt, 0.0, 0.0, 0.0 )
+		vec3.set( camera.upVector, 0.0, 1.0, 0.0 )
+		camera.updateViewMatrix()
 
 	}
 
 	canvas.addEventListener( 'mousemove', event => {
 
-		vec2.set( MOUSE, event.x, event.y );
+		vec2.set( MOUSE, event.x, event.y )
 
 		if ( MOUSE_HOLD ) {
 
-			DELTA[ 0 ] = GAIN * ( MOUSE[ 0 ] - PREV_MOUSE[ 0 ] );
-			DELTA[ 1 ] = GAIN * ( MOUSE[ 1 ] - PREV_MOUSE[ 1 ] );
+			DELTA[ 0 ] = GAIN * ( MOUSE[ 0 ] - PREV_MOUSE[ 0 ] )
+			DELTA[ 1 ] = GAIN * ( MOUSE[ 1 ] - PREV_MOUSE[ 1 ] )
 
-			CAM_ANGLE[ 0 ] = TMP_CAM_ANGLE[ 0 ] + DELTA[ 0 ];
-			CAM_ANGLE[ 1 ] = TMP_CAM_ANGLE[ 1 ] + DELTA[ 1 ];
-			CAM_ANGLE[ 1 ] = clamp( CAM_ANGLE[ 1 ], - Math.PI * 0.5 + CLAMP_EPS , Math.PI * 0.5 - CLAMP_EPS );
+			CAM_ANGLE[ 0 ] = TMP_CAM_ANGLE[ 0 ] + DELTA[ 0 ]
+			CAM_ANGLE[ 1 ] = TMP_CAM_ANGLE[ 1 ] + DELTA[ 1 ]
+			CAM_ANGLE[ 1 ] = clamp( CAM_ANGLE[ 1 ], - Math.PI * 0.5 + CLAMP_EPS , Math.PI * 0.5 - CLAMP_EPS )
 
-			ctrlCamera();
+			ctrlCamera()
 
 		}
 
-	} );
+	} )
 
 	canvas.addEventListener( 'mousedown', event => {
 
-		MOUSE_HOLD = true;
-		vec2.set( PREV_MOUSE, event.x, event.y );
-		vec2.copy( TMP_CAM_ANGLE, CAM_ANGLE );
+		MOUSE_HOLD = true
+		vec2.set( PREV_MOUSE, event.x, event.y )
+		vec2.copy( TMP_CAM_ANGLE, CAM_ANGLE )
 
-	} );
+	} )
 
 
 	canvas.addEventListener( 'mouseup', event => {
 
-		MOUSE_HOLD = false;
+		MOUSE_HOLD = false
 
-	} );
+	} )
 
 	canvas.addEventListener( 'mousewheel', event => {
 
-		var dt = event.wheelDelta;
-		CAM_DIST -= dt * 0.005;
-		CAM_DIST = clamp( CAM_DIST, 1, 1000 );
-		ctrlCamera();
+		var dt = event.wheelDelta
+		CAM_DIST -= dt * 0.005
+		CAM_DIST = clamp( CAM_DIST, 1, 1000 )
+		ctrlCamera()
 
-	} );
+	} )
 
 	function clamp( x, min, max ) {
-	  return Math.min( Math.max( x, min ), max );
+		return Math.min( Math.max( x, min ), max )
 	}
 
 }
 
-module.exports = OrbitCtrl;
+module.exports = OrbitCtrl

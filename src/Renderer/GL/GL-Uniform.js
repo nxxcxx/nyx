@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-var RenderTarget = require( 'src/RenderTarget' );
-var Texture = require( 'src/Texture' );
+var RenderTarget = require( 'src/RenderTarget' )
+var Texture = require( 'src/Texture' )
 
 /*
  * @param  {String}  name
@@ -10,52 +10,52 @@ var Texture = require( 'src/Texture' );
  */
 function bindBufferUniform( GL, name, uniform, program ) {
 
-	uniform.location = GL.getUniformLocation( program, name );
+	uniform.location = GL.getUniformLocation( program, name )
 
 	if ( !uniform.location ) {
 
-		// console.warn( `${name} uniform is defined but never used by shader.` );
-		return;
+		// console.warn( `${name} uniform is defined but never used by shader.` )
+		return
 
 	}
 
-	var setter;
+	var setter
 	switch ( uniform.type ) {
 
-		case 'f': setter = val => GL.uniform1f( uniform.location, val );
-			break;
+		case 'f': setter = val => GL.uniform1f( uniform.location, val )
+			break
 
-		case 'm4': setter =  val => GL.uniformMatrix4fv( uniform.location, false, val );
-			break;
+		case 'm4': setter =  val => GL.uniformMatrix4fv( uniform.location, false, val )
+			break
 
-		case 'v3': setter = val => GL.uniform3fv( uniform.location, val );
-			break;
+		case 'v3': setter = val => GL.uniform3fv( uniform.location, val )
+			break
 
 		case 't': setter = val => {
 
-				// todo if texture image data ready ...
-				GL.activeTexture( GL.TEXTURE0 + uniform.unit );
+			// TODO: if texture image data ready ...
+			GL.activeTexture( GL.TEXTURE0 + uniform.unit )
 
-				if ( uniform.value instanceof Texture.CubeMapTexture ) {
+			if ( uniform.value instanceof Texture.CubeMapTexture ) {
 
-					GL.bindTexture( GL.TEXTURE_CUBE_MAP, val );
+				GL.bindTexture( GL.TEXTURE_CUBE_MAP, val )
 
-				} else {
+			} else {
 
-					GL.bindTexture( GL.TEXTURE_2D, val );
+				GL.bindTexture( GL.TEXTURE_2D, val )
 
-				}
+			}
 
-				GL.uniform1i( uniform.location, uniform.unit );
+			GL.uniform1i( uniform.location, uniform.unit )
 
-			};
-			break;
+		}
+			break
 
-		default: console.error( `${name} uniform type is unknown` );
+		default: console.error( `${name} uniform type is unknown` )
 
 	}
 
-	uniform.setter = setter;
+	uniform.setter = setter
 
 }
 
@@ -70,10 +70,10 @@ function assembleUniformsBuffer( GL, uniforms, program ) {
 
 	Object.keys( uniforms ).forEach( name => {
 
-		var uni = uniforms[ name ];
-		bindBufferUniform( GL, name, uni, program );
+		var uni = uniforms[ name ]
+		bindBufferUniform( GL, name, uni, program )
 
-	} );
+	} )
 
 }
 
@@ -84,11 +84,11 @@ function activateUniforms( uniforms ) {
 
 	Object.keys( uniforms ).forEach( name => {
 
-		var uni = uniforms[ name ];
+		var uni = uniforms[ name ]
 
 		if ( !uni.location ) {
 
-			return;
+			return
 
 		}
 
@@ -96,21 +96,21 @@ function activateUniforms( uniforms ) {
 
 			if ( uni.value instanceof RenderTarget ) {
 
-				uni.setter( uni.value.dataTexture._WebGLTexture );
+				uni.setter( uni.value.dataTexture._WebGLTexture )
 
 			} else {
 
-				uni.setter( uni.value._WebGLTexture );
+				uni.setter( uni.value._WebGLTexture )
 
 			}
 
 		} else {
 
-			uni.setter( uni.value );
+			uni.setter( uni.value )
 
 		}
 
-	} );
+	} )
 
 }
 
@@ -119,4 +119,4 @@ module.exports = {
 	activateUniforms,
 	assembleUniformsBuffer
 
-};
+}
