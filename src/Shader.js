@@ -4,20 +4,20 @@ const DEFAULT_SHADER = {
 
 	VERTEX:
 		`
-		precision highp float
+		precision highp float;
 
-		attribute vec3 position
-		attribute vec3 normal
+		attribute vec3 position;
+		attribute vec3 normal;
 
-		uniform vec3 camera
-		uniform mat4 modelMatrix
-		uniform mat4 viewMatrix
-		uniform mat4 modelViewMatrix
-		uniform mat4 projectionMatrix
+		uniform vec3 camera;
+		uniform mat4 modelMatrix;
+		uniform mat4 viewMatrix;
+		uniform mat4 modelViewMatrix;
+		uniform mat4 projectionMatrix;
 
 		void main() {
 
-			gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 )
+			gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4( position, 1.0 );
 
 		}
 
@@ -25,14 +25,14 @@ const DEFAULT_SHADER = {
 
 	FRAGMENT:
 		`
-		precision highp float
+		precision highp float;
 
-		uniform vec3 camera
+		uniform vec3 camera;
 
 		void main() {
 
-			vec3 color = vec3( 0.8, 1.0, 1.0 )
-			gl_FragColor = vec4( color, 1.0 )
+			vec3 color = vec3( 0.8, 1.0, 1.0 );
+			gl_FragColor = vec4( color, 1.0 );
 
 		}
 

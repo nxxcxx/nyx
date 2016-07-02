@@ -20,13 +20,10 @@ function renderer( opts ) {
 	function render( mesh, camera, renderTarget ) {
 
 		_initMesh( mesh, camera )
-
+		_setRenderTarget( renderTarget )
 		_activateProgram( mesh )
 		_activateAttributes( mesh )
 		_activateUniforms( mesh )
-
-		_setRenderTarget( renderTarget )
-
 		_updateDynamicBuffer( mesh )
 		_draw( mesh )
 
