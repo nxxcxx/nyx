@@ -1,1 +1,1 @@
-require( 'src/_example/ex2' )
+require( 'src/_example/ex_test' )
